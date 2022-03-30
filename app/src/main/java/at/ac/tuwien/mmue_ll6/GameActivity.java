@@ -18,5 +18,7 @@ public class GameActivity extends AppCompatActivity {
 
         // Set No Title
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        setContentView(R.layout.activity_game);
     }
 }
