@@ -4,22 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/pink_bg"
+    android:background="@color/background"
     tools:context=".MainActivity">
 
     <Button
         android:id="@+id/startGameButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="140dp"
         android:onClick="startGameActivity"
         android:text="@string/title_activity_game"
         android:textColor="#424242"
         app:backgroundTint="@color/pink_500"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.229" />
 
     <Button
         android:id="@+id/highscoreButton"
@@ -29,8 +29,9 @@
         android:onClick="startHighScoreActivity"
         android:text="@string/title_activity_highscore"
         android:textColor="#424242"
-        app:backgroundTint="@color/pink_500"
+        app:backgroundTint="@color/pink_300"
         app:layout_constraintEnd_toEndOf="@+id/startGameButton"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/startGameButton"
         app:layout_constraintTop_toBottomOf="@+id/startGameButton" />
 
@@ -38,42 +39,42 @@
         android:id="@+id/playVideoButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:onClick="startVideoActivity"
         android:text="@string/title_activity_video"
         android:textColor="#424242"
-        app:backgroundTint="@color/pink_500"
+        app:backgroundTint="@color/pink_300"
         app:layout_constraintEnd_toEndOf="@+id/helpButton"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/helpButton"
         app:layout_constraintTop_toBottomOf="@+id/helpButton" />
 
     <Button
         android:id="@+id/settingsButton"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="34dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="40dp"
         android:onClick="startSettingsActivity"
         android:text="@string/title_activity_settings"
         android:textColor="#424242"
-        app:backgroundTint="@color/pink_500"
+        app:backgroundTint="@color/pink_300"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/playVideoButton"
-        app:layout_constraintHorizontal_bias="0.214"
         app:layout_constraintStart_toStartOf="@+id/playVideoButton"
         app:layout_constraintTop_toBottomOf="@+id/playVideoButton"
-        app:layout_constraintVertical_bias="0.048" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/helpButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="40dp"
         android:onClick="startHelpActivity"
         android:text="@string/title_activity_help"
         android:textColor="#424242"
-        app:backgroundTint="@color/pink_500"
+        app:backgroundTint="@color/pink_300"
         app:layout_constraintEnd_toEndOf="@+id/highscoreButton"
-        app:layout_constraintHorizontal_bias="0.47"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/highscoreButton"
         app:layout_constraintTop_toBottomOf="@+id/highscoreButton" />
 

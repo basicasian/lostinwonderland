@@ -11,4 +11,8 @@
     <!-- tutorial / help -->
     <string name="help_title">How to play</string>
 
+    <!-- skip video -->
+    <string name="video_skip">skip</string>
+
+
 </resources>
