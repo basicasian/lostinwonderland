@@ -4,15 +4,77 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/pink_bg"
     tools:context=".MainActivity">
 
-    <TextView
+    <Button
+        android:id="@+id/startGameButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="140dp"
+        android:onClick="startGameActivity"
+        android:text="@string/title_activity_game"
+        android:textColor="#424242"
+        app:backgroundTint="@color/pink_500"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/highscoreButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:onClick="startHighScoreActivity"
+        android:text="@string/title_activity_highscore"
+        android:textColor="#424242"
+        app:backgroundTint="@color/pink_500"
+        app:layout_constraintEnd_toEndOf="@+id/startGameButton"
+        app:layout_constraintStart_toStartOf="@+id/startGameButton"
+        app:layout_constraintTop_toBottomOf="@+id/startGameButton" />
+
+    <Button
+        android:id="@+id/playVideoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:onClick="startVideoActivity"
+        android:text="@string/title_activity_video"
+        android:textColor="#424242"
+        app:backgroundTint="@color/pink_500"
+        app:layout_constraintEnd_toEndOf="@+id/helpButton"
+        app:layout_constraintStart_toStartOf="@+id/helpButton"
+        app:layout_constraintTop_toBottomOf="@+id/helpButton" />
+
+    <Button
+        android:id="@+id/settingsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="34dp"
+        android:onClick="startSettingsActivity"
+        android:text="@string/title_activity_settings"
+        android:textColor="#424242"
+        app:backgroundTint="@color/pink_500"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/playVideoButton"
+        app:layout_constraintHorizontal_bias="0.214"
+        app:layout_constraintStart_toStartOf="@+id/playVideoButton"
+        app:layout_constraintTop_toBottomOf="@+id/playVideoButton"
+        app:layout_constraintVertical_bias="0.048" />
+
+    <Button
+        android:id="@+id/helpButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:onClick="startHelpActivity"
+        android:text="@string/title_activity_help"
+        android:textColor="#424242"
+        app:backgroundTint="@color/pink_500"
+        app:layout_constraintEnd_toEndOf="@+id/highscoreButton"
+        app:layout_constraintHorizontal_bias="0.47"
+        app:layout_constraintStart_toStartOf="@+id/highscoreButton"
+        app:layout_constraintTop_toBottomOf="@+id/highscoreButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
