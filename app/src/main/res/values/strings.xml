@@ -1,3 +1,18 @@
 <resources>
-    <string name="app_name">MMUE-LL6</string>
+    <string name="app_name">Lost in Wonderland</string>
+
+    <!-- main menu -->
+    <string name="title_activity_game">start game</string>
+    <string name="title_activity_highscore">high score</string>
+    <string name="title_activity_video">play video</string>
+    <string name="title_activity_help">tutorial</string>
+    <string name="title_activity_settings">settings</string>
+
+    <!-- tutorial / help -->
+    <string name="help_title">How to play</string>
+
+    <!-- skip video -->
+    <string name="video_skip">skip</string>
+
+
 </resources>
