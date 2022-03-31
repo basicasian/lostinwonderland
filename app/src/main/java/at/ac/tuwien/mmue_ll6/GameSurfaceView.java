@@ -58,8 +58,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         pusheen = BitmapFactory.decodeResource(getResources(), R.drawable.pusheen);
 
-        //pusheenRect = new Rect(100, 50, pusheen.getWidth() + 50, pusheen.getHeight() + 50);
-        //pusheenRectSrc = new Rect(0, 0, pusheen.getWidth(), pusheen.getHeight());
+        pusheenRect = new Rect(100, 50, pusheen.getWidth()/2+ 50, pusheen.getHeight()/2 + 50);
+        pusheenRectSrc = new Rect(0, 0, pusheen.getWidth(), pusheen.getHeight());
 
         paint = new Paint();
     }
