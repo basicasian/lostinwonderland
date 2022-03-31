@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import at.ac.tuwien.mmue_ll6.assets.Flummi;
+
 
 public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -22,15 +24,19 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private Rect pusheenRect, pusheenRectSrc;    // Target and source rectangles
     private Paint paint;
 
+    private Flummi flummi;
+
     public GameSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
+
         getHolder().addCallback(this);
         setFocusable(true);
 
-        loadAssets();
+        loadAssets(context);
     }
 
     private void startGame(SurfaceHolder holder) {
+
         gameLoop = new GameLoop(holder, this);
         gameMainThread = new Thread(gameLoop);
         gameMainThread.start();
@@ -45,13 +51,15 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         }
     }
 
-    private void loadAssets() {
+    private void loadAssets(Context context) {
         // Initialize the assets:
+
+        //flummi = new Flummi(context);
 
         pusheen = BitmapFactory.decodeResource(getResources(), R.drawable.pusheen);
 
-        pusheenRect = new Rect(100, 50, pusheen.getWidth() + 50, pusheen.getHeight() + 50);
-        pusheenRectSrc = new Rect(0, 0, pusheen.getWidth(), pusheen.getHeight());
+        //pusheenRect = new Rect(100, 50, pusheen.getWidth() + 50, pusheen.getHeight() + 50);
+        //pusheenRectSrc = new Rect(0, 0, pusheen.getWidth(), pusheen.getHeight());
 
         paint = new Paint();
     }
