@@ -7,6 +7,8 @@ import android.widget.Button;
 public class GameLoop implements Runnable {
 
     public float deltaTime;
+    public float lastTime;
+    public float nowTime;
 
     private SurfaceHolder surfaceHolder;
     private GameSurfaceView gameSurfaceView;
@@ -42,14 +44,13 @@ public class GameLoop implements Runnable {
 
     private void start() {
         //todo: calculate the time delta between the last frame and the current frame
+        lastTime = System.nanoTime();
     }
 
     private void update() {
         //todo: calculate the time delta between the last frame and the current frame
         //Calculate time delta for frame independence
         calculateDeltaTime();
-
-
 
     }
 
@@ -71,6 +72,11 @@ public class GameLoop implements Runnable {
 
     private void calculateDeltaTime() {
         //todo: calculate the time delta between the last frame and the current frame
+        nowTime = System.nanoTime();
+        // from nano seconds to milliseconds
+        deltaTime = (nowTime-lastTime)/ 1000000;
+        lastTime = nowTime;
+
     }
 
 }

@@ -31,7 +31,7 @@ public class Flummi {
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.flummi);
 
         x = 1000;
-        y = 10;
+        y = 100;
 
         // source and target rectangle
         rectTarget = new Rect(x, y, bitmap.getWidth()+ x, bitmap.getHeight() + y);
