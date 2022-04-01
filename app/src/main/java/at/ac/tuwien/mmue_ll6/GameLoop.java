@@ -2,6 +2,7 @@ package at.ac.tuwien.mmue_ll6;
 
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
+import android.widget.Button;
 
 public class GameLoop implements Runnable {
 
@@ -47,6 +48,9 @@ public class GameLoop implements Runnable {
         //todo: calculate the time delta between the last frame and the current frame
         //Calculate time delta for frame independence
         calculateDeltaTime();
+
+
+
     }
 
     //@SuppressLint("WrongCall")

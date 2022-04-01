@@ -1,5 +1,6 @@
 package at.ac.tuwien.mmue_ll6;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,9 +9,14 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Button;
 
 import at.ac.tuwien.mmue_ll6.assets.Flummi;
 
@@ -20,8 +26,6 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private GameLoop gameLoop;
     private Thread gameMainThread;
 
-    private Bitmap pusheen;
-    private Rect pusheenRect, pusheenRectSrc;    // Target and source rectangles
     private Paint paint;
 
     private Flummi flummi;
@@ -29,9 +33,12 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     public GameSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
+        // callback to add events
         getHolder().addCallback(this);
+        // so events can be handled
         setFocusable(true);
 
+        // initialize resources
         loadAssets(context);
     }
 
@@ -53,37 +60,59 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     private void loadAssets(Context context) {
         // Initialize the assets:
-
-        //flummi = new Flummi(context);
-
-        pusheen = BitmapFactory.decodeResource(getResources(), R.drawable.pusheen);
-
-        pusheenRect = new Rect(100, 50, pusheen.getWidth()/2+ 50, pusheen.getHeight()/2 + 50);
-        pusheenRectSrc = new Rect(0, 0, pusheen.getWidth(), pusheen.getHeight());
-
+        flummi = new Flummi(context);
         paint = new Paint();
     }
 
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
+        // SurfaceView has been created
+        // e.g. create Gameloop and start
         startGame(surfaceHolder);
     }
 
     @Override
     public void surfaceChanged(SurfaceHolder surfaceHolder,  int format, int width, int height) {
+        // SurfaceView has been changed verändert (size, format,…)
+        // e.g. end Gameloop cleanly
 
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+        // SurfaceView has been hidden
         endGame();
     }
 
     @Override
+    public boolean onTouchEvent(MotionEvent e) {
+        // a touch-event has been triggered
+        if (e.getAction() == MotionEvent.ACTION_DOWN) {
+            int x = (int)e.getX();
+
+            if (x > flummi.getX()) {
+                flummi.updateRight();
+            }
+            if (x < flummi.getX()) {
+                flummi.updateLeft();
+            }
+            return true;
+        }
+        return false;
+
+    }
+
+
+    @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
-        canvas.drawColor(Color.rgb(253, 200, 218));
-        canvas.drawBitmap(pusheen, pusheenRectSrc, pusheenRect, paint);
+
+        canvas.drawColor(Color.rgb(255, 255, 255));
+        canvas.drawBitmap(
+                flummi.getBitmap(),
+                flummi.getRectSrc(),
+                flummi.getRectTarget(),
+                paint);
     }
 }
