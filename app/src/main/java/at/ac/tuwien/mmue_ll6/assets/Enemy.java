@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -27,7 +28,7 @@ public class Enemy {
         this.bitmap = bitmap;
 
         x = 800;
-        y = 500;
+        y = 700;
 
         // source and target rectangle
         rectTarget = new Rect(x, y, bitmap.getWidth()+ x, bitmap.getHeight() + y);

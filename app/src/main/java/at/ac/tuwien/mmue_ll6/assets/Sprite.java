@@ -26,7 +26,7 @@ public class Sprite {
         frameHeight = bitmap.getHeight();
 
         x = 50;
-        y = 500;
+        y = 700;
         frameTime = 150;
     }
 

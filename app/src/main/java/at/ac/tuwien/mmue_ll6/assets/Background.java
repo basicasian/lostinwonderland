@@ -5,7 +5,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -13,7 +12,7 @@ import android.view.Display;
 
 import at.ac.tuwien.mmue_ll6.R;
 
-public class Flummi {
+public class Background {
 
     //Bitmap to get character from image
     private Bitmap bitmap;
@@ -23,37 +22,16 @@ public class Flummi {
     private int x;
     private int y;
 
-    //motion speed of the character
-    private int speed = 0;
-
     //constructor
-    public Flummi(Bitmap bitmap) {
+    public Background(Bitmap bitmap) {
         this.bitmap = bitmap;
 
-        x = 1000;
-        y = 700;
+        x = 0;
+        y = 0;
 
         // source and target rectangle
-        rectTarget = new Rect(x, y, bitmap.getWidth()+ x, bitmap.getHeight() + y);
+        rectTarget = new Rect(x, y, 1900, 930);
         rectSrc = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-
-    }
-
-    //Method to update coordinate of character
-    public void updateRight(){
-        // updating x coordinate
-        x += 20;
-
-        rectTarget.left = x;
-        rectTarget.right = x + bitmap.getWidth();
-    }
-
-    public void updateLeft(){
-        // updating  coordinate
-        x -= 20;
-
-        rectTarget.left = x;
-        rectTarget.right = x + bitmap.getWidth();
     }
 
     public Bitmap getBitmap() {
@@ -75,16 +53,11 @@ public class Flummi {
         return y;
     }
 
-    public int getSpeed() {
-        return speed;
-    }
-
     // draws the current frame onto the canvas
     public void draw(Canvas canvas) {
         if (canvas != null) {
             canvas.drawBitmap(bitmap, rectSrc, rectTarget, null);
         }
     }
-
 }
 

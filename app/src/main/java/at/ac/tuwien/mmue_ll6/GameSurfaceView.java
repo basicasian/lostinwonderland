@@ -19,6 +19,7 @@ import android.view.SurfaceView;
 import android.widget.Button;
 import android.widget.Toast;
 
+import at.ac.tuwien.mmue_ll6.assets.Background;
 import at.ac.tuwien.mmue_ll6.assets.Enemy;
 import at.ac.tuwien.mmue_ll6.assets.Flummi;
 import at.ac.tuwien.mmue_ll6.assets.Sprite;
@@ -34,6 +35,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private Flummi flummi;
     private Enemy enemy;
     private Sprite fire;
+    private Background background;
 
     public GameSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -64,11 +66,12 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     }
 
     private void loadAssets(Context context) {
-        // Initialize the assets:
+        // Initialize the assets
         flummi = new Flummi(BitmapFactory.decodeResource(context.getResources(), R.drawable.flummi));
         enemy = new Enemy(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy));
         fire = new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.fire), 4);
 
+        background = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background));
         paint = new Paint();
     }
 
@@ -132,9 +135,12 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         if (canvas != null) {
             canvas.drawColor(Color.rgb(255, 255, 255));
 
+            background.draw(canvas);
+
             flummi.draw(canvas);
             enemy.draw(canvas);
             fire.draw(canvas);
+
         }
     }
 }
