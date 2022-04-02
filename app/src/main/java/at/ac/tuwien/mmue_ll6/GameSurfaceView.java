@@ -17,7 +17,9 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.Button;
+import android.widget.Toast;
 
+import at.ac.tuwien.mmue_ll6.assets.Enemy;
 import at.ac.tuwien.mmue_ll6.assets.Flummi;
 
 
@@ -29,6 +31,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private Paint paint;
 
     private Flummi flummi;
+    private Enemy enemy;
 
     public GameSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -61,6 +64,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private void loadAssets(Context context) {
         // Initialize the assets:
         flummi = new Flummi(context);
+        enemy = new Enemy(context);
+
         paint = new Paint();
     }
 
@@ -89,20 +94,28 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     public boolean onTouchEvent(MotionEvent e) {
         // a touch-event has been triggered
         if (e.getAction() == MotionEvent.ACTION_DOWN) {
-            int x = (int)e.getX();
+            int x = (int) e.getX();
 
-            if (x > flummi.getX()) {
-                flummi.updateRight();
+            if (!Rect.intersects(flummi.getRectTarget(), enemy.getRectTarget())) {
+                if (x > flummi.getX()) {
+                    flummi.updateRight();
+                }
+                if (x < flummi.getX()) {
+                    flummi.updateLeft();
+                }
+
+                if (Rect.intersects(flummi.getRectTarget(), enemy.getRectTarget())) {
+                    collisionEvent();
+                }
             }
-            if (x < flummi.getX()) {
-                flummi.updateLeft();
-            }
-            return true;
         }
-        return false;
-
+        return true;
     }
 
+    private void collisionEvent(){
+        Toast.makeText(getContext(), "Lose Game!", Toast.LENGTH_LONG).show();
+        endGame();
+    }
 
     @Override
     public void draw(Canvas canvas) {
@@ -113,6 +126,11 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
                 flummi.getBitmap(),
                 flummi.getRectSrc(),
                 flummi.getRectTarget(),
+                paint);
+        canvas.drawBitmap(
+                enemy.getBitmap(),
+                enemy.getRectSrc(),
+                enemy.getRectTarget(),
                 paint);
     }
 }
