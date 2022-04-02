@@ -19,9 +19,9 @@ public class GameLoop implements Runnable {
 
     private static final String TAG = GameLoop.class.getSimpleName();
 
-    private final static int    MAX_FPS = 50;
-    private final static int    MAX_FRAME_SKIPS = 5;
-    private final static int    FRAME_PERIOD = 1000 / MAX_FPS;
+    private final static int  MAX_FPS = 50;
+    private final static int  MAX_FRAME_SKIPS = 5;
+    private final static int  FRAME_PERIOD = 1000 / MAX_FPS;
 
     public GameLoop(SurfaceHolder surfaceHolder, GameSurfaceView gameSurfaceView) {
         this.surfaceHolder = surfaceHolder;

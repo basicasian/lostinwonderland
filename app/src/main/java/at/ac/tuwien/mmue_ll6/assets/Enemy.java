@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -22,9 +23,8 @@ public class Enemy {
     private int y;
 
     //constructor
-    public Enemy(Context context) {
-        // getting bitmap from drawable resource
-        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy);
+    public Enemy(Bitmap bitmap) {
+        this.bitmap = bitmap;
 
         x = 800;
         y = 500;
@@ -53,6 +53,11 @@ public class Enemy {
         return y;
     }
 
-
+    // draws the current frame onto the canvas
+    public void draw(Canvas canvas) {
+        if (canvas != null) {
+            canvas.drawBitmap(bitmap, rectSrc, rectTarget, null);
+        }
+    }
 }
 

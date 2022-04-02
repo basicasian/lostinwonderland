@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -24,11 +25,9 @@ public class Flummi {
     //motion speed of the character
     private int speed = 0;
 
-
     //constructor
-    public Flummi(Context context) {
-        // getting bitmap from drawable resource
-        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.flummi);
+    public Flummi(Bitmap bitmap) {
+        this.bitmap = bitmap;
 
         x = 1000;
         y = 500;
@@ -64,7 +63,6 @@ public class Flummi {
         return rectTarget;}
 
     public Rect getRectSrc() {
-
         return rectSrc;
     }
 
@@ -80,6 +78,12 @@ public class Flummi {
         return speed;
     }
 
+    // draws the current frame onto the canvas
+    public void draw(Canvas canvas) {
+        if (canvas != null) {
+            canvas.drawBitmap(bitmap, rectSrc, rectTarget, null);
+        }
+    }
 
 }
 

@@ -17,16 +17,13 @@ public class Sprite {
     long pastTime = 0;
     int frameTime;
 
-    public Sprite(Bitmap bitmap) {
+    public Sprite(Bitmap bitmap, int totalFrames) {
         this.bitmap = bitmap;
-        totalFrames = 4;
+        this.totalFrames = totalFrames;
         currentFrame = 0;
 
-        frameWidth = bitmap.getWidth() / totalFrames;
+        frameWidth = bitmap.getWidth() / this.totalFrames;
         frameHeight = bitmap.getHeight();
-
-        Log.d("test", String.valueOf(frameWidth));
-        Log.d("test", String.valueOf(frameHeight));
 
         x = 50;
         y = 500;

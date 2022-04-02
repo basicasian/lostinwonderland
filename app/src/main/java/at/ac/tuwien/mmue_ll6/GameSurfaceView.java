@@ -33,7 +33,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     private Flummi flummi;
     private Enemy enemy;
-    private Sprite sprite;
+    private Sprite fire;
 
     public GameSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -65,11 +65,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     private void loadAssets(Context context) {
         // Initialize the assets:
-        flummi = new Flummi(context);
-        enemy = new Enemy(context);
-
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.fire);
-        sprite = new Sprite(bitmap);
+        flummi = new Flummi(BitmapFactory.decodeResource(context.getResources(), R.drawable.flummi));
+        enemy = new Enemy(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy));
+        fire = new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.fire), 4);
 
         paint = new Paint();
     }
@@ -124,7 +122,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
 
     public void update() {
-        sprite.update(System.currentTimeMillis());
+        fire.update(System.currentTimeMillis());
     }
 
     @Override
@@ -133,18 +131,10 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         if (canvas != null) {
             canvas.drawColor(Color.rgb(255, 255, 255));
-            canvas.drawBitmap(
-                    flummi.getBitmap(),
-                    flummi.getRectSrc(),
-                    flummi.getRectTarget(),
-                    paint);
-            canvas.drawBitmap(
-                    enemy.getBitmap(),
-                    enemy.getRectSrc(),
-                    enemy.getRectTarget(),
-                    paint);
 
-            sprite.draw(canvas);
+            flummi.draw(canvas);
+            enemy.draw(canvas);
+            fire.draw(canvas);
         }
     }
 }
