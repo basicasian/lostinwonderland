@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import at.ac.tuwien.mmue_ll6.assets.Enemy;
 import at.ac.tuwien.mmue_ll6.assets.Flummi;
+import at.ac.tuwien.mmue_ll6.assets.Sprite;
 
 
 public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
@@ -32,6 +33,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     private Flummi flummi;
     private Enemy enemy;
+    private Sprite sprite;
 
     public GameSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -65,6 +67,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // Initialize the assets:
         flummi = new Flummi(context);
         enemy = new Enemy(context);
+
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.fire);
+        sprite = new Sprite(bitmap);
 
         paint = new Paint();
     }
@@ -117,20 +122,29 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         endGame();
     }
 
+
+    public void update() {
+        sprite.update(System.currentTimeMillis());
+    }
+
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
 
-        canvas.drawColor(Color.rgb(255, 255, 255));
-        canvas.drawBitmap(
-                flummi.getBitmap(),
-                flummi.getRectSrc(),
-                flummi.getRectTarget(),
-                paint);
-        canvas.drawBitmap(
-                enemy.getBitmap(),
-                enemy.getRectSrc(),
-                enemy.getRectTarget(),
-                paint);
+        if (canvas != null) {
+            canvas.drawColor(Color.rgb(255, 255, 255));
+            canvas.drawBitmap(
+                    flummi.getBitmap(),
+                    flummi.getRectSrc(),
+                    flummi.getRectTarget(),
+                    paint);
+            canvas.drawBitmap(
+                    enemy.getBitmap(),
+                    enemy.getRectSrc(),
+                    enemy.getRectTarget(),
+                    paint);
+
+            sprite.draw(canvas);
+        }
     }
 }
