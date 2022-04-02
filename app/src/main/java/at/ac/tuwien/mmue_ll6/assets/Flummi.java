@@ -40,17 +40,9 @@ public class Flummi {
     }
 
     //Method to update coordinate of character
-    public void updateRight(){
+    public void move(int deltaX){
         // updating x coordinate
-        x += 20;
-
-        rectTarget.left = x;
-        rectTarget.right = x + bitmap.getWidth();
-    }
-
-    public void updateLeft(){
-        // updating  coordinate
-        x -= 20;
+        x += deltaX;
 
         rectTarget.left = x;
         rectTarget.right = x + bitmap.getWidth();

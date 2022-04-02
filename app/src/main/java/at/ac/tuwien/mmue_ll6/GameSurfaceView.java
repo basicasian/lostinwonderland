@@ -35,7 +35,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private Flummi flummi;
     private Enemy enemy;
     private Sprite fire;
-    private Background background;
+    private Background bg1;
+    private Background bg2;
 
     public GameSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -71,7 +72,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         enemy = new Enemy(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy));
         fire = new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.fire), 4);
 
-        background = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background));
+        bg1 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background));
+        bg2 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background));
         paint = new Paint();
     }
 
@@ -104,10 +106,10 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
             if (!Rect.intersects(flummi.getRectTarget(), enemy.getRectTarget())) {
                 if (x > flummi.getX()) {
-                    flummi.updateRight();
+                    flummi.move(+20);
                 }
                 if (x < flummi.getX()) {
-                    flummi.updateLeft();
+                    flummi.move(-20);
                 }
 
                 if (Rect.intersects(flummi.getRectTarget(), enemy.getRectTarget())) {
@@ -135,7 +137,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         if (canvas != null) {
             canvas.drawColor(Color.rgb(255, 255, 255));
 
-            background.draw(canvas);
+            bg1.draw(canvas);
 
             flummi.draw(canvas);
             enemy.draw(canvas);

@@ -30,8 +30,8 @@ public class Background {
         y = 0;
 
         // source and target rectangle
-        rectTarget = new Rect(x, y, 1900, 930);
-        rectSrc = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        rectTarget = new Rect(x, y, 1900 + x, 1060 + y);
+        rectSrc = new Rect(0, 0, this.bitmap.getWidth(), this.bitmap.getHeight());
     }
 
     public Bitmap getBitmap() {
@@ -58,6 +58,14 @@ public class Background {
         if (canvas != null) {
             canvas.drawBitmap(bitmap, rectSrc, rectTarget, null);
         }
+    }
+
+    public void move(int deltaX){
+        // updating x coordinate
+        x += deltaX;
+
+        rectTarget.left = x;
+        rectTarget.right = x + 1900;
     }
 }
 
