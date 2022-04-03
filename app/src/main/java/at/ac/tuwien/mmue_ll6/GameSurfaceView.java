@@ -20,9 +20,9 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import at.ac.tuwien.mmue_ll6.assets.Background;
-import at.ac.tuwien.mmue_ll6.assets.Enemy;
 import at.ac.tuwien.mmue_ll6.assets.Flummi;
 import at.ac.tuwien.mmue_ll6.assets.Sprite;
+import at.ac.tuwien.mmue_ll6.assets.StaticCharacter;
 
 
 public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
@@ -33,10 +33,17 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private Paint paint;
 
     private Flummi flummi;
-    private Enemy enemy;
+    private StaticCharacter enemy;
+    private StaticCharacter buttonLeft;
+    private StaticCharacter buttonRight;
     private Sprite fire;
     private Background bg1;
     private Background bg2;
+
+    int displayHeight;
+    int displayWidth;
+    int barHeight;
+    int offset;
 
     public GameSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -67,13 +74,33 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     }
 
     private void loadAssets(Context context) {
-        // Initialize the assets
-        flummi = new Flummi(BitmapFactory.decodeResource(context.getResources(), R.drawable.flummi));
-        enemy = new Enemy(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy));
-        fire = new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.fire), 4);
+        // get the size of the screen
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((Activity) getContext()).getWindowManager()
+                .getDefaultDisplay()
+                .getMetrics(displayMetrics);
+        displayWidth = displayMetrics.widthPixels;
+        displayHeight = displayMetrics.heightPixels;
 
-        bg1 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background));
-        bg2 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background));
+        // because we removed the notification bar, we have to add the height manually
+        barHeight = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            barHeight = getResources().getDimensionPixelSize(resourceId);
+        }
+
+        // Initialize the assets
+        flummi = new Flummi(BitmapFactory.decodeResource(context.getResources(), R.drawable.flummi), 1000, displayHeight/2);
+        enemy = new StaticCharacter(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy), 700, displayHeight/2);
+        fire = new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.fire), 4, 100, displayHeight/2);
+
+        offset = 270;
+        buttonLeft = new StaticCharacter(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowleft), 150, displayHeight - offset);
+        buttonRight= new StaticCharacter(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowright), displayWidth - offset, displayHeight - offset);
+
+        bg1 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background), displayWidth, displayHeight, barHeight, true);
+        bg2 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background), displayWidth, displayHeight, barHeight, false);
+
         paint = new Paint();
     }
 
@@ -103,24 +130,26 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // a touch-event has been triggered
         if (e.getAction() == MotionEvent.ACTION_DOWN) {
             int x = (int) e.getX();
+            int y = (int) e.getY();
 
-            if (!Rect.intersects(flummi.getRectTarget(), enemy.getRectTarget())) {
-                if (x > flummi.getX()) {
-                    flummi.move(+20);
-                }
-                if (x < flummi.getX()) {
-                    flummi.move(-20);
-                }
+            if (x >= 150 && x < (150 + buttonLeft.getBitmap().getWidth())
+                    && y >= displayHeight - offset && y < (displayHeight - offset + buttonLeft.getBitmap().getHeight())) {
+                //tada, if this is true, you've started your click inside your bitmap
+                flummi.move(-20);
+            }
+            if (x >=displayWidth - offset && x < (displayWidth - offset + buttonLeft.getBitmap().getWidth())
+                    && y >= displayHeight - offset && y < (displayHeight - offset + buttonLeft.getBitmap().getHeight())) {
+                flummi.move(+20);
+            }
 
-                if (Rect.intersects(flummi.getRectTarget(), enemy.getRectTarget())) {
-                    collisionEvent();
-                }
+            if (Rect.intersects(flummi.getRectTarget(), enemy.getRectTarget())) {
+                collisionEvent();
             }
         }
         return true;
     }
 
-    private void collisionEvent(){
+     private void collisionEvent(){
         Toast.makeText(getContext(), "Lose Game!", Toast.LENGTH_LONG).show();
         endGame();
     }
@@ -135,13 +164,15 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         super.draw(canvas);
 
         if (canvas != null) {
-            canvas.drawColor(Color.rgb(255, 255, 255));
-
+            bg2.draw(canvas);
             bg1.draw(canvas);
 
             flummi.draw(canvas);
             enemy.draw(canvas);
             fire.draw(canvas);
+
+            buttonLeft.draw(canvas);
+            buttonRight.draw(canvas);
 
         }
     }

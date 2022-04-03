@@ -17,7 +17,7 @@ public class Sprite {
     long pastTime = 0;
     int frameTime;
 
-    public Sprite(Bitmap bitmap, int totalFrames) {
+    public Sprite(Bitmap bitmap, int totalFrames, int x, int y) {
         this.bitmap = bitmap;
         this.totalFrames = totalFrames;
         currentFrame = 0;
@@ -25,8 +25,8 @@ public class Sprite {
         frameWidth = bitmap.getWidth() / this.totalFrames;
         frameHeight = bitmap.getHeight();
 
-        x = 50;
-        y = 700;
+        this.x = x;
+        this.y = y;
         frameTime = 150;
     }
 

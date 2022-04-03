@@ -13,7 +13,7 @@ import android.view.Display;
 
 import at.ac.tuwien.mmue_ll6.R;
 
-public class Enemy {
+public class StaticCharacter {
 
     //Bitmap to get character from image
     private Bitmap bitmap;
@@ -24,11 +24,11 @@ public class Enemy {
     private int y;
 
     //constructor
-    public Enemy(Bitmap bitmap) {
+    public StaticCharacter(Bitmap bitmap, int x, int y) {
         this.bitmap = bitmap;
 
-        x = 800;
-        y = 700;
+        this.x = x;
+        this.y = y;
 
         // source and target rectangle
         rectTarget = new Rect(x, y, bitmap.getWidth()+ x, bitmap.getHeight() + y);

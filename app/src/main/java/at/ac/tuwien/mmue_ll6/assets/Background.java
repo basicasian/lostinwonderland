@@ -22,15 +22,26 @@ public class Background {
     private int x;
     private int y;
 
+    private int width;
+    private int height;
+    private int barHeight;
+
+    private boolean first;
+
     //constructor
-    public Background(Bitmap bitmap) {
+    public Background(Bitmap bitmap, int height, int width, int barHeight, boolean first) {
         this.bitmap = bitmap;
 
-        x = 0;
-        y = 0;
+        this.height = height;
+        this.width = width;
+        this.barHeight = barHeight;
 
         // source and target rectangle
-        rectTarget = new Rect(x, y, 1900 + x, 1060 + y);
+        if (first) {
+            rectTarget = new Rect(barHeight, 0, height+barHeight, width);
+        } else {
+            rectTarget = new Rect(height+barHeight, 0, (height+barHeight)*2, width);
+        }
         rectSrc = new Rect(0, 0, this.bitmap.getWidth(), this.bitmap.getHeight());
     }
 
@@ -64,8 +75,13 @@ public class Background {
         // updating x coordinate
         x += deltaX;
 
-        rectTarget.left = x;
-        rectTarget.right = x + 1900;
+        if (first) {
+            rectTarget.left = barHeight + x;
+            rectTarget.right = barHeight + height + x;
+        } else {
+            rectTarget.left = height+barHeight + x;
+            rectTarget.right = (height+barHeight)*2 + x;
+        }
     }
 }
 

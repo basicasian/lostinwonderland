@@ -27,11 +27,11 @@ public class Flummi {
     private int speed = 0;
 
     //constructor
-    public Flummi(Bitmap bitmap) {
+    public Flummi(Bitmap bitmap, int x, int y) {
         this.bitmap = bitmap;
 
-        x = 1000;
-        y = 700;
+        this.x = x;
+        this.y = y;
 
         // source and target rectangle
         rectTarget = new Rect(x, y, bitmap.getWidth()+ x, bitmap.getHeight() + y);
