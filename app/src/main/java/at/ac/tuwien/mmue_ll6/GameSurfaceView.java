@@ -16,6 +16,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -55,6 +56,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         // initialize resources
         loadAssets(context);
+
     }
 
     private void startGame(SurfaceHolder holder) {
@@ -108,14 +110,14 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         // SurfaceView has been created
-        // e.g. create Gameloop and start
+        // e.g. create game loop and start
         startGame(surfaceHolder);
     }
 
     @Override
     public void surfaceChanged(SurfaceHolder surfaceHolder,  int format, int width, int height) {
-        // SurfaceView has been changed verändert (size, format,…)
-        // e.g. end Gameloop cleanly
+        // SurfaceView has been changed (size, format,…)
+        // e.g. end game loop cleanly
 
     }
 
@@ -125,21 +127,28 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         endGame();
     }
 
+
+
     @Override
     public boolean onTouchEvent(MotionEvent e) {
         // a touch-event has been triggered
-        if (e.getAction() == MotionEvent.ACTION_DOWN) {
+        Log.d("test", "onTouchEvent: true");
+        Log.d("test", String.valueOf(e));
+
+        if (e.getAction() == MotionEvent.ACTION_DOWN || e.getAction() == MotionEvent.ACTION_MOVE) {
+
+            Log.d("test", "onTouchEvent: true 2");
             int x = (int) e.getX();
             int y = (int) e.getY();
 
             if (x >= 150 && x < (150 + buttonLeft.getBitmap().getWidth())
                     && y >= displayHeight - offset && y < (displayHeight - offset + buttonLeft.getBitmap().getHeight())) {
-                //tada, if this is true, you've started your click inside your bitmap
-                flummi.move(-20);
+                // if this is true, you've started your click inside your bitmap
+                flummi.move(-1);
             }
             if (x >=displayWidth - offset && x < (displayWidth - offset + buttonLeft.getBitmap().getWidth())
                     && y >= displayHeight - offset && y < (displayHeight - offset + buttonLeft.getBitmap().getHeight())) {
-                flummi.move(+20);
+                flummi.move(+1);
             }
 
             if (Rect.intersects(flummi.getRectTarget(), enemy.getRectTarget())) {
@@ -147,6 +156,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             }
         }
         return true;
+
     }
 
      private void collisionEvent(){

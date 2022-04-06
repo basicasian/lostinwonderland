@@ -90,7 +90,7 @@ public class GameLoop implements Runnable {
                 }
             }
         } finally {
-            if(canvas != null) surfaceHolder.unlockCanvasAndPost(canvas);
+            if (canvas != null) surfaceHolder.unlockCanvasAndPost(canvas);
         }
 
     }
