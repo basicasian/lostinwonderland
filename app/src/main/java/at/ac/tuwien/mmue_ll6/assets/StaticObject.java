@@ -13,7 +13,11 @@ import android.view.Display;
 
 import at.ac.tuwien.mmue_ll6.R;
 
-public class StaticCharacter {
+/**
+ * Encapsulated entity for handling static objects
+ * @author Renate Zhang
+ */
+public class StaticObject {
 
     //Bitmap to get character from image
     private Bitmap bitmap;
@@ -23,38 +27,33 @@ public class StaticCharacter {
     private int x;
     private int y;
 
-    //constructor
-    public StaticCharacter(Bitmap bitmap, int x, int y) {
+    /**
+     * constructor for the class StaticObject
+     * @param bitmap the used bitmap
+     * @param x the x coordinate of the target rect
+     * @param y the y coordinate of the target rect
+     */
+    public StaticObject(Bitmap bitmap, int x, int y) {
         this.bitmap = bitmap;
 
         this.x = x;
         this.y = y;
 
         // source and target rectangle
-        rectTarget = new Rect(x, y, bitmap.getWidth()+ x, bitmap.getHeight() + y);
-        rectSrc = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        this.rectTarget = new Rect(x, y, bitmap.getWidth()+ x, bitmap.getHeight() + y);
+        this.rectSrc = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
     }
 
     public Bitmap getBitmap() {
         return bitmap;
     }
 
-    public Rect getRectTarget() {
-        return rectTarget;}
+    public Rect getRectTarget() { return rectTarget;}
 
-    public Rect getRectSrc() {
-        return rectSrc;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    // draws the current frame onto the canvas
+    /**
+     * draws the current frame onto the canvas
+     * @param canvas which is drawn on
+     */
     public void draw(Canvas canvas) {
         if (canvas != null) {
             canvas.drawBitmap(bitmap, rectSrc, rectTarget, null);

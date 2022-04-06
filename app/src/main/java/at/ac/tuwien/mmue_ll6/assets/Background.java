@@ -12,6 +12,10 @@ import android.view.Display;
 
 import at.ac.tuwien.mmue_ll6.R;
 
+/**
+ * Encapsulated entity for handling the background
+ * @author Renate Zhang
+ */
 public class Background {
 
     //Bitmap to get character from image
@@ -28,7 +32,10 @@ public class Background {
 
     private boolean first;
 
-    //constructor
+    /**
+     * constructor for the class Background
+     * @param bitmap the used bitmap
+     */
     public Background(Bitmap bitmap, int height, int width, int barHeight, boolean first) {
         this.bitmap = bitmap;
 
@@ -64,7 +71,10 @@ public class Background {
         return y;
     }
 
-    // draws the current frame onto the canvas
+    /**
+     * draws the current frame onto the canvas
+     * @param canvas which is drawn on
+     */
     public void draw(Canvas canvas) {
         if (canvas != null) {
             canvas.drawBitmap(bitmap, rectSrc, rectTarget, null);

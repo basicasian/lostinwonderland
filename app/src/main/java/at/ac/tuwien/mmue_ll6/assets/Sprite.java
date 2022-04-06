@@ -5,6 +5,10 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.Log;
 
+/**
+ * Encapsulated entity for handling sprites
+ * @author Renate Zhang
+ */
 public class Sprite {
     Bitmap bitmap;
     private int x;

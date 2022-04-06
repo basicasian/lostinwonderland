@@ -2,28 +2,22 @@ package at.ac.tuwien.mmue_ll6;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import at.ac.tuwien.mmue_ll6.assets.Background;
 import at.ac.tuwien.mmue_ll6.assets.Flummi;
 import at.ac.tuwien.mmue_ll6.assets.Sprite;
-import at.ac.tuwien.mmue_ll6.assets.StaticCharacter;
+import at.ac.tuwien.mmue_ll6.assets.StaticObject;
 
 
 public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
@@ -34,9 +28,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private Paint paint;
 
     private Flummi flummi;
-    private StaticCharacter enemy;
-    private StaticCharacter buttonLeft;
-    private StaticCharacter buttonRight;
+    private StaticObject enemy;
+    private StaticObject buttonLeft;
+    private StaticObject buttonRight;
     private Sprite fire;
     private Background bg1;
     private Background bg2;
@@ -93,12 +87,12 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         // Initialize the assets
         flummi = new Flummi(BitmapFactory.decodeResource(context.getResources(), R.drawable.flummi), 1000, displayHeight/2);
-        enemy = new StaticCharacter(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy), 700, displayHeight/2);
+        enemy = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy), 700, displayHeight/2);
         fire = new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.fire), 4, 100, displayHeight/2);
 
         offset = 270;
-        buttonLeft = new StaticCharacter(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowleft), 150, displayHeight - offset);
-        buttonRight= new StaticCharacter(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowright), displayWidth - offset, displayHeight - offset);
+        buttonLeft = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowleft), 150, displayHeight - offset);
+        buttonRight= new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowright), displayWidth - offset, displayHeight - offset);
 
         bg1 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background), displayWidth, displayHeight, barHeight, true);
         bg2 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background), displayWidth, displayHeight, barHeight, false);
@@ -151,6 +145,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
                 flummi.move(+1);
             }
 
+
             if (Rect.intersects(flummi.getRectTarget(), enemy.getRectTarget())) {
                 collisionEvent();
             }
@@ -183,7 +178,6 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
             buttonLeft.draw(canvas);
             buttonRight.draw(canvas);
-
         }
     }
 }
