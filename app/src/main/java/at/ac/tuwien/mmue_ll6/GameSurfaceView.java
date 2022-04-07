@@ -33,7 +33,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private GameLoop gameLoop;
     private Thread gameMainThread;
     private Paint paint;
+
     private boolean gameLost = false;
+    private boolean isJumping = false;
 
     // objects
     private Flummi flummi;
@@ -201,13 +203,14 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             if (touchX >= 150 && touchX < (150 + buttonLeft.getBitmap().getWidth())
                     && touchY >= displayHeight - offset && touchY < (displayHeight - offset + buttonLeft.getBitmap().getHeight())) {
                 // if this is true, you've started your click inside your bitmap
+                isJumping = true;
                 flummi.moveY(-100);
-
             }
         }
 
         if (e.getAction() == MotionEvent.ACTION_UP) {
             setPressed(false);
+            isJumping = false;
         }
         return true;
     }
@@ -251,7 +254,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         fire.update(System.currentTimeMillis());
 
         // gravity simulation
-        if (!Rect.intersects(flummi.getRectTarget(), platform1)) {
+        if (!Rect.intersects(flummi.getRectTarget(), platform1) && !isJumping) {
             flummi.moveY(+10);
         }
         if (isPressed()) {
@@ -273,7 +276,6 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
                 paintText.setARGB(255,198, 64, 110);
                 paintText.setTextSize(100);
                 canvas.drawText("Game Over", displayWidth/3, (displayHeight/2), paintText);
-
                 // endGame();
             }
 
@@ -289,9 +291,6 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             buttonLeft.draw(canvas);
             buttonRight.draw(canvas);
             buttonUp.draw(canvas);
-
-
-
         }
     }
 }
