@@ -23,10 +23,6 @@ public class StaticObject {
     private Bitmap bitmap;
     private Rect rectTarget, rectSrc;
 
-    //coordinates
-    private int x;
-    private int y;
-
     /**
      * constructor for the class StaticObject
      * @param bitmap the used bitmap
@@ -35,9 +31,6 @@ public class StaticObject {
      */
     public StaticObject(Bitmap bitmap, int x, int y) {
         this.bitmap = bitmap;
-
-        this.x = x;
-        this.y = y;
 
         // source and target rectangle
         this.rectTarget = new Rect(x, y, bitmap.getWidth()+ x, bitmap.getHeight() + y);

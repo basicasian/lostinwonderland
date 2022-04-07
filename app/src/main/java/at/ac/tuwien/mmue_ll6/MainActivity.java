@@ -6,6 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+/**
+ * Activity for the main menu, starting new intents to other activities
+ * @author Renate Zhang
+ */
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -33,7 +37,4 @@ public class MainActivity extends AppCompatActivity {
     public void startHighScoreActivity(View v) {
         startActivity(new Intent(this, HighScoreActivity.class));
     }
-
-
-
 }

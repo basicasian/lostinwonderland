@@ -52,25 +52,6 @@ public class Background {
         rectSrc = new Rect(0, 0, this.bitmap.getWidth(), this.bitmap.getHeight());
     }
 
-    public Bitmap getBitmap() {
-        return bitmap;
-    }
-
-    public Rect getRectTarget() {
-        return rectTarget;}
-
-    public Rect getRectSrc() {
-        return rectSrc;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
     /**
      * draws the current frame onto the canvas
      * @param canvas which is drawn on

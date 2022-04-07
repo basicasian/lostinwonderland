@@ -10,31 +10,43 @@ import android.util.Log;
  * @author Renate Zhang
  */
 public class Sprite {
+
+    //Bitmap to get character from image
     Bitmap bitmap;
-    private int x;
-    int y;
-    int frameWidth;
-    int frameHeight;
-    int totalFrames;
-    int currentFrame;
+    //coordinates
+    private final int x;
+    private final int y;
+    //to extract the frame out of the bitmap
+    private final int frameWidth;
+    private final int frameHeight;
+    private int currentFrame;
 
-    long pastTime = 0;
-    int frameTime;
+    private long pastTime = 0;
+    private final int frameTime;
 
+    /**
+     * constructor for the class Sprite
+     * @param bitmap the used bitmap
+     * @param totalFrames number of total frames of sprite sheet
+     * @param x the y coordinate of the target rect
+     * @param y the y coordinate of the target rect
+     */
     public Sprite(Bitmap bitmap, int totalFrames, int x, int y) {
         this.bitmap = bitmap;
-        this.totalFrames = totalFrames;
         currentFrame = 0;
 
-        frameWidth = bitmap.getWidth() / this.totalFrames;
+        frameWidth = bitmap.getWidth() / totalFrames;
         frameHeight = bitmap.getHeight();
 
         this.x = x;
         this.y = y;
-        frameTime = 150;
+        this.frameTime = 150;
     }
 
-    // checks if its time for the next frame
+    /**
+     * checks if its time for the next frame
+     * @param currentTime the current time to check if its time for the next frame
+     */
     public void update(long currentTime) {
         if (currentTime > pastTime + frameTime) {
             pastTime = currentTime;
@@ -43,7 +55,10 @@ public class Sprite {
         }
     }
 
-    // draws the current frame onto the canvas
+    /**
+     * draws the current frame onto the canvas
+     * @param canvas which is drawn on
+     */
     public void draw(Canvas canvas) {
         if (canvas != null) {
             Rect targetRect = new Rect(x, y, x + frameWidth * 2, y + frameHeight * 2);

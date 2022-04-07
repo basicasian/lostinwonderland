@@ -1,5 +1,6 @@
 package at.ac.tuwien.mmue_ll6;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
@@ -19,27 +20,34 @@ import at.ac.tuwien.mmue_ll6.assets.Flummi;
 import at.ac.tuwien.mmue_ll6.assets.Sprite;
 import at.ac.tuwien.mmue_ll6.assets.StaticObject;
 
-
+/**
+ * The game view for loading assets and starting and ending the game
+ * @author Renate Zhang
+ */
 public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
 
     private GameLoop gameLoop;
     private Thread gameMainThread;
 
-    private Paint paint;
-
+    // objects
     private Flummi flummi;
     private StaticObject enemy;
     private StaticObject buttonLeft;
     private StaticObject buttonRight;
+    private StaticObject buttonUp;
     private Sprite fire;
     private Background bg1;
     private Background bg2;
 
+    // information about display
     int displayHeight;
     int displayWidth;
     int barHeight;
     int offset;
 
+    /**
+     * constructor for the class GameSurfaceView
+     */
     public GameSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -50,16 +58,20 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         // initialize resources
         loadAssets(context);
-
     }
 
+    /**
+     * create a new game loop and game thread, and starts it
+     */
     private void startGame(SurfaceHolder holder) {
-
         gameLoop = new GameLoop(holder, this);
         gameMainThread = new Thread(gameLoop);
         gameMainThread.start();
     }
 
+    /**
+     * ends the game and joins the game thread
+     */
     private void endGame() {
         gameLoop.setRunning(false);
         try {
@@ -69,6 +81,11 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         }
     }
 
+    /**
+     * loading the assets (character, background, etc) and initializing them with x and y coordinates
+     * also getting the display sizes for the background
+     * @param context to get the bitmap
+     */
     private void loadAssets(Context context) {
         // get the size of the screen
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -93,77 +110,89 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         offset = 270;
         buttonLeft = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowleft), 150, displayHeight - offset);
         buttonRight= new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowright), displayWidth - offset, displayHeight - offset);
+        buttonUp= new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowup), 400 , displayHeight - offset);
 
         bg1 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background), displayWidth, displayHeight, barHeight, true);
         bg2 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background), displayWidth, displayHeight, barHeight, false);
-
-        paint = new Paint();
     }
 
-
+    /**
+     * surfaceView has been created, create game loop and start
+     * @param surfaceHolder needed for the game loop
+     */
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
-        // SurfaceView has been created
-        // e.g. create game loop and start
         startGame(surfaceHolder);
     }
 
+    /**
+     * SurfaceView has been changed (size, format,…)
+     */
     @Override
     public void surfaceChanged(SurfaceHolder surfaceHolder,  int format, int width, int height) {
-        // SurfaceView has been changed (size, format,…)
-        // e.g. end game loop cleanly
-
     }
 
+    /**
+     * SurfaceView has been hidden
+     */
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-        // SurfaceView has been hidden
         endGame();
     }
 
-
-
+    /**
+     * When the screen is touched, trigger movement of Flummi
+     * @param e the input motion event
+     */
     @Override
     public boolean onTouchEvent(MotionEvent e) {
         // a touch-event has been triggered
-        Log.d("test", "onTouchEvent: true");
-        Log.d("test", String.valueOf(e));
 
         if (e.getAction() == MotionEvent.ACTION_DOWN || e.getAction() == MotionEvent.ACTION_MOVE) {
-
-            Log.d("test", "onTouchEvent: true 2");
             int x = (int) e.getX();
             int y = (int) e.getY();
 
             if (x >= 150 && x < (150 + buttonLeft.getBitmap().getWidth())
                     && y >= displayHeight - offset && y < (displayHeight - offset + buttonLeft.getBitmap().getHeight())) {
                 // if this is true, you've started your click inside your bitmap
-                flummi.move(-1);
+                flummi.moveX(-1);
             }
             if (x >=displayWidth - offset && x < (displayWidth - offset + buttonLeft.getBitmap().getWidth())
                     && y >= displayHeight - offset && y < (displayHeight - offset + buttonLeft.getBitmap().getHeight())) {
-                flummi.move(+1);
+                flummi.moveX(+1);
             }
-
+            if (x >= 400 && x < (400 + buttonLeft.getBitmap().getWidth())
+                    && y >= displayHeight - offset && y < (displayHeight - offset + buttonLeft.getBitmap().getHeight())) {
+                // if this is true, you've started your click inside your bitmap
+                flummi.jump(-1);
+            }
 
             if (Rect.intersects(flummi.getRectTarget(), enemy.getRectTarget())) {
                 collisionEvent();
             }
         }
         return true;
-
     }
 
+    /**
+     * if flummi collides with the enemy, create a lose message and end the game
+     */
      private void collisionEvent(){
         Toast.makeText(getContext(), "Lose Game!", Toast.LENGTH_LONG).show();
         endGame();
     }
 
-
+    /**
+     * updates the sprite animation
+     */
     public void update() {
         fire.update(System.currentTimeMillis());
     }
 
+    /**
+     * draw the objects created in loadAssets() on the canvas
+     * @param canvas which is drawn on
+     */
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
@@ -178,6 +207,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
             buttonLeft.draw(canvas);
             buttonRight.draw(canvas);
+            buttonUp.draw(canvas);
         }
     }
 }

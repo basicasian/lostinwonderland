@@ -1,5 +1,6 @@
 package at.ac.tuwien.mmue_ll6.assets;
 
+import android.app.blob.BlobHandle;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -12,15 +13,13 @@ import android.util.Log;
 public class Flummi {
 
     //Bitmap to get character from image
-    private Bitmap bitmap;
-    private Rect rectTarget, rectSrc;
+    private final Bitmap bitmap;
+    private final Rect rectSrc;
+    private Rect rectTarget;
 
     //coordinates
     private int x;
     private int y;
-
-    //motion speed of the character
-    private int speed = 0;
 
     /**
      * constructor for the class Flummi
@@ -39,22 +38,28 @@ public class Flummi {
         this.rectSrc = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
     }
 
-    public Bitmap getBitmap() {
-        return bitmap;
-    }
-
     public Rect getRectTarget() { return rectTarget;}
 
     /**
-     * method to update coordinate of character
+     * method to update x coordinate of character
      * @param deltaX how much the x coordinate should be moved
      */
-    public void move(int deltaX){
-
+    public void moveX(int deltaX){
         this.x += deltaX;
 
         this.rectTarget.left = x;
         this.rectTarget.right = x + bitmap.getWidth();
+    }
+
+    /**
+     * method to update y coordinate of character
+     * @param deltaY how much the y coordinate should be moved
+     */
+    public void jump(int deltaY){
+        this.y += deltaY;
+
+        this.rectTarget.top = y;
+        this.rectTarget.bottom = y + bitmap.getHeight();
     }
 
     /**

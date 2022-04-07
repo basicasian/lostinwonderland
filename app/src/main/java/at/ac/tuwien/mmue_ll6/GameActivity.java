@@ -12,10 +12,11 @@ import android.widget.Button;
 
 import at.ac.tuwien.mmue_ll6.assets.Flummi;
 
+/**
+ * Activity for playing the the game
+ * @author Renate Zhang
+ */
 public class GameActivity extends AppCompatActivity {
-
-    SurfaceView gameSurfaceView;
-    Flummi flummi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +31,4 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
 
     }
-    
-    
-
-
-
 }

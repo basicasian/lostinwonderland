@@ -11,6 +11,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.VideoView;
 
+/**
+ * Activity for playing the intro video with skip button
+ * @author Renate Zhang
+ */
 public class VideoActivity extends AppCompatActivity implements MediaPlayer.OnCompletionListener {
 
     VideoView videoView;
@@ -41,7 +45,6 @@ public class VideoActivity extends AppCompatActivity implements MediaPlayer.OnCo
         //start video view when video activity starts
         videoView.start();
     }
-
 
     public void skipButtonPressed(View v) {
         skipVideo();
