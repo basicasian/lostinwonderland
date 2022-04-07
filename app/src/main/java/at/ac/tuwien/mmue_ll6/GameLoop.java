@@ -44,7 +44,7 @@ public class GameLoop implements Runnable {
      */
     @Override
     public void run() {
-        Log.d(TAG, "Starting game loop");
+        Log.i(TAG, "Starting game loop");
 
         //one time updates before first frame update is called
         start();

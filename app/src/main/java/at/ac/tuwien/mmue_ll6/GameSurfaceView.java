@@ -10,6 +10,7 @@ import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -25,6 +26,8 @@ import at.ac.tuwien.mmue_ll6.assets.StaticObject;
  * @author Renate Zhang
  */
 public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
+
+    private static final String TAG = GameLoop.class.getSimpleName();
 
     private GameLoop gameLoop;
     private Thread gameMainThread;
@@ -108,9 +111,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         fire = new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.fire), 4, 100, displayHeight/2);
 
         offset = 270;
-        buttonLeft = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowleft), 150, displayHeight - offset);
+        buttonLeft = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowleft), displayWidth - offset*2, displayHeight - offset);
         buttonRight= new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowright), displayWidth - offset, displayHeight - offset);
-        buttonUp= new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowup), 400 , displayHeight - offset);
+        buttonUp= new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowup), 150 , displayHeight - offset);
 
         bg1 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background), displayWidth, displayHeight, barHeight, true);
         bg2 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background), displayWidth, displayHeight, barHeight, false);
@@ -140,13 +143,36 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         endGame();
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        Log.d(TAG, "onKeyDown: " + keyCode);
+        // left arrow = 20
+        if (keyCode == 20) {
+            flummi.moveX(-5);
+            return true;
+        }
+        // right arrow = 19
+        if (keyCode == 19) {
+            flummi.moveX(+5);
+            return true;
+        }
+        // space = 62
+        if (keyCode == 62) {
+            flummi.jump(-5);
+            return true;
+        }
+        return true;
+    }
+
     /**
-     * When the screen is touched, trigger movement of Flummi
+     * a touch-event has been triggered, trigger movement of Flummi
      * @param e the input motion event
      */
     @Override
     public boolean onTouchEvent(MotionEvent e) {
-        // a touch-event has been triggered
+
+        Log.d(TAG, "onTouchEvent: " + e);
 
         if (e.getAction() == MotionEvent.ACTION_DOWN || e.getAction() == MotionEvent.ACTION_MOVE) {
             int x = (int) e.getX();
@@ -155,16 +181,15 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             if (x >= 150 && x < (150 + buttonLeft.getBitmap().getWidth())
                     && y >= displayHeight - offset && y < (displayHeight - offset + buttonLeft.getBitmap().getHeight())) {
                 // if this is true, you've started your click inside your bitmap
-                flummi.moveX(-1);
+                flummi.jump(-3);
             }
             if (x >=displayWidth - offset && x < (displayWidth - offset + buttonLeft.getBitmap().getWidth())
                     && y >= displayHeight - offset && y < (displayHeight - offset + buttonLeft.getBitmap().getHeight())) {
-                flummi.moveX(+1);
+                flummi.moveX(+3);
             }
-            if (x >= 400 && x < (400 + buttonLeft.getBitmap().getWidth())
+            if (x >= displayWidth - offset*2 && x < (displayWidth - offset*2 + buttonLeft.getBitmap().getWidth())
                     && y >= displayHeight - offset && y < (displayHeight - offset + buttonLeft.getBitmap().getHeight())) {
-                // if this is true, you've started your click inside your bitmap
-                flummi.jump(-1);
+                flummi.moveX(-3);
             }
 
             if (Rect.intersects(flummi.getRectTarget(), enemy.getRectTarget())) {
