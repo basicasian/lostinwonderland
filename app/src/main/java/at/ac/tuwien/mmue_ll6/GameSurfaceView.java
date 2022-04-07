@@ -162,7 +162,6 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         endGame();
     }
 
-    /*
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
@@ -176,13 +175,19 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             flummi.moveX(+5);
             return true;
         }
+        return true;
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+
         // space = 62
         if (keyCode == 62) {
-            flummi.jump(-5, platform1);
+            flummi.moveY(-100);
             return true;
         }
         return true;
-    }*/
+    }
 
     /**
      * a touch-event has been triggered, set pressed state to true or false
@@ -271,17 +276,17 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         super.draw(canvas);
 
         if (canvas != null) {
+
+            bg2.draw(canvas);
+            bg1.draw(canvas);
+
             if (gameLost) {
                 Paint paintText = new Paint();
                 paintText.setARGB(255,198, 64, 110);
                 paintText.setTextSize(100);
                 canvas.drawText("Game Over", displayWidth/3, (displayHeight/2), paintText);
-                // endGame();
+                endGame();
             }
-
-            bg2.draw(canvas);
-            bg1.draw(canvas);
-
             canvas.drawRect(platform1, paint);
 
             flummi.draw(canvas);
