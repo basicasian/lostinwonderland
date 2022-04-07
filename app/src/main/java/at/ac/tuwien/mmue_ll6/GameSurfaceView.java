@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
@@ -27,26 +28,35 @@ import at.ac.tuwien.mmue_ll6.assets.StaticObject;
  */
 public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
 
-    private static final String TAG = GameLoop.class.getSimpleName();
+    private static final String TAG = GameSurfaceView.class.getSimpleName();
 
     private GameLoop gameLoop;
     private Thread gameMainThread;
+    private Paint paint;
+    private boolean gameLost = false;
 
     // objects
     private Flummi flummi;
     private StaticObject enemy;
+    private Rect platform1;
+    private Sprite fire;
+
+    // assets
+    private Background bg1;
+    private Background bg2;
     private StaticObject buttonLeft;
     private StaticObject buttonRight;
     private StaticObject buttonUp;
-    private Sprite fire;
-    private Background bg1;
-    private Background bg2;
 
     // information about display
     int displayHeight;
     int displayWidth;
     int barHeight;
-    int offset;
+    int offset = 270;
+
+    // coordinates of touch
+    int touchX;
+    int touchY;
 
     /**
      * constructor for the class GameSurfaceView
@@ -106,17 +116,24 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         }
 
         // Initialize the assets
-        flummi = new Flummi(BitmapFactory.decodeResource(context.getResources(), R.drawable.flummi), 1000, displayHeight/2);
-        enemy = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy), 700, displayHeight/2);
-        fire = new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.fire), 4, 100, displayHeight/2);
+        // coordinate system starts from top left! (in landscape mode)
+        // but elements are initialized from bottom left
+        flummi = new Flummi(BitmapFactory.decodeResource(context.getResources(), R.drawable.flummi), 1000, displayHeight - 300);
+        enemy = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy), 500, displayHeight - 300);
+        fire = new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.fire), 4, 100, displayHeight - 300);
+        // platform1 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform), 100, 660, 0.5f);
+        //platform1 = new Rect(0, 800, displayWidth + barHeight, displayHeight);
+        platform1 = new Rect(0, displayHeight - 300, displayWidth - 500, displayHeight);
 
-        offset = 270;
-        buttonLeft = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowleft), displayWidth - offset*2, displayHeight - offset);
-        buttonRight= new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowright), displayWidth - offset, displayHeight - offset);
-        buttonUp= new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowup), 150 , displayHeight - offset);
+        buttonLeft = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowleft), displayWidth - 500, displayHeight - 50);
+        buttonRight= new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowright), displayWidth - 250, displayHeight - 50);
+        buttonUp= new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowup), barHeight + 50, displayHeight - 50);
 
         bg1 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background), displayWidth, displayHeight, barHeight, true);
         bg2 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background), displayWidth, displayHeight, barHeight, false);
+
+        paint = new Paint();
+        paint.setARGB(255,93, 204, 88);
     }
 
     /**
@@ -143,75 +160,103 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         endGame();
     }
 
+    /*
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
-        Log.d(TAG, "onKeyDown: " + keyCode);
-        // left arrow = 20
-        if (keyCode == 20) {
+        // left arrow = 21
+        if (keyCode == 21) {
             flummi.moveX(-5);
             return true;
         }
-        // right arrow = 19
-        if (keyCode == 19) {
+        // right arrow = 22
+        if (keyCode == 22) {
             flummi.moveX(+5);
             return true;
         }
         // space = 62
         if (keyCode == 62) {
-            flummi.jump(-5);
+            flummi.jump(-5, platform1);
             return true;
         }
         return true;
-    }
+    }*/
 
     /**
-     * a touch-event has been triggered, trigger movement of Flummi
+     * a touch-event has been triggered, set pressed state to true or false
      * @param e the input motion event
      */
     @Override
     public boolean onTouchEvent(MotionEvent e) {
-
         Log.d(TAG, "onTouchEvent: " + e);
 
-        if (e.getAction() == MotionEvent.ACTION_DOWN || e.getAction() == MotionEvent.ACTION_MOVE) {
-            int x = (int) e.getX();
-            int y = (int) e.getY();
+        if (e.getAction() == MotionEvent.ACTION_DOWN) {
+            setPressed(true);
 
-            if (x >= 150 && x < (150 + buttonLeft.getBitmap().getWidth())
-                    && y >= displayHeight - offset && y < (displayHeight - offset + buttonLeft.getBitmap().getHeight())) {
+            touchX = (int) e.getX();
+            touchY = (int) e.getY();
+
+            // jump motion should be only one click
+            // up botton
+            if (touchX >= 150 && touchX < (150 + buttonLeft.getBitmap().getWidth())
+                    && touchY >= displayHeight - offset && touchY < (displayHeight - offset + buttonLeft.getBitmap().getHeight())) {
                 // if this is true, you've started your click inside your bitmap
-                flummi.jump(-3);
-            }
-            if (x >=displayWidth - offset && x < (displayWidth - offset + buttonLeft.getBitmap().getWidth())
-                    && y >= displayHeight - offset && y < (displayHeight - offset + buttonLeft.getBitmap().getHeight())) {
-                flummi.moveX(+3);
-            }
-            if (x >= displayWidth - offset*2 && x < (displayWidth - offset*2 + buttonLeft.getBitmap().getWidth())
-                    && y >= displayHeight - offset && y < (displayHeight - offset + buttonLeft.getBitmap().getHeight())) {
-                flummi.moveX(-3);
-            }
+                flummi.moveY(-100);
 
-            if (Rect.intersects(flummi.getRectTarget(), enemy.getRectTarget())) {
-                collisionEvent();
             }
+        }
+
+        if (e.getAction() == MotionEvent.ACTION_UP) {
+            setPressed(false);
         }
         return true;
     }
 
     /**
-     * if flummi collides with the enemy, create a lose message and end the game
+     * check if the buttons are pressed, if yes move character
+     * can be pressed permanently
      */
-     private void collisionEvent(){
-        Toast.makeText(getContext(), "Lose Game!", Toast.LENGTH_LONG).show();
-        endGame();
+    private void touchEvent() {
+
+        // left button
+        if (touchX >=displayWidth - offset && touchX < (displayWidth - offset + buttonLeft.getBitmap().getWidth())
+                && touchY >= displayHeight - offset && touchY < (displayHeight - offset + buttonLeft.getBitmap().getHeight())) {
+            flummi.moveX(+4);
+        }
+        // right button
+        if (touchX >= displayWidth - offset*2 && touchX < (displayWidth - offset*2 + buttonLeft.getBitmap().getWidth())
+                && touchY >= displayHeight - offset && touchY < (displayHeight - offset + buttonLeft.getBitmap().getHeight())) {
+            flummi.moveX(-4);
+        }
     }
 
     /**
-     * updates the sprite animation
+     * check if lose condition is fulfilled, if yes end game
+     */
+     private void checkLose(){
+         // if flummi touches the enemy or
+         // if flummi falls from platforms
+         if ((Rect.intersects(flummi.getRectTarget(), enemy.getRectTarget())) || (flummi.getRectTarget().top > displayHeight)) {
+             gameLost = true;
+         }
+    }
+
+    /**
+     * updates the sprite animation and checks if the screen is still pressed
+     * or if lose condition is fulfilled
      */
     public void update() {
+        checkLose();
+
         fire.update(System.currentTimeMillis());
+
+        // gravity simulation
+        if (!Rect.intersects(flummi.getRectTarget(), platform1)) {
+            flummi.moveY(+10);
+        }
+        if (isPressed()) {
+            touchEvent();
+        }
     }
 
     /**
@@ -223,8 +268,19 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         super.draw(canvas);
 
         if (canvas != null) {
+            if (gameLost) {
+                Paint paintText = new Paint();
+                paintText.setARGB(255,198, 64, 110);
+                paintText.setTextSize(100);
+                canvas.drawText("Game Over", displayWidth/3, (displayHeight/2), paintText);
+
+                // endGame();
+            }
+
             bg2.draw(canvas);
             bg1.draw(canvas);
+
+            canvas.drawRect(platform1, paint);
 
             flummi.draw(canvas);
             enemy.draw(canvas);
@@ -233,6 +289,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             buttonLeft.draw(canvas);
             buttonRight.draw(canvas);
             buttonUp.draw(canvas);
+
+
+
         }
     }
 }

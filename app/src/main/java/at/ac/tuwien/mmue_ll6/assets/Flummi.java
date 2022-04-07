@@ -21,6 +21,9 @@ public class Flummi {
     private int x;
     private int y;
 
+    private boolean isJumping;
+
+
     /**
      * constructor for the class Flummi
      * @param bitmap the used bitmap
@@ -34,11 +37,14 @@ public class Flummi {
         this.y = y;
 
         // source and target rectangle
-        this.rectTarget = new Rect(x, y, bitmap.getWidth()+ x, bitmap.getHeight() + y);
+        this.rectTarget = new Rect(x, y - bitmap.getHeight(), x + bitmap.getWidth(), y);
         this.rectSrc = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
     }
 
     public Rect getRectTarget() { return rectTarget;}
+
+    public boolean getJumping() { return isJumping;}
+    public void setJumping(boolean isJumping) { this.isJumping = isJumping;}
 
     /**
      * method to update x coordinate of character
@@ -55,11 +61,11 @@ public class Flummi {
      * method to update y coordinate of character
      * @param deltaY how much the y coordinate should be moved
      */
-    public void jump(int deltaY){
+    public void moveY(int deltaY){
         this.y += deltaY;
 
-        this.rectTarget.top = y;
-        this.rectTarget.bottom = y + bitmap.getHeight();
+        this.rectTarget.top = y - bitmap.getHeight();
+        this.rectTarget.bottom = y;
     }
 
     /**

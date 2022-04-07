@@ -99,7 +99,7 @@ public class GameLoop implements Runnable {
                     }
                 }
                 while (sleepTime < 0 && framesSkipped < MAX_FRAME_SKIPS) {
-                    this.gameSurfaceView.update();
+                    //this.gameSurfaceView.update();
                     sleepTime += FRAME_PERIOD;
                     framesSkipped++;
                 }
@@ -118,6 +118,8 @@ public class GameLoop implements Runnable {
         lastTime = nowTime;
 
         sleepTime = (int)(FRAME_PERIOD - deltaTime);
+
+        // TODO: implement frame independence
     }
 
 }

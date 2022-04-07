@@ -61,7 +61,7 @@ public class Sprite {
      */
     public void draw(Canvas canvas) {
         if (canvas != null) {
-            Rect targetRect = new Rect(x, y, x + frameWidth * 2, y + frameHeight * 2);
+            Rect targetRect = new Rect(x, y - frameHeight * 2, x + frameWidth * 2, y);
             Rect sourceRect = new Rect(currentFrame * frameWidth + 2, 0, (currentFrame + 1) * frameWidth, frameHeight);
             canvas.drawBitmap(bitmap, sourceRect, targetRect, null);
         }
