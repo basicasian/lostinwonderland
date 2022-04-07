@@ -175,6 +175,11 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             flummi.moveX(+5);
             return true;
         }
+        // space = 62
+        if (keyCode == 62) {
+            isJumping = true;
+            return true;
+        }
         return true;
     }
 
@@ -183,7 +188,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         // space = 62
         if (keyCode == 62) {
-            flummi.moveY(-100);
+            isJumping = false;
+            flummi.moveY(-150);
             return true;
         }
         return true;
@@ -209,7 +215,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
                     && touchY >= displayHeight - offset && touchY < (displayHeight - offset + buttonLeft.getBitmap().getHeight())) {
                 // if this is true, you've started your click inside your bitmap
                 isJumping = true;
-                flummi.moveY(-100);
+                flummi.moveY(-150);
             }
         }
 
