@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoseActivity">
+    tools:context=".AfterGameActivity">
 
     <TextView
         android:id="@+id/loseText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/lose_text"
+        android:text="@string/after_game_text"
         android:textColor="@color/pink_700"
         android:textSize="50sp"
         app:layout_constraintBottom_toTopOf="@+id/tryAgainButton"
@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="28dp"
-        android:text="@string/lose_tryagain"
+        android:text="@string/after_game_tryagain"
         android:onClick="restartGameActivity"
         app:backgroundTint="@color/pink_500"
         app:layout_constraintBottom_toTopOf="@+id/returnToMenuButton"
@@ -36,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="244dp"
-        android:text="@string/lose_menu"
+        android:text="@string/after_game_menu"
         android:onClick="returnMenuActivity"
         app:backgroundTint="@color/pink_100"
         app:layout_constraintBottom_toBottomOf="parent"

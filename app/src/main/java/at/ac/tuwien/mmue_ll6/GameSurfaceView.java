@@ -2,7 +2,9 @@ package at.ac.tuwien.mmue_ll6;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -40,11 +42,14 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     // check variables
     private boolean isJumping = false;
     private boolean isGameOver = false;
+    private boolean isGameWin = false;
 
     // objects
     private Flummi flummi;
     private StaticObject enemy;
+    private StaticObject goal;
     private Rect platform1;
+    private Rect platform2;
     private Sprite fire;
 
     // assets
@@ -54,6 +59,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private StaticObject buttonRight;
     private StaticObject buttonUp;
     private StaticObject gameOverImage;
+    private StaticObject gameWinImage;
 
     // information about display
     int displayHeight;
@@ -131,15 +137,16 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // but elements are initialized from bottom left
         flummi = new Flummi(BitmapFactory.decodeResource(context.getResources(), R.drawable.flummi), 700, displayHeight - 300);
         enemy = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy), 500, displayHeight - 300);
+        goal = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.goal), displayWidth - 120, displayHeight - 300);
         fire = new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.fire), 4, 100, displayHeight - 300);
-        // platform1 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform), 100, 660, 0.5f);
-        //platform1 = new Rect(0, 800, displayWidth + barHeight, displayHeight);
         platform1 = new Rect(0, displayHeight - 300, displayWidth - 500, displayHeight);
+        platform2 = new Rect(displayWidth - 300, displayHeight - 300, displayWidth + barHeight, displayHeight);
 
         buttonLeft = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowleft), displayWidth - 500, displayHeight - 50);
         buttonRight= new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowright), displayWidth - 250, displayHeight - 50);
         buttonUp= new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowup), barHeight + 50, displayHeight - 50);
         gameOverImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.gameover), displayWidth/5, 2*displayHeight/3);
+        gameWinImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.youwin), displayWidth/5, displayHeight/2);
 
         bg1 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background), barHeight, displayWidth+barHeight, displayHeight);
         bg2 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background), displayWidth+barHeight, displayWidth+barHeight+displayWidth, displayHeight);
@@ -205,9 +212,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         }
 
         // if the game's over, touching on the screen sends you to MainActivity
-        if (isGameOver){
+        if (isGameOver || isGameWin){
             if (e.getAction()==MotionEvent.ACTION_DOWN){
-                context.startActivity(new Intent(context,LoseActivity.class));
+                context.startActivity(new Intent(context,AfterGameActivity.class));
             }
         }
 
@@ -220,6 +227,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
      */
     private void longTouchEvent() {
 
+        /*
         // move background if flummi moves too much to the right
         if (flummi.getX() >= (displayWidth/2)) {
             bg1.move(-4);
@@ -230,7 +238,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         if (flummi.getRectTarget().left <= barHeight) {
             bg1.move(4);
             bg2.move(4);
-        }
+        }*/
 
         // right button
         if (touchX >= displayWidth - offset && touchX < (displayWidth - offset + buttonLeft.getBitmap().getWidth())
@@ -253,15 +261,21 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // if flummi touches the enemy or flummi falls from platforms
         if ((Rect.intersects(flummi.getRectTarget(), enemy.getRectTarget())) || (flummi.getRectTarget().top > displayHeight)) {
             Log.d(TAG, "update: game over");
-
             isGameOver = true;
             // don't call endGame() here! only if the you go back to the main screen
+        }
+
+        // win condition
+        // if flummi touches the goal
+        if (Rect.intersects(flummi.getRectTarget(), goal.getRectTarget())) {
+            Log.d(TAG, "update: game won");
+            isGameWin = true;
         }
 
         fire.update(System.currentTimeMillis());
 
         // gravity simulation
-        if (!Rect.intersects(flummi.getRectTarget(), platform1) && !isJumping) {
+        if (!Rect.intersects(flummi.getRectTarget(), platform1) && !isJumping && !Rect.intersects(flummi.getRectTarget(), platform2)) {
             flummi.moveY(+10);
         }
         if (isPressed()) {
@@ -282,17 +296,24 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             bg1.draw(canvas);
             bg2.draw(canvas);
             canvas.drawRect(platform1, paint);
+            canvas.drawRect(platform2, paint);
 
             flummi.draw(canvas);
             enemy.draw(canvas);
+            goal.draw(canvas);
             fire.draw(canvas);
 
             buttonLeft.draw(canvas);
             buttonRight.draw(canvas);
             buttonUp.draw(canvas);
 
+            // draw game won when the game is won
+            if (isGameWin){
+                gameWinImage.draw(canvas);
+            }
+
             // draw game over when the game is over
-            if(isGameOver){
+            if (isGameOver){
                 gameOverImage.draw(canvas);
                 gameLoop.setRunning(false);
             }

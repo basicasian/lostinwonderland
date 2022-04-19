@@ -18,9 +18,9 @@
     <string name="game_left">left</string>
     <string name="game_right">right</string>
 
-    <!-- lose -->
-    <string name="lose_text">GAME OVER</string>
-    <string name="lose_tryagain">try again?</string>
-    <string name="lose_menu">return to menu</string>
+    <!-- after game -->
+    <string name="after_game_text">GAME ENDED</string>
+    <string name="after_game_tryagain">another game?</string>
+    <string name="after_game_menu">return to menu</string>
 
 </resources>

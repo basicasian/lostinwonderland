@@ -2,6 +2,8 @@ package at.ac.tuwien.mmue_ll6;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -31,12 +33,6 @@ public class GameActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_game);
 
-
     }
-
-    public void loseGameActivity(View v) {
-        startActivity(new Intent(this, LoseActivity.class));
-    }
-
 
 }

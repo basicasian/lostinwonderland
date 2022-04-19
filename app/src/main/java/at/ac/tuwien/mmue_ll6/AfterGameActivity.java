@@ -7,10 +7,10 @@ import android.os.Bundle;
 import android.view.View;
 
 /**
- * Activity if the player lost the game
+ * Activity if the player lost or won the game
  * @author Renate Zhang
  */
-public class LoseActivity extends AppCompatActivity {
+public class AfterGameActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
