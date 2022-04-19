@@ -26,29 +26,26 @@ public class Background {
     private int x;
     private int y;
 
-    private int width;
+    private int left;
+    private int right;
     private int height;
-    private int barHeight;
-
-    private boolean first;
 
     /**
      * constructor for the class Background
      * @param bitmap the used bitmap
      */
-    public Background(Bitmap bitmap, int height, int width, int barHeight, boolean first) {
+    public Background(Bitmap bitmap, int left, int right, int height) {
         this.bitmap = bitmap;
 
+        this.left = left;
+        this.right = right;
         this.height = height;
-        this.width = width;
-        this.barHeight = barHeight;
 
         // source and target rectangle
-        if (first) {
-            rectTarget = new Rect(barHeight, 0, height+barHeight, width);
-        } else {
-            rectTarget = new Rect(height+barHeight, 0, (height+barHeight)*2, width);
-        }
+        Log.d("bg", "left: " + left);
+        Log.d("bg", "right: " + right);
+        Log.d("bg", "height: " + height);
+        rectTarget = new Rect(left, 0, right, height);
         rectSrc = new Rect(0, 0, this.bitmap.getWidth(), this.bitmap.getHeight());
     }
 
@@ -66,13 +63,9 @@ public class Background {
         // updating x coordinate
         x += deltaX;
 
-        if (first) {
-            rectTarget.left = barHeight + x;
-            rectTarget.right = barHeight + height + x;
-        } else {
-            rectTarget.left = height+barHeight + x;
-            rectTarget.right = (height+barHeight)*2 + x;
-        }
+        rectTarget.left = left + x;
+        rectTarget.right = right + x;
+
     }
 }
 

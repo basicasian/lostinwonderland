@@ -43,8 +43,7 @@ public class Flummi {
 
     public Rect getRectTarget() { return rectTarget;}
 
-    public boolean getJumping() { return isJumping;}
-    public void setJumping(boolean isJumping) { this.isJumping = isJumping;}
+    public int getX() { return x;}
 
     /**
      * method to update x coordinate of character

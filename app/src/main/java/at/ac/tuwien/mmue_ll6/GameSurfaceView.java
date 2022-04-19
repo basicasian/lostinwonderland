@@ -3,6 +3,7 @@ package at.ac.tuwien.mmue_ll6;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -32,10 +33,13 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     private GameLoop gameLoop;
     private Thread gameMainThread;
+    private Context context;
     private Paint paint;
+    private Paint paint2;
 
-    private boolean gameLost = false;
+    // check variables
     private boolean isJumping = false;
+    private boolean isGameOver = false;
 
     // objects
     private Flummi flummi;
@@ -49,6 +53,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private StaticObject buttonLeft;
     private StaticObject buttonRight;
     private StaticObject buttonUp;
+    private StaticObject gameOverImage;
 
     // information about display
     int displayHeight;
@@ -65,6 +70,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
      */
     public GameSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.context = context;
 
         // callback to add events
         getHolder().addCallback(this);
@@ -81,6 +87,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private void startGame(SurfaceHolder holder) {
         gameLoop = new GameLoop(holder, this);
         gameMainThread = new Thread(gameLoop);
+
+        Log.d(TAG, "Starting Game Thread");
         gameMainThread.start();
     }
 
@@ -90,6 +98,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private void endGame() {
         gameLoop.setRunning(false);
         try {
+            Log.d(TAG, "Joining Game Thread");
             gameMainThread.join();
         } catch (InterruptedException e) {
             Log.e("Error", e.getMessage());
@@ -120,7 +129,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // Initialize the assets
         // coordinate system starts from top left! (in landscape mode)
         // but elements are initialized from bottom left
-        flummi = new Flummi(BitmapFactory.decodeResource(context.getResources(), R.drawable.flummi), 1000, displayHeight - 300);
+        flummi = new Flummi(BitmapFactory.decodeResource(context.getResources(), R.drawable.flummi), 700, displayHeight - 300);
         enemy = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy), 500, displayHeight - 300);
         fire = new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.fire), 4, 100, displayHeight - 300);
         // platform1 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform), 100, 660, 0.5f);
@@ -130,12 +139,15 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         buttonLeft = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowleft), displayWidth - 500, displayHeight - 50);
         buttonRight= new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowright), displayWidth - 250, displayHeight - 50);
         buttonUp= new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowup), barHeight + 50, displayHeight - 50);
+        gameOverImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.gameover), displayWidth/5, 2*displayHeight/3);
 
-        bg1 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background), displayWidth, displayHeight, barHeight, true);
-        bg2 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background), displayWidth, displayHeight, barHeight, false);
+        bg1 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background), barHeight, displayWidth+barHeight, displayHeight);
+        bg2 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background), displayWidth+barHeight, displayWidth+barHeight+displayWidth, displayHeight);
 
         paint = new Paint();
         paint.setARGB(255,93, 204, 88);
+        paint2 = new Paint();
+        paint2.setARGB(255,255, 2255, 255);
     }
 
     /**
@@ -155,48 +167,16 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     }
 
     /**
-     * SurfaceView has been hidden
+     * SurfaceView has been hidden, end the game loop
      */
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
         endGame();
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-        // left arrow = 21
-        if (keyCode == 21) {
-            flummi.moveX(-5);
-            return true;
-        }
-        // right arrow = 22
-        if (keyCode == 22) {
-            flummi.moveX(+5);
-            return true;
-        }
-        // space = 62
-        if (keyCode == 62) {
-            isJumping = true;
-            return true;
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
-
-        // space = 62
-        if (keyCode == 62) {
-            isJumping = false;
-            flummi.moveY(-150);
-            return true;
-        }
-        return true;
-    }
-
     /**
      * a touch-event has been triggered, set pressed state to true or false
+     * can be pressed only once, unlike longTouchEvent() method
      * @param e the input motion event
      */
     @Override
@@ -204,7 +184,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         Log.d(TAG, "onTouchEvent: " + e);
 
         if (e.getAction() == MotionEvent.ACTION_DOWN) {
-            setPressed(true);
+            setPressed(true); // needed for LongTouchEvent()
 
             touchX = (int) e.getX();
             touchY = (int) e.getY();
@@ -213,7 +193,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             // up botton
             if (touchX >= 150 && touchX < (150 + buttonLeft.getBitmap().getWidth())
                     && touchY >= displayHeight - offset && touchY < (displayHeight - offset + buttonLeft.getBitmap().getHeight())) {
-                // if this is true, you've started your click inside your bitmap
+                // if this is true, you've started your click inside the up button
                 isJumping = true;
                 flummi.moveY(-150);
             }
@@ -223,36 +203,45 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             setPressed(false);
             isJumping = false;
         }
+
+        // if the game's over, touching on the screen sends you to MainActivity
+        if (isGameOver){
+            if (e.getAction()==MotionEvent.ACTION_DOWN){
+                context.startActivity(new Intent(context,LoseActivity.class));
+            }
+        }
+
         return true;
     }
 
     /**
-     * check if the buttons are pressed, if yes move character
-     * can be pressed permanently
+     * check if the buttons are pressed, if yes move character to the left or right
+     * can be pressed permanently, unlike onTouchEvent() method
      */
-    private void touchEvent() {
+    private void longTouchEvent() {
 
-        // left button
-        if (touchX >=displayWidth - offset && touchX < (displayWidth - offset + buttonLeft.getBitmap().getWidth())
+        // move background if flummi moves too much to the right
+        if (flummi.getX() >= (displayWidth/2)) {
+            bg1.move(-4);
+            bg2.move(-4);
+        }
+
+        // move background if flummi moves too much to the left
+        if (flummi.getRectTarget().left <= barHeight) {
+            bg1.move(4);
+            bg2.move(4);
+        }
+
+        // right button
+        if (touchX >= displayWidth - offset && touchX < (displayWidth - offset + buttonLeft.getBitmap().getWidth())
                 && touchY >= displayHeight - offset && touchY < (displayHeight - offset + buttonLeft.getBitmap().getHeight())) {
             flummi.moveX(+4);
         }
-        // right button
-        if (touchX >= displayWidth - offset*2 && touchX < (displayWidth - offset*2 + buttonLeft.getBitmap().getWidth())
+        // left button
+        if (touchX >= displayWidth - offset * 2 && touchX < (displayWidth - offset * 2 + buttonLeft.getBitmap().getWidth())
                 && touchY >= displayHeight - offset && touchY < (displayHeight - offset + buttonLeft.getBitmap().getHeight())) {
             flummi.moveX(-4);
         }
-    }
-
-    /**
-     * check if lose condition is fulfilled, if yes end game
-     */
-     private void checkLose(){
-         // if flummi touches the enemy or
-         // if flummi falls from platforms
-         if ((Rect.intersects(flummi.getRectTarget(), enemy.getRectTarget())) || (flummi.getRectTarget().top > displayHeight)) {
-             gameLost = true;
-         }
     }
 
     /**
@@ -260,7 +249,14 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
      * or if lose condition is fulfilled
      */
     public void update() {
-        checkLose();
+        // lose condition
+        // if flummi touches the enemy or flummi falls from platforms
+        if ((Rect.intersects(flummi.getRectTarget(), enemy.getRectTarget())) || (flummi.getRectTarget().top > displayHeight)) {
+            Log.d(TAG, "update: game over");
+
+            isGameOver = true;
+            // don't call endGame() here! only if the you go back to the main screen
+        }
 
         fire.update(System.currentTimeMillis());
 
@@ -269,7 +265,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             flummi.moveY(+10);
         }
         if (isPressed()) {
-            touchEvent();
+            longTouchEvent();
         }
     }
 
@@ -283,16 +279,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         if (canvas != null) {
 
-            bg2.draw(canvas);
             bg1.draw(canvas);
-
-            if (gameLost) {
-                Paint paintText = new Paint();
-                paintText.setARGB(255,198, 64, 110);
-                paintText.setTextSize(100);
-                canvas.drawText("Game Over", displayWidth/3, (displayHeight/2), paintText);
-                endGame();
-            }
+            bg2.draw(canvas);
             canvas.drawRect(platform1, paint);
 
             flummi.draw(canvas);
@@ -302,6 +290,12 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             buttonLeft.draw(canvas);
             buttonRight.draw(canvas);
             buttonUp.draw(canvas);
+
+            // draw game over when the game is over
+            if(isGameOver){
+                gameOverImage.draw(canvas);
+                gameLoop.setRunning(false);
+            }
         }
     }
 }
