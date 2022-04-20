@@ -1,16 +1,9 @@
 package at.ac.tuwien.mmue_ll6.assets;
 
-import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
-
-import at.ac.tuwien.mmue_ll6.R;
 
 /**
  * Encapsulated entity for handling the background

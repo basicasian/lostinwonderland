@@ -1,10 +1,8 @@
 package at.ac.tuwien.mmue_ll6.assets;
 
-import android.app.blob.BlobHandle;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.util.Log;
 
 /**
  * Encapsulated entity for handling dynamic objects, such as the main character or enemies
