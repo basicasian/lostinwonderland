@@ -13,9 +13,12 @@ public class Sprite {
 
     //Bitmap to get character from image
     Bitmap bitmap;
+    private Rect rectSrc;
+    private Rect rectTarget;
+
     //coordinates
-    private final int x;
-    private final int y;
+    private int x;
+    private int y;
     //to extract the frame out of the bitmap
     private final int frameWidth;
     private final int frameHeight;
@@ -33,10 +36,10 @@ public class Sprite {
      */
     public Sprite(Bitmap bitmap, int totalFrames, int x, int y) {
         this.bitmap = bitmap;
-        currentFrame = 0;
+        this.currentFrame = 0;
 
-        frameWidth = bitmap.getWidth() / totalFrames;
-        frameHeight = bitmap.getHeight();
+        this.frameWidth = bitmap.getWidth() / totalFrames;
+        this.frameHeight = bitmap.getHeight();
 
         this.x = x;
         this.y = y;
@@ -56,14 +59,28 @@ public class Sprite {
     }
 
     /**
+     * method to update x coordinate of character
+     * @param deltaX how much the x coordinate should be moved
+     */
+    public void move(double deltaX, double deltaY){
+        this.x += deltaX;
+        this.y += deltaY;
+
+        this.rectTarget.left = x;
+        this.rectTarget.right = x + bitmap.getWidth();
+    }
+
+    /**
      * draws the current frame onto the canvas
      * @param canvas which is drawn on
      */
     public void draw(Canvas canvas) {
         if (canvas != null) {
-            Rect targetRect = new Rect(x, y - frameHeight * 2, x + frameWidth * 2, y);
-            Rect sourceRect = new Rect(currentFrame * frameWidth + 2, 0, (currentFrame + 1) * frameWidth, frameHeight);
-            canvas.drawBitmap(bitmap, sourceRect, targetRect, null);
+            // source and target rectangle
+            this.rectTarget = new Rect(x, y - frameHeight * 2, x + frameWidth * 2, y);
+            this.rectSrc = new Rect(currentFrame * frameWidth + 2, 0, (currentFrame + 1) * frameWidth, frameHeight);
+
+            canvas.drawBitmap(bitmap, rectSrc, rectTarget, null);
         }
     }
 

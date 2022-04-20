@@ -37,21 +37,6 @@ public class StaticObject {
         this.rectSrc = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
     }
 
-    /**
-     * constructor for the class StaticObject with scale factor if bitmap is too big/ small
-     * @param bitmap the used bitmap
-     * @param x the x coordinate of the target rect
-     * @param y the y coordinate of the target rect
-     * @param scale scale factor to reduce/ increase size of bitmap
-     */
-    public StaticObject(Bitmap bitmap, int x, int y, float scale) {
-        this.bitmap = bitmap;
-
-        // source and target rectangle
-        this.rectTarget = new Rect(x, y, (int) (bitmap.getWidth() * scale + x), (int) (bitmap.getHeight()*scale + y));
-        this.rectSrc = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-    }
-
     public Bitmap getBitmap() {
         return bitmap;
     }

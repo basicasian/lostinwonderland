@@ -7,22 +7,21 @@ import android.graphics.Rect;
 import android.util.Log;
 
 /**
- * Encapsulated entity for handling Flummi, the main character
+ * Encapsulated entity for handling dynamic objects, such as the main character or enemies
  * @author Renate Zhang
  */
-public class Flummi {
+public class DynamicObject{
 
-    //Bitmap to get character from image
+    // bitmap to get character from image
     private final Bitmap bitmap;
+
+    // source and target rectangles
     private final Rect rectSrc;
     private Rect rectTarget;
 
-    //coordinates
+    // coordinates
     private int x;
     private int y;
-
-    private boolean isJumping;
-
 
     /**
      * constructor for the class Flummi
@@ -30,7 +29,7 @@ public class Flummi {
      * @param x the x coordinate of the target rect
      * @param y the y coordinate of the target rect
      */
-    public Flummi(Bitmap bitmap, int x, int y) {
+    public DynamicObject(Bitmap bitmap, int x, int y) {
         this.bitmap = bitmap;
 
         this.x = x;
@@ -46,23 +45,19 @@ public class Flummi {
     public int getX() { return x;}
 
     /**
-     * method to update x coordinate of character
+     * method to update x and y coordinate of character
      * @param deltaX how much the x coordinate should be moved
+     * @param deltaY how much the x coordinate should be moved
      */
-    public void moveX(int deltaX){
+    public void move(double deltaX, double deltaY){
         this.x += deltaX;
+        this.y += deltaY;
 
         this.rectTarget.left = x;
         this.rectTarget.right = x + bitmap.getWidth();
-    }
 
-    /**
-     * method to update y coordinate of character
-     * @param deltaY how much the y coordinate should be moved
-     */
-    public void moveY(int deltaY){
-        this.y += deltaY;
-
+        // coordinate system starts from top left! (in landscape mode)
+        // but elements are initialized from bottom left
         this.rectTarget.top = y - bitmap.getHeight();
         this.rectTarget.bottom = y;
     }

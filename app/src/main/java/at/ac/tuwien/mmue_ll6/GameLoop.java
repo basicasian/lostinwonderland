@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.widget.Button;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * The game loop for running and updating the game
  * @author Renate Zhang
@@ -21,9 +23,9 @@ public class GameLoop implements Runnable {
     private final static int  MAX_FRAME_SKIPS = 5;
     private final static int  FRAME_PERIOD = 1000 / MAX_FPS;
 
-    public long deltaTime;
-    public long lastTime;
-    public long nowTime;
+    public double deltaTime;
+    public double lastTime;
+    public double nowTime;
     int framesSkipped;
     int sleepTime;
 
@@ -73,7 +75,8 @@ public class GameLoop implements Runnable {
         // Calculate time delta for frame independence
         calculateDeltaTime();
 
-        this.gameSurfaceView.update();
+        // this deltaTime is in milliseconds, but we pass the deltaTime in seconds
+        this.gameSurfaceView.update(deltaTime/1000);
     }
 
     /**
@@ -99,7 +102,6 @@ public class GameLoop implements Runnable {
                     }
                 }
                 while (sleepTime < 0 && framesSkipped < MAX_FRAME_SKIPS) {
-                    //this.gameSurfaceView.update();
                     sleepTime += FRAME_PERIOD;
                     framesSkipped++;
                 }
@@ -118,8 +120,6 @@ public class GameLoop implements Runnable {
         lastTime = nowTime;
 
         sleepTime = (int)(FRAME_PERIOD - deltaTime);
-
-        // TODO: implement frame independence
     }
 
 }

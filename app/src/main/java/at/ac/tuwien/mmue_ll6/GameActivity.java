@@ -13,7 +13,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 
-import at.ac.tuwien.mmue_ll6.assets.Flummi;
 
 /**
  * Activity for playing the the game
