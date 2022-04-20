@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 
 /**
- * Activity for the main menu, starting new intents to other activities
+ * activity for the main menu, starting new intents to other activities
  * @author Renate Zhang
  */
 public class MainActivity extends AppCompatActivity {

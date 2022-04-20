@@ -2,17 +2,8 @@ package at.ac.tuwien.mmue_ll6;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.view.SurfaceView;
-import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-
 
 /**
  * Activity for playing the the game

@@ -3,9 +3,6 @@ package at.ac.tuwien.mmue_ll6;
 import android.graphics.Canvas;
 import android.util.Log;
 import android.view.SurfaceHolder;
-import android.widget.Button;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * The game loop for running and updating the game
