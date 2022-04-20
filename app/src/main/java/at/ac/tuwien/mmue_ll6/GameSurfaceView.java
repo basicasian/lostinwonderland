@@ -154,7 +154,6 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         bg1 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background), barHeight, displayWidth+barHeight, displayHeight);
         bg2 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background), displayWidth+barHeight, displayWidth+barHeight+displayWidth, displayHeight);
-
     }
 
     /**
