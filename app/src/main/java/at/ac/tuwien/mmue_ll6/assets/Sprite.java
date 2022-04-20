@@ -5,35 +5,51 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.Log;
 
+/**
+ * Encapsulated entity for handling sprites
+ * @author Renate Zhang
+ */
 public class Sprite {
+
+    //Bitmap to get character from image
     Bitmap bitmap;
+    private Rect rectSrc;
+    private Rect rectTarget;
+
+    //coordinates
     private int x;
-    int y;
-    int frameWidth;
-    int frameHeight;
-    int totalFrames;
-    int currentFrame;
+    private int y;
+    //to extract the frame out of the bitmap
+    private final int frameWidth;
+    private final int frameHeight;
+    private int currentFrame;
 
-    long pastTime = 0;
-    int frameTime;
+    private long pastTime = 0;
+    private final int frameTime;
 
-    public Sprite(Bitmap bitmap) {
+    /**
+     * constructor for the class Sprite
+     * @param bitmap the used bitmap
+     * @param totalFrames number of total frames of sprite sheet
+     * @param x the y coordinate of the target rect
+     * @param y the y coordinate of the target rect
+     */
+    public Sprite(Bitmap bitmap, int totalFrames, int x, int y) {
         this.bitmap = bitmap;
-        totalFrames = 4;
-        currentFrame = 0;
+        this.currentFrame = 0;
 
-        frameWidth = bitmap.getWidth() / totalFrames;
-        frameHeight = bitmap.getHeight();
+        this.frameWidth = bitmap.getWidth() / totalFrames;
+        this.frameHeight = bitmap.getHeight();
 
-        Log.d("test", String.valueOf(frameWidth));
-        Log.d("test", String.valueOf(frameHeight));
-
-        x = 50;
-        y = 500;
-        frameTime = 150;
+        this.x = x;
+        this.y = y;
+        this.frameTime = 150;
     }
 
-    // checks if its time for the next frame
+    /**
+     * checks if its time for the next frame
+     * @param currentTime the current time to check if its time for the next frame
+     */
     public void update(long currentTime) {
         if (currentTime > pastTime + frameTime) {
             pastTime = currentTime;
@@ -42,12 +58,29 @@ public class Sprite {
         }
     }
 
-    // draws the current frame onto the canvas
+    /**
+     * method to update x coordinate of character
+     * @param deltaX how much the x coordinate should be moved
+     */
+    public void move(double deltaX, double deltaY){
+        this.x += deltaX;
+        this.y += deltaY;
+
+        this.rectTarget.left = x;
+        this.rectTarget.right = x + bitmap.getWidth();
+    }
+
+    /**
+     * draws the current frame onto the canvas
+     * @param canvas which is drawn on
+     */
     public void draw(Canvas canvas) {
         if (canvas != null) {
-            Rect targetRect = new Rect(x, y, x + frameWidth * 2, y + frameHeight * 2);
-            Rect sourceRect = new Rect(currentFrame * frameWidth + 2, 0, (currentFrame + 1) * frameWidth, frameHeight);
-            canvas.drawBitmap(bitmap, sourceRect, targetRect, null);
+            // source and target rectangle
+            this.rectTarget = new Rect(x, y - frameHeight * 2, x + frameWidth * 2, y);
+            this.rectSrc = new Rect(currentFrame * frameWidth + 2, 0, (currentFrame + 1) * frameWidth, frameHeight);
+
+            canvas.drawBitmap(bitmap, rectSrc, rectTarget, null);
         }
     }
 

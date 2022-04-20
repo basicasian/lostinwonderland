@@ -4,6 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+/**
+ * Activity to see instruction to play / tutorial (planned: using pictures)
+ * @author Renate Zhang
+ */
 public class HelpActivity extends AppCompatActivity {
 
     @Override

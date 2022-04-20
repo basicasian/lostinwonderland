@@ -4,6 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+/**
+ * Activity for settings (planned: sound settings, etc.)
+ * @author Renate Zhang
+ */
 public class SettingsActivity extends AppCompatActivity {
 
     @Override

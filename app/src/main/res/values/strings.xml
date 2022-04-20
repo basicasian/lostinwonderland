@@ -2,11 +2,11 @@
     <string name="app_name">Lost in Wonderland</string>
 
     <!-- main menu -->
-    <string name="title_activity_game">start game</string>
-    <string name="title_activity_highscore">high score</string>
-    <string name="title_activity_video">play video</string>
-    <string name="title_activity_help">tutorial</string>
-    <string name="title_activity_settings">settings</string>
+    <string name="menu_title_game">start game</string>
+    <string name="menu_title_highscore">high score</string>
+    <string name="menu_title_video">play video</string>
+    <string name="menu_title_help">tutorial</string>
+    <string name="menu_title_settings">settings</string>
 
     <!-- tutorial / help -->
     <string name="help_title">How to play</string>
@@ -17,5 +17,10 @@
     <!-- game -->
     <string name="game_left">left</string>
     <string name="game_right">right</string>
+
+    <!-- after game -->
+    <string name="after_game_text">GAME ENDED</string>
+    <string name="after_game_tryagain">another game?</string>
+    <string name="after_game_menu">return to menu</string>
 
 </resources>
