@@ -28,6 +28,8 @@ public class GameLoop implements Runnable {
 
     /**
      * constructor for the class GameLoop
+     * @param gameSurfaceView corresponding game view
+     * @param surfaceHolder corresponding surface holder needed for locking the canvas
      */
     public GameLoop(SurfaceHolder surfaceHolder, GameSurfaceView gameSurfaceView) {
         this.surfaceHolder = surfaceHolder;

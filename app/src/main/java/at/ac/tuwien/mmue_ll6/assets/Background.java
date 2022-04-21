@@ -26,6 +26,9 @@ public class Background {
     /**
      * constructor for the class Background
      * @param bitmap the used bitmap
+     * @param left the coordinate for the left side of the target rect
+     * @param right the coordinate for the right side of the target rect
+     * @param height the coordinate for the upper side of the target rect
      */
     public Background(Bitmap bitmap, int left, int right, int height) {
         this.bitmap = bitmap;

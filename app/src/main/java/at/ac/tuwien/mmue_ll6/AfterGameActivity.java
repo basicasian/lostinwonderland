@@ -15,7 +15,7 @@ public class AfterGameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lose);
+        setContentView(R.layout.activity_after_game);
     }
 
     public void restartGameActivity(View v) {
