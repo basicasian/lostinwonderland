@@ -3,16 +3,21 @@ package at.ac.tuwien.mmue_ll6;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import androidx.annotation.RequiresApi;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -31,8 +36,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     private GameLoop gameLoop;
     private Thread gameMainThread;
-    private Context context;
-    private Paint paint;
+    private final Context context;
     private double deltaTime;
 
     // check variables
@@ -45,19 +49,18 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private DynamicObject flummi;
     private DynamicObject enemy;
     private DynamicObject goal;
-    private DynamicObject platform1;
-    private DynamicObject platform2;
     private SpriteObject fire;
+    private ArrayList<DynamicObject> platformObjects = new ArrayList<>();
     private ArrayList<DynamicObject> dynamicObjects = new ArrayList<>();
 
     // assets
     private Background bg1;
-    private Background bg2;
     private StaticObject buttonLeft;
     private StaticObject buttonRight;
     private StaticObject buttonUp;
     private StaticObject gameOverImage;
     private StaticObject gameWinImage;
+    private ArrayList<StaticObject> staticObjects = new ArrayList<>();
 
     // information about display
     int displayHeight;
@@ -118,20 +121,19 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
      * @param context to get the bitmap
      */
     private void loadAssets(Context context) {
+
         // get the size of the screen
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        ((Activity) getContext()).getWindowManager()
-                .getDefaultDisplay()
-                .getMetrics(displayMetrics);
-        displayWidth = displayMetrics.widthPixels;
-        displayHeight = displayMetrics.heightPixels;
+        displayWidth = context.getResources().getDisplayMetrics().widthPixels;
+        displayHeight = context.getResources().getDisplayMetrics().heightPixels;
 
         // because we removed the notification bar, we have to add the height manually
         barHeight = 0;
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
             barHeight = getResources().getDimensionPixelSize(resourceId);
+            displayWidth += barHeight;
         }
+        Log.d(TAG, "loadAssets: "+ displayWidth);
 
         // Initialize the assets
         // coordinate system starts from top left! (in landscape mode)
@@ -140,10 +142,12 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // dynamic objects
         flummi = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.flummi), 700, displayHeight - 300);
         enemy = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy), 300, displayHeight - 300);
-        goal = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.goal), displayWidth - 120, displayHeight/2);
-        platform1 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 100, displayHeight - 150);
-        platform2 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 1100, displayHeight - 150);
-        dynamicObjects = new ArrayList<>(Arrays.asList(enemy, goal, platform1, platform2));
+        goal = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.goal), 3000, displayHeight/2);
+        DynamicObject platform1 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 100, displayHeight - 150);
+        DynamicObject platform2 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 1100, displayHeight - 150);
+        DynamicObject platform3 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 2000, displayHeight - 300);
+        platformObjects = new ArrayList<>(Arrays.asList(platform1, platform2, platform3));
+        dynamicObjects = new ArrayList<>(Arrays.asList(platform1, platform2, platform3, flummi, enemy, goal));
 
         // sprites
         fire = new SpriteObject(BitmapFactory.decodeResource(getResources(), R.drawable.fire), 4, 100, displayHeight - 300);
@@ -151,12 +155,12 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // static objects
         buttonLeft = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowleft), displayWidth - 500, displayHeight - 50);
         buttonRight= new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowright), displayWidth - 250, displayHeight - 50);
-        buttonUp= new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowup), barHeight + 50, displayHeight - 50);
+        buttonUp = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowup), barHeight + 50, displayHeight - 50);
         gameOverImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.gameover), displayWidth/5, 2*displayHeight/3);
         gameWinImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.youwin), displayWidth/5, displayHeight/2);
+        staticObjects = new ArrayList<>(Arrays.asList(buttonLeft, buttonRight, buttonUp));
 
-        bg1 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background), barHeight, displayWidth+barHeight, displayHeight);
-        bg2 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background), displayWidth+barHeight, displayWidth+barHeight+displayWidth, displayHeight);
+        bg1 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background), barHeight, displayWidth, displayHeight);
     }
 
     /**
@@ -227,21 +231,22 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
      */
     private void longTouchEvent() {
 
+        // TODO: should here dt also be used? -> platforms end up moving in a different speed
         // move scene to the right
         if (flummi.getX() >= (displayWidth/2)
                 && !isJumping && !(checkButton("left"))) {
             for (DynamicObject d: dynamicObjects) {
-                d.move(-200 * this.deltaTime, 0);
+               d.move(-200 * 0.03, 0);
             }
-            fire.move(-200 * this.deltaTime, 0);
+            fire.move(-200 * 0.03, 0);
         }
 
         // move scene to the left
-        if (flummi.getX() <= barHeight) {
+        if (flummi.getX() <= barHeight * 2) {
             for (DynamicObject d: dynamicObjects) {
-                d.move(+200 * this.deltaTime, 0);
+                d.move(+200 * 0.03, 0);
             }
-            fire.move(+200 * this.deltaTime, 0);
+            fire.move(+200 * 0.03, 0);
         }
 
         // right button
@@ -260,7 +265,11 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         }
     }
 
-    public boolean checkButton(String button) {
+    /**
+     * help method to check which button is pressed
+     * @param button the specified direction
+     */
+    private boolean checkButton(String button) {
         boolean result = false;
         switch (button) {
             case "right":
@@ -274,6 +283,21 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         }
         return result;
     }
+
+    /**
+     * help method to check if the character is colliding against platforms
+     * @return true if character is colliding against platform
+     */
+    private boolean checkCollision() {
+        boolean result = false;
+        for (DynamicObject p: platformObjects) {
+            if (Rect.intersects(flummi.getRectTarget(), p.getRectTarget())) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
 
     /**
      * updates the sprite animation and checks if the screen is still pressed
@@ -301,8 +325,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         fire.update(System.currentTimeMillis());
 
         // gravity simulation
-        if (!Rect.intersects(flummi.getRectTarget(), platform1.getRectTarget()) && !isJumping && !Rect.intersects(flummi.getRectTarget(), platform2.getRectTarget())) {
-            flummi.move(0,+500 * deltaTime);
+        if (!isJumping && !checkCollision()) {
+            flummi.move(0,+200 * deltaTime);
         }
         if (isPressed()) {
             longTouchEvent();
@@ -321,24 +345,19 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         if (canvas != null) {
 
             bg1.draw(canvas);
-            bg2.draw(canvas);
-            platform1.draw(canvas);
-            platform2.draw(canvas);
-
             fire.draw(canvas);
-            enemy.draw(canvas);
-            goal.draw(canvas);
-            flummi.draw(canvas);
 
-            buttonLeft.draw(canvas);
-            buttonRight.draw(canvas);
-            buttonUp.draw(canvas);
+            for (DynamicObject d: dynamicObjects) {
+                d.draw(canvas);
+            }
+            for (StaticObject s: staticObjects) {
+                s.draw(canvas);
+            }
 
             // draw game won when the game is won
             if (isGameWin){
                 gameWinImage.draw(canvas);
             }
-
             // draw game over when the game is over
             if (isGameOver){
                 gameOverImage.draw(canvas);
