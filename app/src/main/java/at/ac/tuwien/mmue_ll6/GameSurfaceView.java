@@ -58,6 +58,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private StaticObject buttonLeft;
     private StaticObject buttonRight;
     private StaticObject buttonUp;
+    private StaticObject pauseButton;
     private StaticObject gameOverImage;
     private StaticObject gameWinImage;
     private ArrayList<StaticObject> staticObjects = new ArrayList<>();
@@ -159,9 +160,10 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         buttonLeft = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowleft), displayWidth - 500, displayHeight - 50);
         buttonRight= new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowright), displayWidth - 250, displayHeight - 50);
         buttonUp = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowup), barHeight + 50, displayHeight - 50);
+        pauseButton = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.pause), barHeight + 50, 250);
         gameOverImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.gameover), displayWidth/5, 2*displayHeight/3);
         gameWinImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.youwin), displayWidth/5, displayHeight/2);
-        staticObjects = new ArrayList<>(Arrays.asList(buttonLeft, buttonRight, buttonUp));
+        staticObjects = new ArrayList<>(Arrays.asList(buttonLeft, buttonRight, buttonUp, pauseButton));
 
         bg1 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background), barHeight, displayWidth, displayHeight);
     }
