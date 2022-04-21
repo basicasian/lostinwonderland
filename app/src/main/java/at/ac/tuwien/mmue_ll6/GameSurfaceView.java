@@ -124,15 +124,15 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private void loadAssets(Context context) {
 
         // get the size of the screen
-        displayWidth = context.getResources().getDisplayMetrics().widthPixels;
-        displayHeight = context.getResources().getDisplayMetrics().heightPixels;
+        this.displayWidth = context.getResources().getDisplayMetrics().widthPixels;
+        this.displayHeight = context.getResources().getDisplayMetrics().heightPixels;
 
         // because we removed the notification bar, we have to add the height manually
         barHeight = 0;
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
-            barHeight = getResources().getDimensionPixelSize(resourceId);
-            displayWidth += barHeight;
+            this.barHeight = getResources().getDimensionPixelSize(resourceId);
+            this.displayWidth += barHeight;
         }
 
         // Initialize the assets
@@ -157,10 +157,10 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         fire = new SpriteObject(BitmapFactory.decodeResource(getResources(), R.drawable.fire), 4, 100, displayHeight - 300);
 
         // static objects
-        buttonLeft = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowleft), displayWidth - 500, displayHeight - 50);
-        buttonRight= new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowright), displayWidth - 250, displayHeight - 50);
+        buttonLeft = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowleft), displayWidth - 600, displayHeight - 50);
+        buttonRight= new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowright), displayWidth - 300, displayHeight - 50);
         buttonUp = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowup), barHeight + 50, displayHeight - 50);
-        pauseButton = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.pause), barHeight + 50, 250);
+        pauseButton = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.pause), displayWidth - 300, 300);
         gameOverImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.gameover), displayWidth/5, 2*displayHeight/3);
         gameWinImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.youwin), displayWidth/5, displayHeight/2);
         staticObjects = new ArrayList<>(Arrays.asList(buttonLeft, buttonRight, buttonUp, pauseButton));
@@ -208,11 +208,15 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             touchY = (int) e.getY();
 
             // up botton
-            if (touchX >= 150 && touchX < (150 + buttonLeft.getBitmap().getWidth())
-                    && touchY >= displayHeight - offset && touchY < (displayHeight - offset + buttonLeft.getBitmap().getHeight())) {
+            if (buttonUp.getRectTarget().contains(touchX, touchY)) {
                 // jump motion is not handled here, but in longTouchEvent() for smoother movement
                 isJumping = true;
                 jumpCounter = 0;
+            }
+
+            // pause botton
+            if (pauseButton.getRectTarget().contains(touchX, touchY)) {
+                Log.d(TAG, "onTouchEvent: pause");
             }
         }
 
@@ -284,12 +288,14 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         boolean result = false;
         switch (button) {
             case "right":
-                result = (touchX >= displayWidth - offset && touchX < (displayWidth - offset + buttonLeft.getBitmap().getWidth())
-                        && touchY >= displayHeight - offset && touchY < (displayHeight - offset + buttonLeft.getBitmap().getHeight()));
+                if (buttonRight.getRectTarget().contains(touchX, touchY)) {
+                    result = true;
+                }
                 break;
             case "left":
-                result = (touchX >= displayWidth - offset * 2 && touchX < (displayWidth - offset * 2 + buttonLeft.getBitmap().getWidth())
-                        && touchY >= displayHeight - offset && touchY < (displayHeight - offset + buttonLeft.getBitmap().getHeight()));
+                if (buttonLeft.getRectTarget().contains(touchX, touchY)) {
+                    result = true;
+                }
                 break;
         }
         return result;
