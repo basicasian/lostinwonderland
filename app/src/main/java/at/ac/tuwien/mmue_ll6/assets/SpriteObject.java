@@ -8,7 +8,7 @@ import android.graphics.Rect;
  * Encapsulated entity for handling sprites
  * @author Renate Zhang
  */
-public class Sprite {
+public class SpriteObject {
 
     //Bitmap to get character from image
     Bitmap bitmap;
@@ -33,7 +33,7 @@ public class Sprite {
      * @param x the y coordinate of the target rect
      * @param y the y coordinate of the target rect
      */
-    public Sprite(Bitmap bitmap, int totalFrames, int x, int y) {
+    public SpriteObject(Bitmap bitmap, int totalFrames, int x, int y) {
         this.bitmap = bitmap;
         this.currentFrame = 0;
 
@@ -60,6 +60,7 @@ public class Sprite {
     /**
      * method to update x coordinate of character
      * @param deltaX how much the x coordinate should be moved
+     * @param deltaY how much the y coordinate should be moved
      */
     public void move(double deltaX, double deltaY){
         this.x += deltaX;

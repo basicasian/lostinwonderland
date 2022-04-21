@@ -18,7 +18,7 @@ import java.util.Arrays;
 
 import at.ac.tuwien.mmue_ll6.assets.Background;
 import at.ac.tuwien.mmue_ll6.assets.DynamicObject;
-import at.ac.tuwien.mmue_ll6.assets.Sprite;
+import at.ac.tuwien.mmue_ll6.assets.SpriteObject;
 import at.ac.tuwien.mmue_ll6.assets.StaticObject;
 
 /**
@@ -47,7 +47,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private DynamicObject goal;
     private DynamicObject platform1;
     private DynamicObject platform2;
-    private Sprite fire;
+    private SpriteObject fire;
     private ArrayList<DynamicObject> dynamicObjects = new ArrayList<>();
 
     // assets
@@ -71,6 +71,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     /**
      * constructor for the class GameSurfaceView
+     * @param attrs attribute set
+     * @param context needed to get access to resource (bitmaps)
      */
     public GameSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -87,6 +89,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     /**
      * create a new game loop and game thread, and starts it
+     * @param holder surface holder needed for the game loop
      */
     private void startGame(SurfaceHolder holder) {
         gameLoop = new GameLoop(holder, this);
@@ -143,7 +146,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         dynamicObjects = new ArrayList<>(Arrays.asList(enemy, goal, platform1, platform2));
 
         // sprites
-        fire = new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.fire), 4, 100, displayHeight - 300);
+        fire = new SpriteObject(BitmapFactory.decodeResource(getResources(), R.drawable.fire), 4, 100, displayHeight - 300);
 
         // static objects
         buttonLeft = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowleft), displayWidth - 500, displayHeight - 50);
@@ -250,10 +253,10 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             flummi.move(-200 * this.deltaTime, 0); // velocity * dt
         }
         // up button
-        if (isJumping && jumpCounter < 10) {
+        if (isJumping && jumpCounter < 5) {
             // jumpCounter controls the max time of jumping, so the character cant jump indefinitely
             jumpCounter++;
-            flummi.move(0,-700 * this.deltaTime); // velocity * dt
+            flummi.move(0,-1700 * this.deltaTime); // velocity * dt
         }
     }
 
@@ -275,6 +278,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     /**
      * updates the sprite animation and checks if the screen is still pressed
      * or if lose condition is fulfilled
+     * @param deltaTime the delta time needed for frame independence
      */
     public void update(double deltaTime) {
         this.deltaTime = deltaTime;
@@ -298,7 +302,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         // gravity simulation
         if (!Rect.intersects(flummi.getRectTarget(), platform1.getRectTarget()) && !isJumping && !Rect.intersects(flummi.getRectTarget(), platform2.getRectTarget())) {
-            flummi.move(0,+200 * deltaTime);
+            flummi.move(0,+500 * deltaTime);
         }
         if (isPressed()) {
             longTouchEvent();

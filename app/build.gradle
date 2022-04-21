@@ -35,3 +35,16 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }
+
+task javadoc(type: Javadoc) {
+    failOnError false
+
+    title = "Lost in Wonderland Documentation"
+
+    options.author = true
+    options.memberLevel = JavadocMemberLevel.PRIVATE
+
+    exclude "**/**/**Activity.java"
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
