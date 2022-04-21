@@ -133,7 +133,6 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             barHeight = getResources().getDimensionPixelSize(resourceId);
             displayWidth += barHeight;
         }
-        Log.d(TAG, "loadAssets: "+ displayWidth);
 
         // Initialize the assets
         // coordinate system starts from top left! (in landscape mode)
@@ -142,12 +141,16 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // dynamic objects
         flummi = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.flummi), 700, displayHeight - 300);
         enemy = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy), 300, displayHeight - 300);
-        goal = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.goal), 3000, displayHeight/2);
+        goal = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.goal), 6000, displayHeight/2);
         DynamicObject platform1 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 100, displayHeight - 150);
         DynamicObject platform2 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 1100, displayHeight - 150);
         DynamicObject platform3 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 2000, displayHeight - 300);
-        platformObjects = new ArrayList<>(Arrays.asList(platform1, platform2, platform3));
-        dynamicObjects = new ArrayList<>(Arrays.asList(platform1, platform2, platform3, flummi, enemy, goal));
+        DynamicObject platform4 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 3200, displayHeight - 150);
+        DynamicObject platform5 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 3900, displayHeight - 400);
+        DynamicObject platform6 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 5000, displayHeight - 300);
+
+        platformObjects = new ArrayList<>(Arrays.asList(platform1, platform2, platform3, platform4, platform5, platform6));
+        dynamicObjects = new ArrayList<>(Arrays.asList(flummi, enemy, goal));
 
         // sprites
         fire = new SpriteObject(BitmapFactory.decodeResource(getResources(), R.drawable.fire), 4, 100, displayHeight - 300);
@@ -238,6 +241,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             for (DynamicObject d: dynamicObjects) {
                d.move(-200 * 0.03, 0);
             }
+            for (DynamicObject p: platformObjects) {
+                p.move(-200 * 0.03, 0);
+            }
             fire.move(-200 * 0.03, 0);
         }
 
@@ -245,6 +251,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         if (flummi.getX() <= barHeight * 2) {
             for (DynamicObject d: dynamicObjects) {
                 d.move(+200 * 0.03, 0);
+            }
+            for (DynamicObject p: platformObjects) {
+                p.move(+200 * 0.03, 0);
             }
             fire.move(+200 * 0.03, 0);
         }
@@ -258,10 +267,10 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             flummi.move(-200 * this.deltaTime, 0); // velocity * dt
         }
         // up button
-        if (isJumping && jumpCounter < 5) {
+        if (isJumping && jumpCounter < 4) {
             // jumpCounter controls the max time of jumping, so the character cant jump indefinitely
             jumpCounter++;
-            flummi.move(0,-1700 * this.deltaTime); // velocity * dt
+            flummi.move(0,-1800 * this.deltaTime); // velocity * dt
         }
     }
 
@@ -310,7 +319,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // lose condition
         // if flummi touches the enemy or flummi falls from platforms
         if ((Rect.intersects(flummi.getRectTarget(), enemy.getRectTarget())) || (flummi.getRectTarget().top > displayHeight)) {
-            Log.d(TAG, "update: game over");
+            Log.d(TAG, "update: game lost");
             isGameOver = true;
             // don't call endGame() here! only if the you go back to the main screen
         }
@@ -318,7 +327,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // win condition
         // if flummi touches the goal
         if (Rect.intersects(flummi.getRectTarget(), goal.getRectTarget())) {
-            Log.d(TAG, "update: game won");
+            Log.d(TAG, "update: game win");
             isGameWin = true;
         }
 
@@ -326,7 +335,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         // gravity simulation
         if (!isJumping && !checkCollision()) {
-            flummi.move(0,+200 * deltaTime);
+            flummi.move(0,+300 * deltaTime);
         }
         if (isPressed()) {
             longTouchEvent();
@@ -347,9 +356,15 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             bg1.draw(canvas);
             fire.draw(canvas);
 
+            // draw all plattforms first
+            for (DynamicObject p: platformObjects) {
+                p.draw(canvas);
+            }
+            // then all other dynamic
             for (DynamicObject d: dynamicObjects) {
                 d.draw(canvas);
             }
+            // and static objects (such as buttons) on top
             for (StaticObject s: staticObjects) {
                 s.draw(canvas);
             }
@@ -357,6 +372,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             // draw game won when the game is won
             if (isGameWin){
                 gameWinImage.draw(canvas);
+                gameLoop.setRunning(false);
             }
             // draw game over when the game is over
             if (isGameOver){
