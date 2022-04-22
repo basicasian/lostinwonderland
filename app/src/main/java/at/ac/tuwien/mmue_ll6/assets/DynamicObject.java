@@ -21,11 +21,11 @@ public class DynamicObject{
     private int x;
     private int y;
 
-    // main character values
+    // player values
     private int lives = 3;
 
     /**
-     * constructor for the class Flummi
+     * constructor for the dynamic object
      * @param bitmap the used bitmap
      * @param x the x coordinate of the target rect
      * @param y the y coordinate of the target rect
