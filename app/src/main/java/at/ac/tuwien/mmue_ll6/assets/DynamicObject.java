@@ -21,8 +21,11 @@ public class DynamicObject{
     private int x;
     private int y;
 
+    // player values
+    private int lives = 3;
+
     /**
-     * constructor for the class Flummi
+     * constructor for the dynamic object
      * @param bitmap the used bitmap
      * @param x the x coordinate of the target rect
      * @param y the y coordinate of the target rect
@@ -70,5 +73,29 @@ public class DynamicObject{
         }
     }
 
+    /**
+     * reduce the number of this.lives
+     */
+    public void reduceLive() {
+        lives--;
+    }
+
+    /**
+     * get the number of current lives
+     * @return the number of lives
+     */
+    public int getNumberOfLives() {
+        return lives;
+    }
+
+    /**
+     * set the character back to a certain point
+     * @param x the x coordinate
+     * @param y the y coordinate
+     */
+    public void setToStart (int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
 }
 
