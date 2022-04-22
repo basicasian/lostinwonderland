@@ -259,6 +259,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     /**
      * help method to check which button is pressed
      * @param button the specified direction
+     * @return boolean if input button is pressed
      */
     private boolean checkButton(String button) {
         boolean result = false;
