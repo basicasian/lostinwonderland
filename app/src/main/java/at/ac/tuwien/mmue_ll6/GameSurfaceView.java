@@ -1,27 +1,19 @@
 package at.ac.tuwien.mmue_ll6;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Rect;
-import android.os.Build;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import androidx.annotation.RequiresApi;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import at.ac.tuwien.mmue_ll6.assets.Background;
 import at.ac.tuwien.mmue_ll6.assets.DynamicObject;
 import at.ac.tuwien.mmue_ll6.assets.SpriteObject;
 import at.ac.tuwien.mmue_ll6.assets.StaticObject;
@@ -43,6 +35,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private boolean isJumping = false;
     private boolean isGameOver = false;
     private boolean isGameWin = false;
+    private boolean isGoingRight = true;
     private int jumpCounter;
 
     // objects
@@ -54,13 +47,16 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private ArrayList<DynamicObject> dynamicObjects = new ArrayList<>();
 
     // assets
-    private Background bg1;
+    private StaticObject bg1;
     private StaticObject buttonLeft;
     private StaticObject buttonRight;
     private StaticObject buttonUp;
     private StaticObject pauseButton;
     private StaticObject gameOverImage;
     private StaticObject gameWinImage;
+    private StaticObject heart1;
+    private StaticObject heart2;
+    private StaticObject heart3;
     private ArrayList<StaticObject> staticObjects = new ArrayList<>();
 
     // information about display
@@ -150,9 +146,6 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         DynamicObject platform5 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 3900, displayHeight - 400);
         DynamicObject platform6 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 5000, displayHeight - 300);
 
-        platformObjects = new ArrayList<>(Arrays.asList(platform1, platform2, platform3, platform4, platform5, platform6));
-        dynamicObjects = new ArrayList<>(Arrays.asList(flummi, enemy, goal));
-
         // sprites
         fire = new SpriteObject(BitmapFactory.decodeResource(getResources(), R.drawable.fire), 4, 100, displayHeight - 300);
 
@@ -163,9 +156,16 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         pauseButton = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.pause), displayWidth - 300, 300);
         gameOverImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.gameover), displayWidth/5, 2*displayHeight/3);
         gameWinImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.youwin), displayWidth/5, displayHeight/2);
-        staticObjects = new ArrayList<>(Arrays.asList(buttonLeft, buttonRight, buttonUp, pauseButton));
+        heart1 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 100, 250);
+        heart2 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 300, 250);
+        heart3 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 500, 250);
+        bg1 = new StaticObject(BitmapFactory.decodeResource(getResources(), R.drawable.background), barHeight, displayWidth, 0, displayHeight);
 
-        bg1 = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.background), barHeight, displayWidth, displayHeight);
+        // the order of array is the order of draw calls!
+        platformObjects = new ArrayList<>(Arrays.asList(platform1, platform2, platform3, platform4, platform5, platform6));
+        dynamicObjects = new ArrayList<>(Arrays.asList(flummi, enemy, goal));
+        staticObjects = new ArrayList<>(Arrays.asList(buttonLeft, buttonRight, buttonUp, pauseButton, heart1, heart2, heart3));
+
     }
 
     /**
@@ -240,43 +240,24 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
      */
     private void longTouchEvent() {
 
-        // TODO: should here dt also be used? -> platforms end up moving in a different speed
-        // move scene to the right
-        if (flummi.getX() >= (displayWidth/2)
-                && !isJumping && !(checkButton("left"))) {
-            for (DynamicObject d: dynamicObjects) {
-               d.move(-200 * 0.03, 0);
-            }
-            for (DynamicObject p: platformObjects) {
-                p.move(-200 * 0.03, 0);
-            }
-            fire.move(-200 * 0.03, 0);
-        }
-
-        // move scene to the left
-        if (flummi.getX() <= barHeight * 2) {
-            for (DynamicObject d: dynamicObjects) {
-                d.move(+200 * 0.03, 0);
-            }
-            for (DynamicObject p: platformObjects) {
-                p.move(+200 * 0.03, 0);
-            }
-            fire.move(+200 * 0.03, 0);
-        }
-
         // right button
         if (checkButton("right") && flummi.getX() < (displayWidth/2)) {
-            flummi.move(+200 * this.deltaTime, 0); // velocity * dt
+            flummi.move(+300 * this.deltaTime, 0); // velocity * dt
         }
         // left button
         if (checkButton("left") && flummi.getX() > barHeight) {
-            flummi.move(-200 * this.deltaTime, 0); // velocity * dt
+            flummi.move(-300 * this.deltaTime, 0); // velocity * dt
         }
         // up button
         if (isJumping && jumpCounter < 4) {
             // jumpCounter controls the max time of jumping, so the character cant jump indefinitely
             jumpCounter++;
-            flummi.move(0,-1800 * this.deltaTime); // velocity * dt
+            if (isGoingRight) {
+                flummi.move(200 * deltaTime,-2000 * this.deltaTime); // velocity * dt
+            } else {
+                flummi.move(-200 * deltaTime,-2000 * this.deltaTime); // velocity * dt
+            }
+
         }
     }
 
@@ -289,11 +270,13 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         switch (button) {
             case "right":
                 if (buttonRight.getRectTarget().contains(touchX, touchY)) {
+                    isGoingRight = true;
                     result = true;
                 }
                 break;
             case "left":
                 if (buttonLeft.getRectTarget().contains(touchX, touchY)) {
+                    isGoingRight = false;
                     result = true;
                 }
                 break;
@@ -328,22 +311,59 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // if flummi touches the enemy or flummi falls from platforms
         if ((Rect.intersects(flummi.getRectTarget(), enemy.getRectTarget())) || (flummi.getRectTarget().top > displayHeight)) {
             Log.d(TAG, "update: game lost");
-            isGameOver = true;
-            // don't call endGame() here! only if the you go back to the main screen
+
+            if (flummi.getNumberOfLives() != 0) {
+                flummi.reduceLive();
+                staticObjects.remove(staticObjects.size()-1);
+                flummi.setToStart(700, displayHeight - 300);
+
+            } else {
+                isGameOver = true;
+                // don't call endGame() here! only if the you go back to the main screen
+            }
         }
 
         // win condition
         // if flummi touches the goal
         if (Rect.intersects(flummi.getRectTarget(), goal.getRectTarget())) {
             Log.d(TAG, "update: game win");
+
             isGameWin = true;
+        }
+
+        // move scene to the right
+        if (flummi.getX() >= (displayWidth/2)
+                && !(checkButton("left"))) {
+            for (DynamicObject d: dynamicObjects) {
+                d.move(-200 * 0.03, 0);
+            }
+            for (DynamicObject p: platformObjects) {
+                p.move(-200 * 0.03, 0);
+            }
+            fire.move(-200 * 0.03, 0);
+        }
+
+        // move scene to the left
+        if (flummi.getX() <= 150) {
+            for (DynamicObject d: dynamicObjects) {
+                d.move(+200 * 0.03, 0);
+            }
+            for (DynamicObject p: platformObjects) {
+                p.move(+200 * 0.03, 0);
+            }
+            fire.move(+200 * 0.03, 0);
         }
 
         fire.update(System.currentTimeMillis());
 
         // gravity simulation
         if (!isJumping && !checkCollision()) {
-            flummi.move(0,+300 * deltaTime);
+            if (isGoingRight) {
+                flummi.move(+ 200 * deltaTime,+300 * deltaTime);
+            } else {
+                flummi.move(- 200 * deltaTime,+300 * deltaTime);
+            }
+
         }
         if (isPressed()) {
             longTouchEvent();
@@ -361,7 +381,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         if (canvas != null) {
 
-            bg1.draw(canvas);
+            bg1.draw(canvas); // has to drawn first, because its in the back
             fire.draw(canvas);
 
             // draw all plattforms first

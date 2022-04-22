@@ -28,9 +28,22 @@ public class StaticObject {
         this.rectSrc = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
     }
 
-    public Bitmap getBitmap() {
-        return bitmap;
+    /**
+     * constructor for the class StaticObject
+     * @param bitmap the used bitmap
+     * @param left the left coordinate of the target rect
+     * @param right the right coordinate of the target rect
+     * @param top the top coordinate of the target rect
+     * @param bottom the bottom coordinate of the target rect
+     */
+    public StaticObject(Bitmap bitmap, int left, int right, int top, int bottom) {
+        this.bitmap = bitmap;
+
+        // source and target rectangle
+        rectTarget = new Rect(left, top, right, bottom);
+        rectSrc = new Rect(0, 0, this.bitmap.getWidth(), this.bitmap.getHeight());
     }
+
 
     public Rect getRectTarget() { return rectTarget;}
 
