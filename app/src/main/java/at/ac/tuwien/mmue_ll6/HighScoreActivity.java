@@ -4,6 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+/**
+ * Activity to see high score (planned: best/ shortest time to complete level)
+ * @author Renate Zhang
+ */
 public class HighScoreActivity extends AppCompatActivity {
 
     @Override
