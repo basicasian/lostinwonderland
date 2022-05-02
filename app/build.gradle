@@ -40,7 +40,7 @@ task generateJavadoc(type: Javadoc) {
     group 'docs'
     failOnError false
 
-    title = "Calligraphy Hell Documentation"
+    title = "Lost in Wonderland Documentation"
 
     options.author = true
     options.memberLevel = JavadocMemberLevel.PRIVATE
