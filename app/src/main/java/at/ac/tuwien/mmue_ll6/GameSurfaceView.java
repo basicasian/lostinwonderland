@@ -235,6 +235,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
      * can be pressed permanently, unlike onTouchEvent() method
      */
     private void longTouchEvent() {
+        // check intersection here + gravity
+
 
         // right button
         if (checkButton("right") && player.getX() < (displayWidth/2)) {
@@ -339,7 +341,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         }
 
         // move scene to the left
-        if (player.getX() <= 150) {
+        if (player.getX() <= 250) {
             for (DynamicObject d: dynamicObjects) {
                 d.move(+200 * 0.03, 0);
             }

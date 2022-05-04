@@ -92,7 +92,6 @@ public class GameLoop implements Runnable {
 
                 gameSurfaceView.draw(canvas);
 
-                // for frame independence
                 if (sleepTime > 0) {
                     try {
                         Thread.sleep(sleepTime);
