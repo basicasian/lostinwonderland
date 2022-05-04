@@ -29,6 +29,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private GameLoop gameLoop;
     private Thread gameMainThread;
     private final Context context;
+    private SurfaceHolder surfaceHolder;
     private double deltaTime;
 
     // check variables
@@ -48,12 +49,15 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     // assets
     private StaticObject bg1;
+    private StaticObject overlay;
     private StaticObject buttonLeft;
     private StaticObject buttonRight;
     private StaticObject buttonUp;
     private StaticObject pauseButton;
+    private StaticObject playButton;
     private StaticObject gameOverImage;
     private StaticObject gameWinImage;
+    private StaticObject gamePauseImage;
     private ArrayList<StaticObject> staticObjects = new ArrayList<>();
 
     // information about display
@@ -81,31 +85,6 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         // initialize resources
         loadAssets(context);
-    }
-
-    /**
-     * create a new game loop and game thread, and starts it
-     * @param holder surface holder needed for the game loop
-     */
-    private void startGame(SurfaceHolder holder) {
-        gameLoop = new GameLoop(holder, this);
-        gameMainThread = new Thread(gameLoop);
-
-        Log.d(TAG, "Starting Game Thread");
-        gameMainThread.start();
-    }
-
-    /**
-     * ends the game and joins the game thread
-     */
-    private void endGame() {
-        gameLoop.setRunning(false);
-        try {
-            Log.d(TAG, "Joining Game Thread");
-            gameMainThread.join();
-        } catch (InterruptedException e) {
-            Log.e("Error", e.getMessage());
-        }
     }
 
     /**
@@ -150,17 +129,20 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         buttonRight= new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowright), displayWidth - 300, displayHeight - 50);
         buttonUp = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowup), barHeight + 50, displayHeight - 50);
         pauseButton = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.pause), displayWidth - 300, 300);
-        gameOverImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.gameover), 300, 800);
-        gameWinImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.youwin), 600, 600);
+        playButton = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.play), displayWidth - 300, 300);
+        gameOverImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.gameover), 450, 600);
+        gameWinImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.youwin), 500, 600);
+        gamePauseImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.paused), 600, 600);
         StaticObject heart1 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 100, 250);
         StaticObject heart2 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 300, 250);
         StaticObject heart3 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 500, 250);
         bg1 = new StaticObject(BitmapFactory.decodeResource(getResources(), R.drawable.background), barHeight, displayWidth, 0, displayHeight);
+        overlay = new StaticObject(BitmapFactory.decodeResource(getResources(), R.drawable.overlay), barHeight, displayWidth, 0, displayHeight);
 
         // the order of array is the order of draw calls!
         platformObjects = new ArrayList<>(Arrays.asList(platform1, platform2, platform3, platform4, platform5, platform6));
         dynamicObjects = new ArrayList<>(Arrays.asList(player, enemy, goal));
-        staticObjects = new ArrayList<>(Arrays.asList(heart3, heart2, heart1, buttonLeft, buttonRight, buttonUp, pauseButton));
+        staticObjects = new ArrayList<>(Arrays.asList(heart3, heart2, heart1, buttonLeft, buttonRight, buttonUp));
 
     }
 
@@ -170,7 +152,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
      */
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
-        startGame(surfaceHolder);
+        this.surfaceHolder = surfaceHolder;
+        startGame(this.surfaceHolder);
     }
 
     /**
@@ -187,6 +170,33 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
         endGame();
     }
+
+
+    /**
+     * create a new game loop and game thread, and starts it
+     * @param holder surface holder needed for the game loop
+     */
+    private void startGame(SurfaceHolder holder) {
+        gameLoop = new GameLoop(holder, this);
+        gameMainThread = new Thread(gameLoop);
+
+        Log.d(TAG, "Starting Game Thread");
+        gameMainThread.start();
+    }
+
+    /**
+     * ends the game and joins the game thread
+     */
+    private void endGame() {
+        gameLoop.setRunning(false);
+        try {
+            Log.d(TAG, "Joining Game Thread");
+            gameMainThread.join();
+        } catch (InterruptedException e) {
+            Log.e("Error", e.getMessage());
+        }
+    }
+
 
     /**
      * a touch-event has been triggered, set pressed state to true or false
@@ -213,6 +223,12 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             // pause button
             if (pauseButton.getRectTarget().contains(touchX, touchY)) {
                 Log.d(TAG, "onTouchEvent: pause");
+
+                if (gameLoop.isRunning()) {
+                    endGame();
+                } else {
+                    startGame(this.surfaceHolder);
+                }
             }
         }
 
@@ -393,13 +409,24 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
                 s.draw(canvas);
             }
 
-            // draw game won image when the game is won
+            // draw pause image when the game is paused
+            if (gameLoop.isRunning()){
+                pauseButton.draw(canvas);
+            } else {
+                overlay.draw(canvas);
+                playButton.draw(canvas);
+                gamePauseImage.draw(canvas);
+            }
+
+            // draw game win image when the game is won
             if (isGameWin){
+                overlay.draw(canvas);
                 gameWinImage.draw(canvas);
                 gameLoop.setRunning(false);
             }
             // draw game over image when the game is over
             if (isGameOver){
+                overlay.draw(canvas);
                 gameOverImage.draw(canvas);
                 gameLoop.setRunning(false);
             }

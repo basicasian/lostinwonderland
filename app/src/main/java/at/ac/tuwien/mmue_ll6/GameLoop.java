@@ -4,6 +4,8 @@ import android.graphics.Canvas;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
+import at.ac.tuwien.mmue_ll6.assets.StaticObject;
+
 /**
  * The game loop for running and updating the game
  * @author Renate Zhang
@@ -38,6 +40,10 @@ public class GameLoop implements Runnable {
 
     public void setRunning(boolean running) {
         this.running = running;
+    }
+
+    public boolean isRunning() {
+        return running;
     }
 
     /**
