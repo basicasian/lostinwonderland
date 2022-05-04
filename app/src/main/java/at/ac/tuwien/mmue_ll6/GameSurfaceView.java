@@ -101,8 +101,6 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         loadSounds(context);
     }
 
-
-
     /**
      * load the assets (character, background, etc) and initializing them with x and y coordinates
      * also getting the display sizes for the background
@@ -172,7 +170,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         mediaPlayer.start();
 
         createSoundPool();
-        //load sound file from resource and returns it as id that can be played by the sound pool
+        // load sound file from resource and returns it as id that can be played by the sound pool
         jumpSoundID = soundPool.load(context, R.raw.jumpsound, 1);
     }
 
@@ -199,6 +197,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
         endGame();
+        mediaPlayer.release();
+        soundPool.release();
     }
 
 
@@ -371,7 +371,6 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // if player touches the goal
         if (Rect.intersects(player.getRectTarget(), goal.getRectTarget())) {
             Log.d(TAG, "update: game win");
-
             isGameWin = true;
         }
 
@@ -500,6 +499,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     }
 
     public void playJumpSound() {
-        soundPool.play(jumpSoundID, 1, 1, 1, 0, 2.0f);
+        Log.d(TAG, "playJumpSound: jump");
+        soundPool.play(jumpSoundID, 0.4f, 0.4f, 1, 0, 1.0f);
     }
 }
