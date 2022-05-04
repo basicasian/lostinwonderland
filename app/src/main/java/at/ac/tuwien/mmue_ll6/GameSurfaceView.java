@@ -14,9 +14,9 @@ import android.view.SurfaceView;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import at.ac.tuwien.mmue_ll6.assets.DynamicObject;
-import at.ac.tuwien.mmue_ll6.assets.SpriteObject;
-import at.ac.tuwien.mmue_ll6.assets.StaticObject;
+import at.ac.tuwien.mmue_ll6.objects.DynamicObject;
+import at.ac.tuwien.mmue_ll6.objects.SpriteObject;
+import at.ac.tuwien.mmue_ll6.objects.StaticObject;
 
 /**
  * The game view for loading assets and starting and ending the game
@@ -266,6 +266,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         if (isJumping && jumpCounter < 4) {
             // jumpCounter controls the max time of jumping, so the character cant jump indefinitely
             jumpCounter++;
+
+
             if (isGoingRight) {
                 player.move(200 * deltaTime,-2000 * this.deltaTime); 
             } else {

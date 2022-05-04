@@ -4,8 +4,6 @@ import android.graphics.Canvas;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
-import at.ac.tuwien.mmue_ll6.assets.StaticObject;
-
 /**
  * The game loop for running and updating the game
  * @author Renate Zhang
@@ -51,7 +49,7 @@ public class GameLoop implements Runnable {
      */
     @Override
     public void run() {
-        Log.i(TAG, "Starting game loop");
+        Log.i(TAG, "Running game loop");
 
         //one time updates before first frame update is called
         start();

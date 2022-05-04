@@ -1,4 +1,4 @@
-package at.ac.tuwien.mmue_ll6.assets;
+package at.ac.tuwien.mmue_ll6.objects;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
