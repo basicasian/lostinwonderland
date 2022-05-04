@@ -1,10 +1,16 @@
 package at.ac.tuwien.mmue_ll6;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.SoundPool;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -22,7 +28,7 @@ import at.ac.tuwien.mmue_ll6.objects.StaticObject;
  * The game view for loading assets and starting and ending the game
  * @author Renate Zhang
  */
-public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
+public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback, SoundPool.OnLoadCompleteListener, MediaPlayer.OnCompletionListener {
 
     private static final String TAG = GameSurfaceView.class.getSimpleName();
 
@@ -69,6 +75,11 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     int touchX;
     int touchY;
 
+    // sound
+    private MediaPlayer mediaPlayer;
+    private SoundPool soundPool;
+    private int jumpSoundID;
+
     /**
      * constructor for the class GameSurfaceView
      * @param attrs attribute set
@@ -83,12 +94,17 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // so events can be handled
         setFocusable(true);
 
-        // initialize resources
+        // initialize graphics
         loadAssets(context);
+
+        // initialize sounds
+        loadSounds(context);
     }
 
+
+
     /**
-     * loading the assets (character, background, etc) and initializing them with x and y coordinates
+     * load the assets (character, background, etc) and initializing them with x and y coordinates
      * also getting the display sizes for the background
      * @param context to get the bitmap
      */
@@ -143,7 +159,21 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         platformObjects = new ArrayList<>(Arrays.asList(platform1, platform2, platform3, platform4, platform5, platform6));
         dynamicObjects = new ArrayList<>(Arrays.asList(player, enemy, goal));
         staticObjects = new ArrayList<>(Arrays.asList(heart3, heart2, heart1, buttonLeft, buttonRight, buttonUp));
+    }
 
+    /**
+     * load the media player and initializing them with sources
+     * @param context to get the sound
+     */
+    private void loadSounds(Context context) {
+        //Init media player with a song. Create audio pool
+        mediaPlayer = MediaPlayer.create(context, R.raw.bgmusic);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
+
+        createSoundPool();
+        //load sound file from resource and returns it as id that can be played by the sound pool
+        jumpSoundID = soundPool.load(context, R.raw.jumpsound, 1);
     }
 
     /**
@@ -197,7 +227,6 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         }
     }
 
-
     /**
      * a touch-event has been triggered, set pressed state to true or false
      * can be pressed only once, unlike longTouchEvent() method
@@ -216,6 +245,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             // up button
             if (buttonUp.getRectTarget().contains(touchX, touchY)) {
                 // jump motion is not handled here, but in longTouchEvent() for smoother movement
+                playJumpSound();
                 isJumping = true;
                 jumpCounter = 0;
             }
@@ -223,10 +253,11 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             // pause button
             if (pauseButton.getRectTarget().contains(touchX, touchY)) {
                 Log.d(TAG, "onTouchEvent: pause");
-
                 if (gameLoop.isRunning()) {
+                    mediaPlayer.pause();
                     endGame();
                 } else {
+                    mediaPlayer.start();
                     startGame(this.surfaceHolder);
                 }
             }
@@ -266,8 +297,6 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         if (isJumping && jumpCounter < 4) {
             // jumpCounter controls the max time of jumping, so the character cant jump indefinitely
             jumpCounter++;
-
-
             if (isGoingRight) {
                 player.move(200 * deltaTime,-2000 * this.deltaTime); 
             } else {
@@ -433,5 +462,44 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
                 gameLoop.setRunning(false);
             }
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private SoundPool createNewSoundPool() {
+        AudioAttributes attributes = new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_GAME)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build();
+
+        return new SoundPool.Builder()
+                .setAudioAttributes(attributes)
+                .setMaxStreams(5)
+                .build();
+    }
+
+    private void createSoundPool() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            soundPool = createNewSoundPool();
+        } else {
+            soundPool = createLegacySoundPool();
+        }
+    }
+
+    private SoundPool createLegacySoundPool() {
+        return new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
+    }
+
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        //callback when media player has finished playing
+    }
+
+    @Override
+    public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
+        //callback when sound pool has finished loading
+    }
+
+    public void playJumpSound() {
+        soundPool.play(jumpSoundID, 1, 1, 1, 0, 2.0f);
     }
 }
