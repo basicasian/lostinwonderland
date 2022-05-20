@@ -23,4 +23,9 @@
     <string name="after_game_tryagain">another game?</string>
     <string name="after_game_menu">return to menu</string>
 
+    <!-- tutorial / help -->
+    <string name="settings_language">Choose language</string>
+    <string name="settings_english">English</string>
+    <string name="settings_german">German</string>
+    <string name="settings_save">Save</string>
 </resources>

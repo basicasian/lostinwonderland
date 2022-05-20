@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Lost in Wonderland</string>
+
+    <!-- main menu -->
+    <string name="menu_title_game">Spiel starten</string>
+    <string name="menu_title_highscore">High Score</string>
+    <string name="menu_title_video">Video abspielen</string>
+    <string name="menu_title_help">Tutorial</string>
+    <string name="menu_title_settings">Einstellungen</string>
+
+    <!-- tutorial / help -->
+    <string name="help_title">Spielerklärung</string>
+
+    <!-- skip video -->
+    <string name="video_skip">überspringen</string>
+
+    <!-- game -->
+    <string name="game_left">links</string>
+    <string name="game_right">rechts</string>
+
+    <!-- after game -->
+    <string name="after_game_text">SPIEL BEENDET</string>
+    <string name="after_game_tryagain">nochmal spielen?</string>
+    <string name="after_game_menu">Zum Menü zurückkehren</string>
+
+    <!-- tutorial / help -->
+    <string name="settings_language">Sprache wählen</string>
+    <string name="settings_english">Englisch</string>
+    <string name="settings_german">Deutsch</string>
+    <string name="settings_save">Speichern</string>
+</resources>
