@@ -4,11 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     tools:context=".HelpActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <!-- title -->
         <TextView
@@ -185,16 +186,18 @@
             android:fontFamily="monospace"
             android:text="@string/help_pause"
             android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/helpImage" />
+            app:layout_constraintTop_toBottomOf="@+id/helpImage"
+            app:layout_constraintVertical_bias="0.098" />
 
         <ImageView
             android:id="@+id/helpImage"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginTop="52dp"
-            android:layout_marginEnd="216dp"
+            android:layout_marginEnd="168dp"
             app:layout_constraintEnd_toEndOf="@+id/helpText3"
             app:layout_constraintTop_toBottomOf="@+id/helpText3"
             app:srcCompat="@drawable/pause" />
@@ -203,7 +206,7 @@
             android:id="@+id/helpImage"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_marginStart="216dp"
+            android:layout_marginStart="176dp"
             android:layout_marginTop="52dp"
             app:layout_constraintStart_toStartOf="@+id/helpText3"
             app:layout_constraintTop_toBottomOf="@+id/helpText3"
