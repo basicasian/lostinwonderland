@@ -1,21 +1,214 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".HelpActivity">
 
-    <TextView
-        android:id="@+id/instructions"
-        android:layout_width="189dp"
-        android:layout_height="36dp"
-        android:layout_marginTop="44dp"
-        android:text="@string/help_title"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.115"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- title -->
+        <TextView
+            android:id="@+id/instructions"
+            android:layout_width="189dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="60dp"
+            android:fontFamily="monospace"
+            android:text="@string/help_title"
+            android:textAlignment="center"
+            android:textColor="@color/pink_500"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/helpText1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="monospace"
+            android:text="@string/help_buttons"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/helpImage2" />
+
+        <!-- buttons -->
+        <ImageView
+            android:id="@+id/helpImage1"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="48dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintEnd_toStartOf="@+id/helpImage2"
+            app:layout_constraintTop_toBottomOf="@+id/helpText"
+            app:srcCompat="@drawable/arrowleft" />
+
+        <ImageView
+            android:id="@+id/helpImage2"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="48dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/helpText"
+            app:srcCompat="@drawable/arrowright" />
+
+        <ImageView
+            android:id="@+id/helpImage3"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="48dp"
+            app:layout_constraintStart_toEndOf="@+id/helpImage2"
+            app:layout_constraintTop_toBottomOf="@+id/helpText"
+            app:srcCompat="@drawable/arrowup" />
+
+        <!-- chara -->
+        <ImageView
+            android:id="@+id/helpImageChara"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/instructions"
+            app:srcCompat="@drawable/player" />
+
+        <TextView
+            android:id="@+id/helpText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:fontFamily="monospace"
+            android:text="@string/help_chara"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/helpImageChara" />
+
+        <!-- enemy and platform -->
+        <ImageView
+            android:id="@+id/helpImageEnemy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/helpText1"
+            app:srcCompat="@drawable/enemy" />
+
+        <ImageView
+            android:id="@+id/helpImagePlatform"
+            android:layout_width="218dp"
+            android:layout_height="37dp"
+            android:layout_marginTop="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/helpImageEnemy"
+            app:srcCompat="@drawable/platform2" />
+
+        <TextView
+            android:id="@+id/helpText2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="monospace"
+            android:text="@string/help_enemy"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.494"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/helpImagePlatform" />
+
+        <!-- heart -->
+
+        <ImageView
+            android:id="@+id/helpImageHeart1"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="48dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/helpText2"
+            app:srcCompat="@drawable/heart" />
+
+        <ImageView
+            android:id="@+id/helpImageHeart2"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="48dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toStartOf="@+id/helpImageHeart1"
+            app:layout_constraintTop_toBottomOf="@+id/helpText2"
+            app:srcCompat="@drawable/heart" />
+
+        <ImageView
+            android:id="@+id/helpImageHeart3"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="48dp"
+            app:layout_constraintStart_toEndOf="@+id/helpImageHeart1"
+            app:layout_constraintTop_toBottomOf="@+id/helpText2"
+            app:srcCompat="@drawable/heart" />
+
+        <TextView
+            android:id="@+id/helpText3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:fontFamily="monospace"
+            android:text="@string/help_heart"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/helpImageHeart1" />
+
+        <!-- pause and sound -->
+
+        <TextView
+            android:id="@+id/helpText4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="monospace"
+            android:text="@string/help_pause"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/helpImage" />
+
+        <ImageView
+            android:id="@+id/helpImage"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="52dp"
+            android:layout_marginEnd="168dp"
+            app:layout_constraintEnd_toEndOf="@+id/helpText3"
+            app:layout_constraintTop_toBottomOf="@+id/helpText3"
+            app:srcCompat="@drawable/pause" />
+
+        <ImageView
+            android:id="@+id/helpImage"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="168dp"
+            android:layout_marginTop="52dp"
+            app:layout_constraintStart_toStartOf="@+id/helpText3"
+            app:layout_constraintTop_toBottomOf="@+id/helpText3"
+            app:srcCompat="@drawable/play" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
