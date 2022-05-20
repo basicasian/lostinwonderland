@@ -13,7 +13,7 @@
     <string name="help_chara">This is your character, \n help it find the way out of this wicked wonderland!</string>
     <string name="help_buttons">Pressing the buttons, will move your \n character to the left or right, \n but will also make your character jump.</string>
     <string name="help_enemy">Be careful not to touch the monsters! \n And don\'t fall from the platforms!</string>
-    <string name="help_heart">You have three lives, \n if you lose them all it's game over.</string>
+    <string name="help_heart">You have three lives, if you lose them all it\'s game over.</string>
     <string name="help_pause">Clicking on the pause button, \n will pause button and also stop the music.</string>
 
     <!-- skip video -->
