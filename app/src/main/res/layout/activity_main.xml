@@ -98,7 +98,7 @@
         android:layout_marginStart="100dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="100dp"
-        android:layout_marginBottom="103dp"
+        android:layout_marginBottom="150dp"
         android:onClick="startSettingsActivity"
         android:text="@string/menu_title_settings"
         android:textColor="#424242"

@@ -18,7 +18,6 @@ import android.view.WindowManager;
  */
 public class GameActivity extends AppCompatActivity {
 
-
     private MediaPlayer mediaPlayer;
     private SoundPool soundPool;
     private int jumpSoundID;
@@ -27,9 +26,6 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-
-        //Remove title bar
-        getSupportActionBar().hide();
 
         //Remove notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);

@@ -10,6 +10,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MMUELL6" >
         <activity
+            android:name=".SplashScreenActivity"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".AfterGameActivity"
             android:exported="false"
             android:noHistory="true" />
@@ -34,7 +42,6 @@
             android:noHistory="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
