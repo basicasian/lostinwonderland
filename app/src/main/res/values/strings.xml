@@ -11,8 +11,8 @@
     <!-- tutorial / help -->
     <string name="help_title">* How to play *</string>
     <string name="help_chara">This is your character, \n help it find the way out of this wicked wonderland!</string>
-    <string name="help_buttons">Pressing the buttons, will move your \n character to the left or right, \n but will also make your character jump.</string>
-    <string name="help_enemy">Be careful not to touch the monsters! \n And don\'t fall from the platforms!</string>
+    <string name="help_buttons">Pressing the buttons will move your character to the left or right, but will also make you jump.</string>
+    <string name="help_enemy">Be careful not to touch the monsters! And don\'t fall from the platforms!</string>
     <string name="help_heart">You have three lives, \n if you lose them all it\'s game over.</string>
     <string name="help_pause">Clicking on the pause button, \n will pause button and also stop the music.</string>
 
@@ -33,4 +33,13 @@
     <string name="settings_english">English</string>
     <string name="settings_german">German</string>
     <string name="settings_save">Save</string>
+    <string name="title_activity_splash_screen">SplashScreenActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 </resources>

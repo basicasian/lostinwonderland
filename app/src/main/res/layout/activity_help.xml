@@ -9,13 +9,13 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <!-- title -->
         <TextView
             android:id="@+id/instructions"
-            android:layout_width="189dp"
-            android:layout_height="36dp"
+            android:layout_width="315dp"
+            android:layout_height="29dp"
             android:layout_marginTop="60dp"
             android:fontFamily="monospace"
             android:text="@string/help_title"
@@ -29,8 +29,8 @@
 
         <TextView
             android:id="@+id/helpText1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="342dp"
+            android:layout_height="77dp"
             android:layout_marginTop="16dp"
             android:fontFamily="monospace"
             android:text="@string/help_buttons"
@@ -40,12 +40,15 @@
             app:layout_constraintTop_toBottomOf="@+id/helpImage2" />
 
         <!-- buttons -->
+
+        <!-- chara -->
+
         <ImageView
             android:id="@+id/helpImage1"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_marginTop="48dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="24dp"
             app:layout_constraintEnd_toStartOf="@+id/helpImage2"
             app:layout_constraintTop_toBottomOf="@+id/helpText"
             app:srcCompat="@drawable/arrowleft" />
@@ -54,7 +57,7 @@
             android:id="@+id/helpImage2"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="32dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
@@ -65,13 +68,12 @@
             android:id="@+id/helpImage3"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="48dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="32dp"
             app:layout_constraintStart_toEndOf="@+id/helpImage2"
             app:layout_constraintTop_toBottomOf="@+id/helpText"
             app:srcCompat="@drawable/arrowup" />
 
-        <!-- chara -->
         <ImageView
             android:id="@+id/helpImageChara"
             android:layout_width="wrap_content"
@@ -85,8 +87,8 @@
 
         <TextView
             android:id="@+id/helpText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="350dp"
+            android:layout_height="73dp"
             android:layout_marginTop="12dp"
             android:fontFamily="monospace"
             android:text="@string/help_chara"
@@ -97,13 +99,14 @@
             app:layout_constraintTop_toBottomOf="@+id/helpImageChara" />
 
         <!-- enemy and platform -->
+
         <ImageView
             android:id="@+id/helpImageEnemy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="24dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/helpText1"
             app:srcCompat="@drawable/enemy" />
@@ -119,20 +122,20 @@
             app:layout_constraintTop_toBottomOf="@+id/helpImageEnemy"
             app:srcCompat="@drawable/platform2" />
 
+        <!-- heart -->
+
         <TextView
             android:id="@+id/helpText2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_width="316dp"
+            android:layout_height="64dp"
+            android:layout_marginTop="12dp"
             android:fontFamily="monospace"
             android:text="@string/help_enemy"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.494"
+            app:layout_constraintHorizontal_bias="0.513"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/helpImagePlatform" />
-
-        <!-- heart -->
 
         <ImageView
             android:id="@+id/helpImageHeart1"
@@ -166,8 +169,8 @@
 
         <TextView
             android:id="@+id/helpText3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="328dp"
+            android:layout_height="72dp"
             android:layout_marginTop="12dp"
             android:fontFamily="monospace"
             android:text="@string/help_heart"
@@ -180,35 +183,43 @@
 
         <TextView
             android:id="@+id/helpText4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_width="341dp"
+            android:layout_height="89dp"
+            android:layout_marginTop="24dp"
             android:fontFamily="monospace"
             android:text="@string/help_pause"
             android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/helpImage"
-            app:layout_constraintVertical_bias="0.098" />
+            app:layout_constraintTop_toBottomOf="@+id/helpImageArrow" />
 
         <ImageView
-            android:id="@+id/helpImage"
+            android:id="@+id/helpImagePause"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_marginTop="52dp"
-            android:layout_marginEnd="168dp"
-            app:layout_constraintEnd_toEndOf="@+id/helpText3"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="36dp"
+            app:layout_constraintEnd_toStartOf="@+id/helpImageArrow"
             app:layout_constraintTop_toBottomOf="@+id/helpText3"
             app:srcCompat="@drawable/pause" />
 
         <ImageView
-            android:id="@+id/helpImage"
+            android:id="@+id/helpImageArrow"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="56dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/helpText3"
+            app:srcCompat="@drawable/arrow" />
+
+        <ImageView
+            android:id="@+id/helpImagePlay"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_marginStart="176dp"
-            android:layout_marginTop="52dp"
-            app:layout_constraintStart_toStartOf="@+id/helpText3"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="40dp"
+            app:layout_constraintStart_toEndOf="@+id/helpImageArrow"
             app:layout_constraintTop_toBottomOf="@+id/helpText3"
             app:srcCompat="@drawable/play" />
 

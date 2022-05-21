@@ -11,10 +11,10 @@
     <!-- tutorial / help -->
     <string name="help_title">* How to play *</string>
     <string name="help_chara">Das ist deine Spielfigur, \n finde den Weg aus diesem verwunschenen Wunderland!</string>
-    <string name="help_buttons">Mit den Buttons kannst du dich nach links \n oder rechts bewegen, aber auch springen.</string>
-    <string name="help_enemy">Lasse dich nicht von den Monstern erwischen! \n Und falle ja nicht von den Plattformen!</string>
-    <string name="help_heart">Du hast drei Leben, \n wenn du sie alle verlierst heißt es Game Over.</string>
-    <string name="help_pause">Sobald man auf diesen Button klickt, \n wird das Spiel und die Musik pausiert.</string>
+    <string name="help_buttons">Mit den Buttons kannst du dich nach links oder rechts bewegen, aber auch springen.</string>
+    <string name="help_enemy">Lasse dich nicht von den Monstern erwischen! Und falle ja nicht von den Plattformen!</string>
+    <string name="help_heart">Du hast drei Leben, wenn du sie alle verlierst heißt es Game Over.</string>
+    <string name="help_pause">Sobald man auf diesen Button klickt, wird das Spiel und die Musik pausiert.</string>
 
     <!-- skip video -->
     <string name="video_skip">überspringen</string>

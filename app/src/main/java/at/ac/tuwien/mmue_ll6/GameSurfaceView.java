@@ -117,7 +117,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
             this.barHeight = getResources().getDimensionPixelSize(resourceId);
-            this.displayWidth += barHeight;
+            //this.displayWidth += barHeight;
         }
 
         // Initialize the assets
@@ -125,7 +125,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // but elements are initialized from bottom left
 
         // dynamic objects
-        player = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.player), 700, displayHeight - 300);
+        player = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.player), 600, displayHeight - 300);
         enemy = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy), 300, displayHeight - 300);
         goal = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.goal), 6000, displayHeight/2);
         DynamicObject platform1 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 100, displayHeight - 150);
@@ -142,16 +142,16 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         buttonLeft = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowleft), displayWidth - 600, displayHeight - 50);
         buttonRight= new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowright), displayWidth - 300, displayHeight - 50);
         buttonUp = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowup), barHeight + 50, displayHeight - 50);
-        pauseButton = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.pause), displayWidth - 300, 300);
-        playButton = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.play), displayWidth - 300, 300);
+        pauseButton = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.pause), displayWidth - 300, 280);
+        playButton = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.play), displayWidth - 300, 280);
         gameOverImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.gameover), 450, 600);
         gameWinImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.youwin), 500, 600);
         gamePauseImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.paused), 600, 600);
-        StaticObject heart1 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 100, 250);
-        StaticObject heart2 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 300, 250);
-        StaticObject heart3 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 500, 250);
-        bg1 = new StaticObject(BitmapFactory.decodeResource(getResources(), R.drawable.background), barHeight, displayWidth, 0, displayHeight);
-        overlay = new StaticObject(BitmapFactory.decodeResource(getResources(), R.drawable.overlay), barHeight, displayWidth, 0, displayHeight);
+        StaticObject heart1 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 100, 200);
+        StaticObject heart2 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 300, 200);
+        StaticObject heart3 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 500, 200);
+        bg1 = new StaticObject(BitmapFactory.decodeResource(getResources(), R.drawable.background), 0, displayWidth, 0, displayHeight);
+        overlay = new StaticObject(BitmapFactory.decodeResource(getResources(), R.drawable.overlay), 0, displayWidth, 0, displayHeight);
 
         // the order of array is the order of draw calls!
         platformObjects = new ArrayList<>(Arrays.asList(platform1, platform2, platform3, platform4, platform5, platform6));
@@ -284,7 +284,6 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private void longTouchEvent() {
         // check intersection here + gravity
 
-
         // right button
         if (checkButton("right") && player.getX() < (displayWidth/2)) {
             player.move(+300 * this.deltaTime, 0); // velocity * dt
@@ -374,6 +373,21 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             isGameWin = true;
         }
 
+        // if button is pressed, move character
+        if (isPressed()) {
+            longTouchEvent();
+        }
+
+        // gravity simulation
+        if (!isJumping && !checkCollision()) {
+            if (isGoingRight) {
+                player.move(+ 200 * deltaTime,+300 * deltaTime);
+            } else {
+                player.move(- 200 * deltaTime,+300 * deltaTime);
+            }
+        }
+        fire.update(System.currentTimeMillis());
+
         // move scene to the right
         if (player.getX() >= (displayWidth/2)
                 && !(checkButton("left"))) {
@@ -396,21 +410,6 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             }
             fire.move(+200 * 0.03, 0);
         }
-
-        fire.update(System.currentTimeMillis());
-
-        // gravity simulation
-        if (!isJumping && !checkCollision()) {
-            if (isGoingRight) {
-                player.move(+ 200 * deltaTime,+300 * deltaTime);
-            } else {
-                player.move(- 200 * deltaTime,+300 * deltaTime);
-            }
-        }
-        if (isPressed()) {
-            longTouchEvent();
-        }
-
     }
 
     /**
