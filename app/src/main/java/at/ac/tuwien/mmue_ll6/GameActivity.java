@@ -18,10 +18,6 @@ import android.view.WindowManager;
  */
 public class GameActivity extends AppCompatActivity {
 
-    private MediaPlayer mediaPlayer;
-    private SoundPool soundPool;
-    private int jumpSoundID;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

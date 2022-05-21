@@ -11,7 +11,7 @@
         android:theme="@style/Theme.MMUELL6" >
         <activity
             android:name=".SplashScreenActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -38,12 +38,8 @@
             android:exported="false" />
         <activity
             android:name=".VideoActivity"
-            android:exported="true"
-            android:noHistory="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:exported="false"
+            android:noHistory="true">
         </activity>
         <activity
             android:name=".MainActivity"

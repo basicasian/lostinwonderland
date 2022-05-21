@@ -27,6 +27,7 @@ public class VideoActivity extends AppCompatActivity implements MediaPlayer.OnCo
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video);
 

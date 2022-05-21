@@ -24,7 +24,6 @@
     <string name="game_right">rechts</string>
 
     <!-- after game -->
-    <string name="after_game_text">SPIEL BEENDET</string>
     <string name="after_game_tryagain">nochmal spielen?</string>
     <string name="after_game_menu">Zum Menü zurückkehren</string>
 

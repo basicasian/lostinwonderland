@@ -24,7 +24,6 @@
     <string name="game_right">right</string>
 
     <!-- after game -->
-    <string name="after_game_text">GAME ENDED</string>
     <string name="after_game_tryagain">another game?</string>
     <string name="after_game_menu">return to menu</string>
 
