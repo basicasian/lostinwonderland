@@ -10,11 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MMUELL6" >
         <activity
-            android:name=".SplashScreenActivity"
-            android:exported="false"
-            android:label="@string/title_activity_splash_screen"
-            android:theme="@style/Theme.MMUELL6.NoActionBar" />
-        <activity
             android:name=".AfterGameActivity"
             android:exported="false"
             android:noHistory="true" />

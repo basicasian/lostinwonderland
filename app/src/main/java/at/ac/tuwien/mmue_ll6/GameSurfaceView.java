@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
@@ -13,10 +14,13 @@ import android.media.SoundPool;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.WindowManager;
 
+import java.io.DataInput;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -69,7 +73,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     // information about display
     int displayHeight;
     int displayWidth;
-    int barHeight;
+    int actionBarHeight = 56;
 
     // coordinates of touch
     int touchX;
@@ -109,16 +113,12 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private void loadAssets(Context context) {
 
         // get the size of the screen
-        this.displayWidth = context.getResources().getDisplayMetrics().widthPixels;
-        this.displayHeight = context.getResources().getDisplayMetrics().heightPixels;
-
-        // because we removed the notification bar, we have to add the height manually
-        barHeight = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            this.barHeight = getResources().getDimensionPixelSize(resourceId);
-            //this.displayWidth += barHeight;
-        }
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getRealSize(size);
+        this.displayWidth = size.x - this.actionBarHeight;
+        this.displayHeight = size.y;
 
         // Initialize the assets
         // coordinate system starts from top left! (in landscape mode)
@@ -141,7 +141,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // static objects
         buttonLeft = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowleft), displayWidth - 600, displayHeight - 50);
         buttonRight= new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowright), displayWidth - 300, displayHeight - 50);
-        buttonUp = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowup), barHeight + 50, displayHeight - 50);
+        buttonUp = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowup),  100, displayHeight - 50);
         pauseButton = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.pause), displayWidth - 300, 280);
         playButton = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.play), displayWidth - 300, 280);
         gameOverImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.gameover), 450, 600);
@@ -288,8 +288,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         if (checkButton("right") && player.getX() < (displayWidth/2)) {
             player.move(+300 * this.deltaTime, 0); // velocity * dt
         }
+
         // left button
-        if (checkButton("left") && player.getX() > barHeight) {
+        if (checkButton("left") && player.getX() > displayWidth * 0.1) {
             player.move(-300 * this.deltaTime, 0); 
         }
         // up button
@@ -381,34 +382,35 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // gravity simulation
         if (!isJumping && !checkCollision()) {
             if (isGoingRight) {
-                player.move(+ 200 * deltaTime,+300 * deltaTime);
+                player.move(+ 200 * this.deltaTime,+300 * this.deltaTime);
             } else {
-                player.move(- 200 * deltaTime,+300 * deltaTime);
+                player.move(- 200 * this.deltaTime,+300 * this.deltaTime);
             }
         }
         fire.update(System.currentTimeMillis());
+
 
         // move scene to the right
         if (player.getX() >= (displayWidth/2)
                 && !(checkButton("left"))) {
             for (DynamicObject d: dynamicObjects) {
-                d.move(-200 * 0.03, 0);
+                d.move(-200 * this.deltaTime, 0);
             }
             for (DynamicObject p: platformObjects) {
-                p.move(-200 * 0.03, 0);
+                p.move(-200 * this.deltaTime, 0);
             }
-            fire.move(-200 * 0.03, 0);
+            fire.move(-200 * this.deltaTime, 0);
         }
 
         // move scene to the left
         if (player.getX() <= 250) {
             for (DynamicObject d: dynamicObjects) {
-                d.move(+200 * 0.03, 0);
+                d.move(+200 * this.deltaTime, 0);
             }
             for (DynamicObject p: platformObjects) {
-                p.move(+200 * 0.03, 0);
+                p.move(+200 * this.deltaTime, 0);
             }
-            fire.move(+200 * 0.03, 0);
+            fire.move(+200 * this.deltaTime, 0);
         }
     }
 
