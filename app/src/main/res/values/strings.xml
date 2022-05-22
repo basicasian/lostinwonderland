@@ -22,14 +22,22 @@
     <!-- skip video -->
     <string name="video_skip">skip</string>
 
+    <!-- select game -->
+    <string name="select_game_title">* Choose difficulty *</string>
+    <string name="select_game_easy">easy</string>
+    <string name="select_game_hard">hard</string>
+
     <!-- after game -->
-    <string name="after_game_tryagain">another game?</string>
+    <string name="after_game_tryagain">play again?</string>
+    <string name="after_game_choose">choose level</string>
     <string name="after_game_menu">return to menu</string>
 
-    <!-- tutorial / help -->
+    <!-- settings -->
     <string name="settings_title">* Settings *</string>
     <string name="settings_language">Choose language</string>
     <string name="settings_english">English</string>
     <string name="settings_german">German</string>
     <string name="settings_save">Save</string>
+
+
 </resources>

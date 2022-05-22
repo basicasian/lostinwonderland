@@ -20,8 +20,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void startGameActivity(View v) {
-        startActivity(new Intent(this, GameActivity.class));
+    public void startSelectGameActivity(View v) {
+        startActivity(new Intent(this, SelectGameActivity.class));
     }
 
     public void startVideoActivity(View v) {

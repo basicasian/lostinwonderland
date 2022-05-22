@@ -24,9 +24,15 @@
 
     <!-- after game -->
     <string name="after_game_tryagain">nochmal spielen?</string>
+    <string name="after_game_choose">Level aussuchen</string>
     <string name="after_game_menu">Zum Menü zurückkehren</string>
 
-    <!-- tutorial / help -->
+    <!-- select game -->
+    <string name="select_game_title">* Level aussuchen *</string>
+    <string name="select_game_easy">einfach</string>
+    <string name="select_game_hard">schwierig</string>
+
+    <!-- settings -->
     <string name="settings_title">* Einstellungen *</string>
     <string name="settings_language">Sprache wählen</string>
     <string name="settings_english">Englisch</string>

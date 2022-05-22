@@ -8,7 +8,7 @@
 
     <!-- title -->
     <TextView
-        android:id="@+id/instructions"
+        android:id="@+id/settingsTitle"
         android:layout_width="314dp"
         android:layout_height="39dp"
         android:layout_marginTop="60dp"
@@ -37,12 +37,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="24dp"
         android:fontFamily="monospace"
         android:text="@string/settings_language"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/instructions" />
+        app:layout_constraintTop_toBottomOf="@+id/settingsTitle" />
 
     <RadioButton
         android:id="@+id/englishButton"

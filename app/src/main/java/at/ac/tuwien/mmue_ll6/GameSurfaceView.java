@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -161,7 +162,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         // text for high score
         textPaint.setColor(Color.WHITE);
-        textPaint.setTextSize(40);
+        textPaint.setTextSize(60);
+        textPaint.setTypeface(Typeface.create("Monospace",Typeface.NORMAL));
 
         // the order of array is the order of draw calls!
         platformObjects = new ArrayList<>(Arrays.asList(platform1, platform2, platform3, platform4, platform5, platform6));
@@ -434,8 +436,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         if (canvas != null) {
             bg1.draw(canvas); // has to drawn first, because it's in the back
-            fire.draw(canvas);
-            canvas.drawText("HighScore", displayWidth/2, padding, textPaint);
+            fire.draw(canvas); // sprite
 
             // draw all platforms first
             for (DynamicObject p: platformObjects) {
@@ -449,6 +450,11 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             for (StaticObject s: staticObjects) {
                 s.draw(canvas);
             }
+
+            // font
+            Paint.FontMetrics fm = textPaint.getFontMetrics();
+            float height = fm.descent - fm.ascent;
+            canvas.drawText("Time:", displayWidth * 0.5f, padding + height, textPaint);
 
             // draw pause image when the game is paused
             if (gameLoop.isRunning()){
