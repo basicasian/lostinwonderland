@@ -72,8 +72,11 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private StaticObject gameWinImage;
     private StaticObject gamePauseImage;
     private ArrayList<StaticObject> staticObjects = new ArrayList<>();
-    private Paint textPaint = new Paint();
+
+    // timer
+    private final Paint textPaint = new Paint();
     private float padding;
+    private double timer = 0;
 
     // information about display
     int displayHeight;
@@ -194,6 +197,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         this.surfaceHolder = surfaceHolder;
         startGame(this.surfaceHolder);
+
+        //timer = System.currentTimeMillis();
     }
 
     /**
@@ -362,6 +367,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
      */
     public void update(double deltaTime) {
         this.deltaTime = deltaTime;
+        timer++; // TODO: change this to actual time
 
         // lose condition
         // if the player touches the enemy or player falls from platforms
@@ -454,7 +460,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             // font
             Paint.FontMetrics fm = textPaint.getFontMetrics();
             float height = fm.descent - fm.ascent;
-            canvas.drawText("Time:", displayWidth * 0.5f, padding + height, textPaint);
+            canvas.drawText("Time: " + timer, displayWidth * 0.5f, padding + height, textPaint);
 
             // draw pause image when the game is paused
             if (gameLoop.isRunning()){
