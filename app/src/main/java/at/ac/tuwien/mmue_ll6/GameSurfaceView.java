@@ -20,10 +20,10 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 
-import java.io.DataInput;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import at.ac.tuwien.mmue_ll6.activities.AfterGameActivity;
 import at.ac.tuwien.mmue_ll6.objects.DynamicObject;
 import at.ac.tuwien.mmue_ll6.objects.SpriteObject;
 import at.ac.tuwien.mmue_ll6.objects.StaticObject;
@@ -271,7 +271,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // if the game's over, touching on the screen sends you to AfterGameActivity
         if (isGameOver || isGameWin){
             if (e.getAction()==MotionEvent.ACTION_DOWN){
-                context.startActivity(new Intent(context,AfterGameActivity.class));
+                context.startActivity(new Intent(context, AfterGameActivity.class));
             }
         }
         return true;

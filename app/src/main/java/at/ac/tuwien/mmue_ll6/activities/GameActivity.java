@@ -1,4 +1,4 @@
-package at.ac.tuwien.mmue_ll6;
+package at.ac.tuwien.mmue_ll6.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,6 +11,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+
+import at.ac.tuwien.mmue_ll6.R;
 
 /**
  * Activity for playing the the game

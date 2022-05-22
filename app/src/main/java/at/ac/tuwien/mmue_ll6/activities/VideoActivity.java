@@ -1,4 +1,4 @@
-package at.ac.tuwien.mmue_ll6;
+package at.ac.tuwien.mmue_ll6.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.VideoView;
+
+import at.ac.tuwien.mmue_ll6.R;
 
 /**
  * Activity for playing the intro video with skip button

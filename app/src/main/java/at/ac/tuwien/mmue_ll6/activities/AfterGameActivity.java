@@ -1,4 +1,4 @@
-package at.ac.tuwien.mmue_ll6;
+package at.ac.tuwien.mmue_ll6.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import at.ac.tuwien.mmue_ll6.R;
 
 /**
  * Activity if the player lost or won the game
