@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Lost in Wonderland</string>
+
+    <!-- main menu -->
+    <string name="menu_title_game">Spiel starten</string>
+    <string name="menu_title_highscore">High Score</string>
+    <string name="menu_title_video">Video spielen</string>
+    <string name="menu_title_help">Tutorial</string>
+    <string name="menu_title_settings">Einstellungen</string>
+
+    <!-- tutorial / help -->
+    <string name="help_title">* How to play *</string>
+    <string name="help_chara">Das ist deine Spielfigur, \n finde den Weg aus diesem verwunschenen Wunderland!</string>
+    <string name="help_buttons">Mit den Buttons kannst du dich nach links oder rechts bewegen, aber auch springen.</string>
+    <string name="help_enemy">Lasse dich nicht von den Monstern erwischen! Und falle ja nicht von den Plattformen!</string>
+    <string name="help_heart">Du hast drei Leben, wenn du sie alle verlierst heißt es Game Over.</string>
+    <string name="help_pause">Sobald man auf diesen Button klickt, wird das Spiel und die Musik pausiert.</string>
+
+    <!-- skip video -->
+    <string name="video_skip">überspringen</string>
+
+    <!-- game -->
+    <string name="game_left">links</string>
+    <string name="game_right">rechts</string>
+
+    <!-- after game -->
+    <string name="after_game_tryagain">nochmal spielen?</string>
+    <string name="after_game_menu">Zum Menü zurückkehren</string>
+
+    <!-- tutorial / help -->
+    <string name="settings_language">Sprache wählen</string>
+    <string name="settings_english">Englisch</string>
+    <string name="settings_german">Deutsch</string>
+    <string name="settings_save">Speichern</string>
+</resources>

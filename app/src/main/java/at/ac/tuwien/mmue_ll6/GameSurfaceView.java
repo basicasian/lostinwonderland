@@ -1,28 +1,38 @@
 package at.ac.tuwien.mmue_ll6;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Point;
 import android.graphics.Rect;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.SoundPool;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.WindowManager;
 
+import java.io.DataInput;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import at.ac.tuwien.mmue_ll6.assets.DynamicObject;
-import at.ac.tuwien.mmue_ll6.assets.SpriteObject;
-import at.ac.tuwien.mmue_ll6.assets.StaticObject;
+import at.ac.tuwien.mmue_ll6.objects.DynamicObject;
+import at.ac.tuwien.mmue_ll6.objects.SpriteObject;
+import at.ac.tuwien.mmue_ll6.objects.StaticObject;
 
 /**
  * The game view for loading assets and starting and ending the game
  * @author Renate Zhang
  */
-public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
+public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback, SoundPool.OnLoadCompleteListener, MediaPlayer.OnCompletionListener {
 
     private static final String TAG = GameSurfaceView.class.getSimpleName();
 
@@ -63,11 +73,16 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     // information about display
     int displayHeight;
     int displayWidth;
-    int barHeight;
+    int actionBarHeight = 56;
 
     // coordinates of touch
     int touchX;
     int touchY;
+
+    // sound
+    private MediaPlayer mediaPlayer;
+    private SoundPool soundPool;
+    private int jumpSoundID;
 
     /**
      * constructor for the class GameSurfaceView
@@ -83,35 +98,34 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // so events can be handled
         setFocusable(true);
 
-        // initialize resources
+        // initialize graphics
         loadAssets(context);
+
+        // initialize sounds
+        loadSounds(context);
     }
 
     /**
-     * loading the assets (character, background, etc) and initializing them with x and y coordinates
+     * load the assets (character, background, etc) and initializing them with x and y coordinates
      * also getting the display sizes for the background
      * @param context to get the bitmap
      */
     private void loadAssets(Context context) {
 
         // get the size of the screen
-        this.displayWidth = context.getResources().getDisplayMetrics().widthPixels;
-        this.displayHeight = context.getResources().getDisplayMetrics().heightPixels;
-
-        // because we removed the notification bar, we have to add the height manually
-        barHeight = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            this.barHeight = getResources().getDimensionPixelSize(resourceId);
-            this.displayWidth += barHeight;
-        }
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getRealSize(size);
+        this.displayWidth = size.x - this.actionBarHeight;
+        this.displayHeight = size.y;
 
         // Initialize the assets
         // coordinate system starts from top left! (in landscape mode)
         // but elements are initialized from bottom left
 
         // dynamic objects
-        player = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.player), 700, displayHeight - 300);
+        player = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.player), 600, displayHeight - 300);
         enemy = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy), 300, displayHeight - 300);
         goal = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.goal), 6000, displayHeight/2);
         DynamicObject platform1 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 100, displayHeight - 150);
@@ -127,23 +141,37 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // static objects
         buttonLeft = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowleft), displayWidth - 600, displayHeight - 50);
         buttonRight= new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowright), displayWidth - 300, displayHeight - 50);
-        buttonUp = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowup), barHeight + 50, displayHeight - 50);
-        pauseButton = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.pause), displayWidth - 300, 300);
-        playButton = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.play), displayWidth - 300, 300);
+        buttonUp = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowup),  100, displayHeight - 50);
+        pauseButton = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.pause), displayWidth - 300, 280);
+        playButton = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.play), displayWidth - 300, 280);
         gameOverImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.gameover), 450, 600);
         gameWinImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.youwin), 500, 600);
         gamePauseImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.paused), 600, 600);
-        StaticObject heart1 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 100, 250);
-        StaticObject heart2 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 300, 250);
-        StaticObject heart3 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 500, 250);
-        bg1 = new StaticObject(BitmapFactory.decodeResource(getResources(), R.drawable.background), barHeight, displayWidth, 0, displayHeight);
-        overlay = new StaticObject(BitmapFactory.decodeResource(getResources(), R.drawable.overlay), barHeight, displayWidth, 0, displayHeight);
+        StaticObject heart1 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 100, 200);
+        StaticObject heart2 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 300, 200);
+        StaticObject heart3 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 500, 200);
+        bg1 = new StaticObject(BitmapFactory.decodeResource(getResources(), R.drawable.background), 0, displayWidth, 0, displayHeight);
+        overlay = new StaticObject(BitmapFactory.decodeResource(getResources(), R.drawable.overlay), 0, displayWidth, 0, displayHeight);
 
         // the order of array is the order of draw calls!
         platformObjects = new ArrayList<>(Arrays.asList(platform1, platform2, platform3, platform4, platform5, platform6));
         dynamicObjects = new ArrayList<>(Arrays.asList(player, enemy, goal));
         staticObjects = new ArrayList<>(Arrays.asList(heart3, heart2, heart1, buttonLeft, buttonRight, buttonUp));
+    }
 
+    /**
+     * load the media player and initializing them with sources
+     * @param context to get the sound
+     */
+    private void loadSounds(Context context) {
+        //Init media player with a song. Create audio pool
+        mediaPlayer = MediaPlayer.create(context, R.raw.bgmusic);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
+
+        createSoundPool();
+        // load sound file from resource and returns it as id that can be played by the sound pool
+        jumpSoundID = soundPool.load(context, R.raw.jumpsound, 1);
     }
 
     /**
@@ -169,6 +197,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
         endGame();
+        mediaPlayer.release();
+        soundPool.release();
     }
 
 
@@ -197,7 +227,6 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         }
     }
 
-
     /**
      * a touch-event has been triggered, set pressed state to true or false
      * can be pressed only once, unlike longTouchEvent() method
@@ -216,6 +245,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             // up button
             if (buttonUp.getRectTarget().contains(touchX, touchY)) {
                 // jump motion is not handled here, but in longTouchEvent() for smoother movement
+                playJumpSound();
                 isJumping = true;
                 jumpCounter = 0;
             }
@@ -223,10 +253,11 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             // pause button
             if (pauseButton.getRectTarget().contains(touchX, touchY)) {
                 Log.d(TAG, "onTouchEvent: pause");
-
                 if (gameLoop.isRunning()) {
+                    mediaPlayer.pause();
                     endGame();
                 } else {
+                    mediaPlayer.start();
                     startGame(this.surfaceHolder);
                 }
             }
@@ -253,13 +284,13 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private void longTouchEvent() {
         // check intersection here + gravity
 
-
         // right button
         if (checkButton("right") && player.getX() < (displayWidth/2)) {
             player.move(+300 * this.deltaTime, 0); // velocity * dt
         }
+
         // left button
-        if (checkButton("left") && player.getX() > barHeight) {
+        if (checkButton("left") && player.getX() > displayWidth * 0.1) {
             player.move(-300 * this.deltaTime, 0); 
         }
         // up button
@@ -340,47 +371,47 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // if player touches the goal
         if (Rect.intersects(player.getRectTarget(), goal.getRectTarget())) {
             Log.d(TAG, "update: game win");
-
             isGameWin = true;
         }
+
+        // if button is pressed, move character
+        if (isPressed()) {
+            longTouchEvent();
+        }
+
+        // gravity simulation
+        if (!isJumping && !checkCollision()) {
+            if (isGoingRight) {
+                player.move(+ 200 * this.deltaTime,+300 * this.deltaTime);
+            } else {
+                player.move(- 200 * this.deltaTime,+300 * this.deltaTime);
+            }
+        }
+        fire.update(System.currentTimeMillis());
+
 
         // move scene to the right
         if (player.getX() >= (displayWidth/2)
                 && !(checkButton("left"))) {
             for (DynamicObject d: dynamicObjects) {
-                d.move(-200 * 0.03, 0);
+                d.move(-200 * this.deltaTime, 0);
             }
             for (DynamicObject p: platformObjects) {
-                p.move(-200 * 0.03, 0);
+                p.move(-200 * this.deltaTime, 0);
             }
-            fire.move(-200 * 0.03, 0);
+            fire.move(-200 * this.deltaTime, 0);
         }
 
         // move scene to the left
         if (player.getX() <= 250) {
             for (DynamicObject d: dynamicObjects) {
-                d.move(+200 * 0.03, 0);
+                d.move(+200 * this.deltaTime, 0);
             }
             for (DynamicObject p: platformObjects) {
-                p.move(+200 * 0.03, 0);
+                p.move(+200 * this.deltaTime, 0);
             }
-            fire.move(+200 * 0.03, 0);
+            fire.move(+200 * this.deltaTime, 0);
         }
-
-        fire.update(System.currentTimeMillis());
-
-        // gravity simulation
-        if (!isJumping && !checkCollision()) {
-            if (isGoingRight) {
-                player.move(+ 200 * deltaTime,+300 * deltaTime);
-            } else {
-                player.move(- 200 * deltaTime,+300 * deltaTime);
-            }
-        }
-        if (isPressed()) {
-            longTouchEvent();
-        }
-
     }
 
     /**
@@ -431,5 +462,45 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
                 gameLoop.setRunning(false);
             }
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private SoundPool createNewSoundPool() {
+        AudioAttributes attributes = new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_GAME)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build();
+
+        return new SoundPool.Builder()
+                .setAudioAttributes(attributes)
+                .setMaxStreams(5)
+                .build();
+    }
+
+    private void createSoundPool() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            soundPool = createNewSoundPool();
+        } else {
+            soundPool = createLegacySoundPool();
+        }
+    }
+
+    private SoundPool createLegacySoundPool() {
+        return new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
+    }
+
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        //callback when media player has finished playing
+    }
+
+    @Override
+    public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
+        //callback when sound pool has finished loading
+    }
+
+    public void playJumpSound() {
+        Log.d(TAG, "playJumpSound: jump");
+        soundPool.play(jumpSoundID, 0.4f, 0.4f, 1, 0, 1.0f);
     }
 }
