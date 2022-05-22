@@ -8,6 +8,9 @@
     <string name="menu_title_help">Tutorial</string>
     <string name="menu_title_settings">Einstellungen</string>
 
+    <!-- high score -->
+    <string name="highscore_title">* High Score *</string>
+
     <!-- tutorial / help -->
     <string name="help_title">* How to play *</string>
     <string name="help_chara">Das ist deine Spielfigur, \n finde den Weg aus diesem verwunschenen Wunderland!</string>
@@ -19,15 +22,12 @@
     <!-- skip video -->
     <string name="video_skip">überspringen</string>
 
-    <!-- game -->
-    <string name="game_left">links</string>
-    <string name="game_right">rechts</string>
-
     <!-- after game -->
     <string name="after_game_tryagain">nochmal spielen?</string>
     <string name="after_game_menu">Zum Menü zurückkehren</string>
 
     <!-- tutorial / help -->
+    <string name="settings_title">* Einstellungen *</string>
     <string name="settings_language">Sprache wählen</string>
     <string name="settings_english">Englisch</string>
     <string name="settings_german">Deutsch</string>

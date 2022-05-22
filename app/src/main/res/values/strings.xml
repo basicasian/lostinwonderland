@@ -16,18 +16,18 @@
     <string name="help_heart">You have three lives, \n if you lose them all it\'s game over.</string>
     <string name="help_pause">Clicking on the pause button, \n will pause button and also stop the music.</string>
 
+    <!-- high score -->
+    <string name="highscore_title">* High Score *</string>
+
     <!-- skip video -->
     <string name="video_skip">skip</string>
-
-    <!-- game -->
-    <string name="game_left">left</string>
-    <string name="game_right">right</string>
 
     <!-- after game -->
     <string name="after_game_tryagain">another game?</string>
     <string name="after_game_menu">return to menu</string>
 
     <!-- tutorial / help -->
+    <string name="settings_title">* Settings *</string>
     <string name="settings_language">Choose language</string>
     <string name="settings_english">English</string>
     <string name="settings_german">German</string>
