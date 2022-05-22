@@ -10,7 +10,7 @@
     <TextView
         android:id="@+id/instructions"
         android:layout_width="315dp"
-        android:layout_height="29dp"
+        android:layout_height="41dp"
         android:layout_marginTop="60dp"
         android:fontFamily="monospace"
         android:text="@string/highscore_title"

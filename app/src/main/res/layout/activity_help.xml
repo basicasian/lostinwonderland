@@ -14,8 +14,8 @@
         <!-- title -->
         <TextView
             android:id="@+id/instructions"
-            android:layout_width="315dp"
-            android:layout_height="29dp"
+            android:layout_width="313dp"
+            android:layout_height="40dp"
             android:layout_marginTop="60dp"
             android:fontFamily="monospace"
             android:text="@string/help_title"
