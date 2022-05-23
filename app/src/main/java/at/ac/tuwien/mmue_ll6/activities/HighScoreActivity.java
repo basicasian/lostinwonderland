@@ -32,7 +32,7 @@ public class HighScoreActivity extends AppCompatActivity {
 
         highscoreTimes = findViewById(R.id.highscoreTimes);
 
-        // Load users
+        // Load scores
         Concurrency.executeAsync(() -> {
             List<Score> users = loadUsers();
             runOnUiThread(() -> onScoresLoadedListener.onScoresLoaded(users));
