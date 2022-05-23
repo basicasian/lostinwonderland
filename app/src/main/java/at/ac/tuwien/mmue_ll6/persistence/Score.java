@@ -8,9 +8,9 @@ public class Score {
 
     @PrimaryKey(autoGenerate = true)
     public int id;
-    public float time;
+    public double time;
 
-    public Score(float time) {
+    public Score(double time) {
         this.time = time;
     }
 }

@@ -30,6 +30,9 @@ import at.ac.tuwien.mmue_ll6.activities.AfterGameActivity;
 import at.ac.tuwien.mmue_ll6.objects.DynamicObject;
 import at.ac.tuwien.mmue_ll6.objects.SpriteObject;
 import at.ac.tuwien.mmue_ll6.objects.StaticObject;
+import at.ac.tuwien.mmue_ll6.persistence.Score;
+import at.ac.tuwien.mmue_ll6.persistence.ScoreRoomDatabase;
+import at.ac.tuwien.mmue_ll6.util.Concurrency;
 
 /**
  * The game view for loading assets and starting and ending the game
@@ -361,6 +364,11 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     }
 
 
+    public void saveScore(Score score) {
+        ScoreRoomDatabase.getInstance(context).scoreDao().insert(score);
+    }
+
+
     /**
      * updates the game logic
      * @param deltaTime the delta time needed for frame independence
@@ -390,6 +398,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         if (Rect.intersects(player.getRectTarget(), goal.getRectTarget())) {
             Log.d(TAG, "update: game win");
             isGameWin = true;
+
+            // Save user
+            Concurrency.executeAsync(() -> saveScore(new Score(timer)));
         }
 
         // if button is pressed, move character
