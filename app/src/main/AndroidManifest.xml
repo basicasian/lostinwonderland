@@ -11,7 +11,8 @@
         android:theme="@style/Theme.MMUELL6">
         <activity
             android:name=".activities.SelectGameActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:noHistory="true"/>
         <activity
             android:name=".activities.SplashScreenActivity"
             android:exported="true">
