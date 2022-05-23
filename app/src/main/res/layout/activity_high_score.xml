@@ -7,11 +7,12 @@
     tools:context=".activities.HighScoreActivity">
 
     <!-- title -->
+
     <TextView
         android:id="@+id/highscoreTitle"
         android:layout_width="315dp"
         android:layout_height="41dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="52dp"
         android:fontFamily="monospace"
         android:text="@string/highscore_title"
         android:textAlignment="center"
@@ -23,18 +24,55 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/highscoreTimes"
-        android:layout_width="316dp"
-        android:layout_height="474dp"
-        android:layout_marginTop="36dp"
+        android:id="@+id/highscoreTitleEasy"
+        android:layout_width="315dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="monospace"
+        android:text="@string/highscore_easy"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/highscoreTitle" />
+
+    <TextView
+        android:id="@+id/highscoreTitleHard"
+        android:layout_width="315dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="24dp"
+        android:fontFamily="monospace"
+        android:text="@string/highscore_hard"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/highscoreTimesEasy" />
+
+    <TextView
+        android:id="@+id/highscoreTimesEasy"
+        android:layout_width="318dp"
+        android:layout_height="178dp"
+        android:layout_marginTop="12dp"
+        android:fontFamily="monospace"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.516"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/highscoreTitleEasy" />
+
+    <TextView
+        android:id="@+id/highscoreTimesHard"
+        android:layout_width="325dp"
+        android:layout_height="180dp"
         android:fontFamily="monospace"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintHorizontal_bias="0.558"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/highscoreTitle"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/highscoreTitleHard"
+        app:layout_constraintVertical_bias="0.109" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

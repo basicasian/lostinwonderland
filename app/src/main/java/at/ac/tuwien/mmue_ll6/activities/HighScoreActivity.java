@@ -30,8 +30,7 @@ public class HighScoreActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_high_score);
 
-        highscoreTimes = findViewById(R.id.highscoreTimes);
-
+        highscoreTimes = findViewById(R.id.highscoreTimesEasy);
         // Load scores
         Concurrency.executeAsync(() -> {
             List<Score> users = loadScores();
@@ -47,7 +46,7 @@ public class HighScoreActivity extends AppCompatActivity {
         StringBuilder text = new StringBuilder();
         int ranking = 1;
         for (Score score : scores) {
-            text.append(ranking).append(":").append(score.time).append("\n");
+            text.append(ranking).append(" : ").append(score.time).append("\n");
             ranking++;
         }
         highscoreTimes.setText(text.toString());

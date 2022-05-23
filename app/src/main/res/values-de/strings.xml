@@ -10,6 +10,8 @@
 
     <!-- high score -->
     <string name="highscore_title">* High Score *</string>
+    <string name="highscore_easy">Easy Level</string>
+    <string name="highscore_hard">Hard Level</string>
 
     <!-- tutorial / help -->
     <string name="help_title">* How to play *</string>

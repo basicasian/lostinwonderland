@@ -53,7 +53,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private boolean isGameOver = false;
     private boolean isGameWin = false;
     private boolean isGoingRight = true;
-    private int jumpCounter;
+    private int jumpTimer;
+    private int jumpCounter = 0;
 
     // objects
     private DynamicObject player;
@@ -79,7 +80,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     // timer
     private final Paint textPaint = new Paint();
     private float padding;
-    private double timer = 0;
+    private double currentTime = 0;
 
     // information about display
     int displayHeight;
@@ -200,8 +201,6 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         this.surfaceHolder = surfaceHolder;
         startGame(this.surfaceHolder);
-
-        //timer = System.currentTimeMillis();
     }
 
     /**
@@ -265,9 +264,22 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             // up button
             if (buttonUp.getRectTarget().contains(touchX, touchY)) {
                 // jump motion is not handled here, but in longTouchEvent() for smoother movement
+
                 playJumpSound();
                 isJumping = true;
-                jumpCounter = 0;
+                jumpTimer = 0; // how 'high' the player is jumping
+
+                // improved jump mechanics but not quite smooth
+                /*
+                if (jumpCounter <= 3) {
+                    playJumpSound();
+                    isJumping = true;
+                    jumpTimer = 0; // how 'high' the player is jumping
+                    jumpCounter++; // how often he can jump in a sequence
+                } else if (checkCollision()) {
+                   jumpCounter = 0;
+                   isJumping = false;
+                }*/
             }
 
             // pause button
@@ -314,9 +326,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             player.move(-300 * this.deltaTime, 0); 
         }
         // up button
-        if (isJumping && jumpCounter < 4) {
+        if (isJumping && jumpTimer < 4) {
             // jumpCounter controls the max time of jumping, so the character cant jump indefinitely
-            jumpCounter++;
+            jumpTimer++;
             if (isGoingRight) {
                 player.move(200 * deltaTime,-2000 * this.deltaTime); 
             } else {
@@ -375,14 +387,15 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
      */
     public void update(double deltaTime) {
         this.deltaTime = deltaTime;
-        timer++; // TODO: change this to actual time
+        currentTime += deltaTime;
+        currentTime = ((double)((int)(currentTime *100.0))) / 100.0; //only two decimals
 
         // lose condition
         // if the player touches the enemy or player falls from platforms
         if ((Rect.intersects(player.getRectTarget(), enemy.getRectTarget())) || (player.getRectTarget().top > displayHeight)) {
             Log.d(TAG, "update: game lost");
 
-            if (player.getNumberOfLives() != 0) {
+            if (player.getNumberOfLives() != 1) {
                 player.reduceLive();
                 staticObjects.remove(0);
                 player.setToStart(700, 300);
@@ -399,8 +412,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             Log.d(TAG, "update: game win");
             isGameWin = true;
 
-            // Save user
-            Concurrency.executeAsync(() -> saveScore(new Score(timer)));
+            // Save score
+            Concurrency.executeAsync(() -> saveScore(new Score(currentTime)));
         }
 
         // if button is pressed, move character
@@ -471,7 +484,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             // font
             Paint.FontMetrics fm = textPaint.getFontMetrics();
             float height = fm.descent - fm.ascent;
-            canvas.drawText("Time: " + timer, displayWidth * 0.5f, padding + height, textPaint);
+
+            canvas.drawText("Time: " + currentTime, displayWidth * 0.5f, padding + height, textPaint);
 
             // draw pause image when the game is paused
             if (gameLoop.isRunning()){
