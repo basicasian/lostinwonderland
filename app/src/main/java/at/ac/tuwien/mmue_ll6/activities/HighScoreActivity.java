@@ -40,8 +40,6 @@ public class HighScoreActivity extends AppCompatActivity {
     }
 
     private List<Score> loadScores() {
-        List<Score> unorderedUsers = ScoreRoomDatabase.getInstance(this).scoreDao().selectAllScores();
-
         return ScoreRoomDatabase.getInstance(this).scoreDao().selectAllScores();
     }
 

@@ -14,7 +14,7 @@ public interface ScoreDao {
     @Insert
     void insert(Score score);
 
-    @Query("SELECT * FROM score")
+    @Query("SELECT * FROM score ORDER BY time ASC")
     List<Score> selectAllScores();
 
     @Query("DELETE FROM score")
