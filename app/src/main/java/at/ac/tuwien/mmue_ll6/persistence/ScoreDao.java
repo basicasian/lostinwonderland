@@ -5,6 +5,10 @@ import androidx.room.Query;
 
 import java.util.List;
 
+/**
+ * Dao object for score
+ * @author Michelle Lau
+ */
 @Dao
 public interface ScoreDao {
     @Insert

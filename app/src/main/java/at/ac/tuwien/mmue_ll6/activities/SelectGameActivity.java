@@ -8,6 +8,10 @@ import android.view.View;
 
 import at.ac.tuwien.mmue_ll6.R;
 
+/**
+ * Activity for selecting the level, thus difficulty
+ * @author Michelle Lau
+ */
 public class SelectGameActivity extends AppCompatActivity {
 
     @Override

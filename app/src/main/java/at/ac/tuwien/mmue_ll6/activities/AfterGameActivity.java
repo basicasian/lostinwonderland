@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import at.ac.tuwien.mmue_ll6.R;
 
 /**
- * Activity if the player lost or won the game
+ * Activity after the game, whether the player lost or won the game
  * @author Renate Zhang
  */
 public class AfterGameActivity extends AppCompatActivity {

@@ -13,7 +13,7 @@ import at.ac.tuwien.mmue_ll6.persistence.ScoreRoomDatabase;
 import at.ac.tuwien.mmue_ll6.util.Concurrency;
 
 /**
- * Activity to see high score (planned: best/ shortest time to complete level)
+ * Activity to see high score (score is currently shortest time to complete level)
  * @author Renate Zhang
  */
 public class HighScoreActivity extends AppCompatActivity {

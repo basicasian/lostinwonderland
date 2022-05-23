@@ -8,6 +8,10 @@ import androidx.room.RoomDatabase;
 
 import java.util.HashMap;
 
+/**
+ * Database for scores
+ * @author Michelle Lau
+ */
 @Database(entities = {Score.class}, version = 1)
 public abstract class ScoreRoomDatabase extends RoomDatabase {
     public abstract ScoreDao scoreDao();

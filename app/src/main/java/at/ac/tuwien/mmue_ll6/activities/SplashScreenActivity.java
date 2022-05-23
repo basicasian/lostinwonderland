@@ -10,6 +10,10 @@ import android.view.animation.AnimationUtils;
 
 import at.ac.tuwien.mmue_ll6.R;
 
+/**
+ * Activity when entering the app, showing the logo
+ * @author Michelle Lau
+ */
 public class SplashScreenActivity extends AppCompatActivity implements Animation.AnimationListener {
 
     @Override

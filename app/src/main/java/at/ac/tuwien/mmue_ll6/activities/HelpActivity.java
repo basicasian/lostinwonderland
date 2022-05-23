@@ -7,7 +7,7 @@ import android.os.Bundle;
 import at.ac.tuwien.mmue_ll6.R;
 
 /**
- * Activity to see instruction to play / tutorial (planned: using pictures)
+ * Activity to see instruction to play / tutorial
  * @author Renate Zhang
  */
 public class HelpActivity extends AppCompatActivity {

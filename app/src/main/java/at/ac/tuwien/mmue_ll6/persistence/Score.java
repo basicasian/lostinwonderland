@@ -3,6 +3,10 @@ package at.ac.tuwien.mmue_ll6.persistence;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+/**
+ * Entity object for score
+ * @author Michelle Lau
+ */
 @Entity(tableName = "score")
 public class Score {
 
