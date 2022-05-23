@@ -34,12 +34,12 @@ public class HighScoreActivity extends AppCompatActivity {
 
         // Load scores
         Concurrency.executeAsync(() -> {
-            List<Score> users = loadUsers();
+            List<Score> users = loadScores();
             runOnUiThread(() -> onScoresLoadedListener.onScoresLoaded(users));
         });
     }
 
-    private List<Score> loadUsers() {
+    private List<Score> loadScores() {
         return ScoreRoomDatabase.getInstance(this).scoreDao().selectAllScores();
     }
 
