@@ -25,6 +25,7 @@ import android.view.WindowManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 import at.ac.tuwien.mmue_ll6.activities.AfterGameActivity;
 import at.ac.tuwien.mmue_ll6.objects.DynamicObject;
@@ -69,18 +70,11 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     // assets
     private StaticObject bg1;
     private StaticObject overlay;
-    private StaticObject buttonLeft;
-    private StaticObject buttonRight;
-    private StaticObject buttonUp;
-    private StaticObject pauseButton;
-    private StaticObject playButton;
-    private StaticObject gameOverImage;
-    private StaticObject gameWinImage;
-    private StaticObject gamePauseImage;
-    private ArrayList<StaticObject> staticObjects = new ArrayList<>();
+    private HashMap<String, StaticObject> staticObjectsFixed = new HashMap<>();
+    private HashMap<String, StaticObject> staticObjectsVariable = new HashMap<>();
 
     // timer
-    private final Paint textPaint = new Paint();
+    private Paint textPaint = new Paint();
     private float padding;
     private double currentTime = 0;
 
@@ -120,6 +114,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     }
 
     public void setLevel(int level) {
+        Log.d(TAG, "set level: " + level);
         this.level = level;
     }
 
@@ -131,13 +126,12 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private void loadAssets(Context context) {
 
         // get the size of the screen
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        Point size = new Point();
-        display.getRealSize(size);
-        this.displayWidth = size.x - this.actionBarHeight;
-        this.displayHeight = size.y;
+        this.displayWidth = GameHelper.getDisplayWidth(context, actionBarHeight);
+        this.displayHeight = GameHelper.getDisplayHeight(context);
         padding = displayWidth * 0.02f;
+
+        // text for high score
+        textPaint = GameHelper.setTextPaint();
 
         // Initialize the assets
         // coordinate system starts from top left! (in landscape mode)
@@ -147,41 +141,21 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         player = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.player), 600, displayHeight - 300);
         enemy = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy), 300, displayHeight - 300);
         goal = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.goal), 6000, displayHeight/2);
-        DynamicObject platform1 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 100, displayHeight - 150);
-        DynamicObject platform2 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 1100, displayHeight - 150);
-        DynamicObject platform3 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 2000, displayHeight - 300);
-        DynamicObject platform4 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 3200, displayHeight - 150);
-        DynamicObject platform5 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 3900, displayHeight - 400);
-        DynamicObject platform6 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 5000, displayHeight - 300);
 
         // sprites
         fire = new SpriteObject(BitmapFactory.decodeResource(getResources(), R.drawable.fire), 4, 100, displayHeight - 300);
 
-        // static objects
-        buttonLeft = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowleft), displayWidth - 600,displayHeight - (int) padding);
-        buttonRight= new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowright), displayWidth - 300,displayHeight - (int) padding);
-        buttonUp = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowup),  100, displayHeight - (int) padding);
-        pauseButton = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.pause), displayWidth - 300, (int) (padding + BitmapFactory.decodeResource(context.getResources(), R.drawable.pause).getHeight()));
-        playButton = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.play), displayWidth - 300, (int) (padding + BitmapFactory.decodeResource(context.getResources(), R.drawable.play).getHeight()));
-        gameOverImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.gameover), displayWidth/2 - BitmapFactory.decodeResource(context.getResources(), R.drawable.gameover).getWidth()/2, displayHeight/2 + BitmapFactory.decodeResource(context.getResources(), R.drawable.gameover).getHeight()/2);
-        gameWinImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.youwin), displayWidth/2 - BitmapFactory.decodeResource(context.getResources(), R.drawable.youwin).getWidth()/2, displayHeight/2 + BitmapFactory.decodeResource(context.getResources(), R.drawable.youwin).getHeight()/2);
-        gamePauseImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.paused), displayWidth/2 - BitmapFactory.decodeResource(context.getResources(), R.drawable.paused).getWidth()/2, displayHeight/2 + BitmapFactory.decodeResource(context.getResources(), R.drawable.paused).getHeight()/2);
+        // platforms
+        this.level = 1; // TODO: setlevel() is called after this !!
+        platformObjects = GameHelper.createPlatforms(context, this.displayHeight, this.level);
 
-        StaticObject heart1 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 100, (int) (padding + BitmapFactory.decodeResource(context.getResources(), R.drawable.heart).getHeight()));
-        StaticObject heart2 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 300, (int) (padding + BitmapFactory.decodeResource(context.getResources(), R.drawable.heart).getHeight()));
-        StaticObject heart3 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 500, (int) (padding + BitmapFactory.decodeResource(context.getResources(), R.drawable.heart).getHeight()));
+        // static objects
+        staticObjectsFixed = GameHelper.createStaticObjectsFixed(context, displayHeight, displayWidth, (int) padding);
+        staticObjectsVariable = GameHelper.createStaticObjectsVariable(context, displayHeight, displayWidth, (int) padding);
         bg1 = new StaticObject(BitmapFactory.decodeResource(getResources(), R.drawable.background), 0, displayWidth, 0, displayHeight);
         overlay = new StaticObject(BitmapFactory.decodeResource(getResources(), R.drawable.overlay), 0, displayWidth, 0, displayHeight);
 
-        // text for high score
-        textPaint.setColor(Color.WHITE);
-        textPaint.setTextSize(60);
-        textPaint.setTypeface(Typeface.create("Monospace",Typeface.NORMAL));
-
-        // the order of array is the order of draw calls!
-        platformObjects = new ArrayList<>(Arrays.asList(platform1, platform2, platform3, platform4, platform5, platform6));
         dynamicObjects = new ArrayList<>(Arrays.asList(player, enemy, goal));
-        staticObjects = new ArrayList<>(Arrays.asList(heart3, heart2, heart1, buttonLeft, buttonRight, buttonUp));
     }
 
     /**
@@ -268,7 +242,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             touchY = (int) e.getY();
 
             // up button
-            if (buttonUp.getRectTarget().contains(touchX, touchY)) {
+            if (staticObjectsFixed.get("buttonUp").getRectTarget().contains(touchX, touchY)) {
                 // jump motion is not handled here, but in longTouchEvent() for smoother movement
 
                 playJumpSound();
@@ -289,7 +263,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             }
 
             // pause button
-            if (pauseButton.getRectTarget().contains(touchX, touchY)) {
+            if (staticObjectsVariable.get("pauseButton").getRectTarget().contains(touchX, touchY)) {
                 Log.d(TAG, "onTouchEvent: pause");
                 if (gameLoop.isRunning()) {
                     mediaPlayer.pause();
@@ -348,17 +322,17 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
      * @param button the specified direction
      * @return boolean if input button is pressed
      */
-    private boolean checkButton(String button) {
+    public boolean checkButton(String button) {
         boolean result = false;
         switch (button) {
             case "right":
-                if (buttonRight.getRectTarget().contains(touchX, touchY)) {
+                if (staticObjectsFixed.get("buttonRight").getRectTarget().contains(touchX, touchY)) {
                     isGoingRight = true;
                     result = true;
                 }
                 break;
             case "left":
-                if (buttonLeft.getRectTarget().contains(touchX, touchY)) {
+                if (staticObjectsFixed.get("buttonLeft").getRectTarget().contains(touchX, touchY)) {
                     isGoingRight = false;
                     result = true;
                 }
@@ -371,7 +345,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
      * help method to check if the player is colliding against platforms
      * @return true if character is colliding against platform
      */
-    private boolean checkCollision() {
+    public boolean checkCollision() {
         boolean result = false;
         for (DynamicObject p: platformObjects) {
             if (Rect.intersects(player.getRectTarget(), p.getRectTarget())) {
@@ -381,11 +355,12 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         return result;
     }
 
-
+    /**
+     * save score to the database
+     */
     public void saveScore(Score score) {
         ScoreRoomDatabase.getInstance(context).scoreDao().insert(score);
     }
-
 
     /**
      * updates the game logic
@@ -401,11 +376,10 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         if ((Rect.intersects(player.getRectTarget(), enemy.getRectTarget())) || (player.getRectTarget().top > displayHeight)) {
             Log.d(TAG, "update: game lost");
 
-            if (player.getNumberOfLives() != 1) {
+            if (player.getNumberOfLives() != 0) {
+                staticObjectsFixed.remove("heart" + player.getNumberOfLives());
                 player.reduceLive();
-                staticObjects.remove(0);
                 player.setToStart(700, 300);
-
             } else {
                 isGameOver = true;
                 // don't call endGame() here! only if the you go back to the main screen
@@ -478,12 +452,12 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             for (DynamicObject p: platformObjects) {
                 p.draw(canvas);
             }
-            // then all other dynamic
+            // then all other dynamic objects
             for (DynamicObject d: dynamicObjects) {
                 d.draw(canvas);
             }
             // and static objects (such as buttons) on top
-            for (StaticObject s: staticObjects) {
+            for (StaticObject s: staticObjectsFixed.values()) {
                 s.draw(canvas);
             }
 
@@ -495,23 +469,23 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
             // draw pause image when the game is paused
             if (gameLoop.isRunning()){
-                pauseButton.draw(canvas);
+                staticObjectsVariable.get("pauseButton").draw(canvas);
             } else {
                 overlay.draw(canvas);
-                playButton.draw(canvas);
-                gamePauseImage.draw(canvas);
+                staticObjectsVariable.get("playButton").draw(canvas);
+                staticObjectsVariable.get("gamePauseImage").draw(canvas);
             }
 
             // draw game win image when the game is won
             if (isGameWin){
                 overlay.draw(canvas);
-                gameWinImage.draw(canvas);
+                staticObjectsVariable.get("gameWinImage").draw(canvas);
                 gameLoop.setRunning(false);
             }
             // draw game over image when the game is over
             if (isGameOver){
                 overlay.draw(canvas);
-                gameOverImage.draw(canvas);
+                staticObjectsVariable.get("gameOverImage").draw(canvas);
                 gameLoop.setRunning(false);
             }
         }
