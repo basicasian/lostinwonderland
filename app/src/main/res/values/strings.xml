@@ -31,7 +31,7 @@
 
     <!-- after game -->
     <string name="after_game_tryagain">play again?</string>
-    <string name="after_game_choose">choose level</string>
+    <string name="after_game_highscore">show highscore</string>
     <string name="after_game_menu">return to menu</string>
 
     <!-- settings -->

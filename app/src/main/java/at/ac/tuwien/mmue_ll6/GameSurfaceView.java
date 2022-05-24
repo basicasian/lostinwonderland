@@ -413,7 +413,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             isGameWin = true;
 
             // Save score
-            Concurrency.executeAsync(() -> saveScore(new Score(currentTime)));
+            Concurrency.executeAsync(() -> saveScore(new Score(currentTime, 1)));
         }
 
         // if button is pressed, move character

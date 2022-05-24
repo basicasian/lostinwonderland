@@ -26,7 +26,7 @@
 
     <!-- after game -->
     <string name="after_game_tryagain">nochmal spielen?</string>
-    <string name="after_game_choose">Level aussuchen</string>
+    <string name="after_game_highscore">Highscore</string>
     <string name="after_game_menu">Zum Menü zurückkehren</string>
 
     <!-- select game -->

@@ -13,8 +13,10 @@ public class Score {
     @PrimaryKey(autoGenerate = true)
     public int id;
     public double time;
+    public int level;
 
-    public Score(double time) {
+    public Score(double time, int level) {
         this.time = time;
+        this.level = level;
     }
 }

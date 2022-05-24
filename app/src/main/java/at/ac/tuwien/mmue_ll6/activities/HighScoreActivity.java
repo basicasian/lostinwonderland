@@ -18,7 +18,8 @@ import at.ac.tuwien.mmue_ll6.util.Concurrency;
  */
 public class HighScoreActivity extends AppCompatActivity {
 
-    private TextView highscoreTimes;
+    private TextView highscoreEasy;
+    private TextView highscoreHard;
 
     private interface OnScoreLoadedListener {
         void onScoresLoaded(List<Score> users);
@@ -30,16 +31,18 @@ public class HighScoreActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_high_score);
 
-        highscoreTimes = findViewById(R.id.highscoreTimesEasy);
+        highscoreEasy = findViewById(R.id.highscoreTimesEasy);
+        highscoreHard = findViewById(R.id.highscoreTimesHard);
+
         // Load scores
         Concurrency.executeAsync(() -> {
-            List<Score> users = loadScores();
-            runOnUiThread(() -> onScoresLoadedListener.onScoresLoaded(users));
+            List<Score> scores = loadScores(1);
+            runOnUiThread(() -> onScoresLoadedListener.onScoresLoaded(scores));
         });
     }
 
-    private List<Score> loadScores() {
-        return ScoreRoomDatabase.getInstance(this).scoreDao().selectAllScores();
+    private List<Score> loadScores(int level) {
+        return ScoreRoomDatabase.getInstance(this).scoreDao().selectAllScores(level);
     }
 
     private void updateScoresTable(List<Score> scores) {
@@ -49,6 +52,6 @@ public class HighScoreActivity extends AppCompatActivity {
             text.append(ranking).append(" : ").append(score.time).append("\n");
             ranking++;
         }
-        highscoreTimes.setText(text.toString());
+        highscoreEasy.setText(text.toString());
     }
 }

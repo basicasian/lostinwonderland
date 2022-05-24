@@ -29,8 +29,8 @@ public class AfterGameActivity extends AppCompatActivity {
         startActivity(new Intent(this, GameActivity.class));
     }
 
-    public void chooseLevelActivity(View v) {
-        startActivity(new Intent(this, SelectGameActivity.class));
+    public void showHighScoreActivity(View v) {
+        startActivity(new Intent(this, HighScoreActivity.class));
     }
 
     public void returnMenuActivity(View v) {
