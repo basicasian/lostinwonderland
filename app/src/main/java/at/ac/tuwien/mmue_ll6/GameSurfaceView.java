@@ -42,11 +42,13 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     private static final String TAG = GameSurfaceView.class.getSimpleName();
 
+    // game variables
     private GameLoop gameLoop;
     private Thread gameMainThread;
     private final Context context;
     private SurfaceHolder surfaceHolder;
     private double deltaTime;
+    private int level;
 
     // check variables
     private boolean isJumping = false;
@@ -115,6 +117,10 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         // initialize sounds
         loadSounds(context);
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     /**
@@ -413,7 +419,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             isGameWin = true;
 
             // Save score
-            Concurrency.executeAsync(() -> saveScore(new Score(currentTime, 1)));
+            Concurrency.executeAsync(() -> saveScore(new Score(currentTime, level)));
         }
 
         // if button is pressed, move character

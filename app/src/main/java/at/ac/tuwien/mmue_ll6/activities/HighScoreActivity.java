@@ -34,6 +34,7 @@ public class HighScoreActivity extends AppCompatActivity {
         highscoreEasy = findViewById(R.id.highscoreTimesEasy);
         highscoreHard = findViewById(R.id.highscoreTimesHard);
 
+        // TODO: load score also for different level
         // Load scores
         Concurrency.executeAsync(() -> {
             List<Score> scores = loadScores(1);

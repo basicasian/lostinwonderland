@@ -20,8 +20,16 @@ public class SelectGameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_select_game);
     }
 
-    public void startGameActivity(View v) {
-        startActivity(new Intent(this, GameActivity.class));
+    public void startEasyGameActivity(View v) {
+        Intent i = new Intent(this, GameActivity.class);
+        i.putExtra("level", 1); // pass level to next activity
+        startActivity(i);
+    }
+
+    public void startHardGameActivity(View v) {
+        Intent i = new Intent(this, GameActivity.class);
+        i.putExtra("level", 2); // pass level to next activity
+        startActivity(i);
     }
 
 }
