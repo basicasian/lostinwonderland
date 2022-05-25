@@ -33,10 +33,11 @@ public class GameActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_game); // set content view first
         GameSurfaceView gameSurfaceView = this.findViewById(R.id.gameSurfaceView); // use id to set level
-
-        gameSurfaceView.setLevel(level);
+        gameSurfaceView.setLevel(level); // this happens too late!
 
         // Remove notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
+
+
 }

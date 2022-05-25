@@ -71,11 +71,11 @@ public class GameGraphic {
         setTextPaint(); // text for high score
 
         // objects
-        setPlatforms();
         setStaticObjectsFixed();
         setStaticObjectsVariable();
         setSpriteObjects();
         setDynamicObjects();
+        setPlatforms();
     }
 
     private void setDisplaySize() {

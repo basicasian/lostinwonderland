@@ -58,12 +58,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     int touchX;
     int touchY;
 
-    // graphics
+    // graphics and sound
     private final GameGraphic gameGraphic;
-
-    // sound
     private final GameSound gameSound;
-
 
     /**
      * constructor for the class GameSurfaceView
@@ -79,12 +76,12 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // so events can be handled
         setFocusable(true);
 
-        // initialize graphics
-        this.level = 2; // TODO: setlevel() is called after this !!
-        gameGraphic = new GameGraphic(context, this.level);
-
         // initialize sounds
         gameSound = new GameSound(context);
+
+        // initialize graphics
+        this.level = 1; // should be done by GameActivity
+        gameGraphic = new GameGraphic(context, this.level);
     }
 
     public void setLevel(int level) {
