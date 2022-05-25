@@ -1,4 +1,4 @@
-package at.ac.tuwien.mmue_ll6;
+package at.ac.tuwien.mmue_ll6.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +8,12 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import at.ac.tuwien.mmue_ll6.R;
+
+/**
+ * Activity when entering the app, showing the logo
+ * @author Michelle Lau
+ */
 public class SplashScreenActivity extends AppCompatActivity implements Animation.AnimationListener {
 
     @Override

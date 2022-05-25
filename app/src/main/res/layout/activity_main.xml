@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".MainActivity">
+    tools:context=".activities.MainActivity">
 
     <Button
         android:id="@+id/startGameButton"
@@ -14,12 +14,12 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="140dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginEnd="100dp"
         android:layout_centerHorizontal="true"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="140dp"
+        android:layout_marginEnd="100dp"
         android:width="200dp"
-        android:onClick="startGameActivity"
+        android:onClick="startSelectGameActivity"
         android:text="@string/menu_title_game"
         android:textColor="#424242"
         app:backgroundTint="@color/pink_500"
@@ -38,8 +38,8 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="100dp"
-        android:layout_marginEnd="100dp"
         android:layout_marginTop="30dp"
+        android:layout_marginEnd="100dp"
         android:onClick="startHelpActivity"
         android:text="@string/menu_title_help"
         android:textColor="#424242"

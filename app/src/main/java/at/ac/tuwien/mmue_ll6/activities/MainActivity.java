@@ -1,10 +1,12 @@
-package at.ac.tuwien.mmue_ll6;
+package at.ac.tuwien.mmue_ll6.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+import at.ac.tuwien.mmue_ll6.R;
 
 /**
  * activity for the main menu, starting new intents to other activities
@@ -18,8 +20,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void startGameActivity(View v) {
-        startActivity(new Intent(this, GameActivity.class));
+    public void startSelectGameActivity(View v) {
+        startActivity(new Intent(this, SelectGameActivity.class));
     }
 
     public void startVideoActivity(View v) {

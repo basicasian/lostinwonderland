@@ -1,14 +1,11 @@
-package at.ac.tuwien.mmue_ll6;
+package at.ac.tuwien.mmue_ll6.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.Locale;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -19,8 +16,10 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import at.ac.tuwien.mmue_ll6.R;
+
 /**
- * Activity for settings (planned: sound settings, etc.)
+ * Activity for settings (language settings, etc.)
  * @author Renate Zhang
  */
 public class SettingsActivity extends AppCompatActivity {
