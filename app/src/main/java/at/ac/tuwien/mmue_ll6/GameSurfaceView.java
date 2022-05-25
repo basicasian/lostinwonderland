@@ -60,13 +60,13 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private DynamicObject enemy;
     private DynamicObject goal;
     private SpriteObject fire;
-    private ArrayList<DynamicObject> platformObjects = new ArrayList<>();
+    // private ArrayList<DynamicObject> platformObjects = new ArrayList<>();
     private ArrayList<DynamicObject> dynamicObjects = new ArrayList<>();
 
     // assets
     private StaticObject bg1;
     private StaticObject overlay;
-    private HashMap<String, StaticObject> staticObjectsFixed = new HashMap<>();
+    // private HashMap<String, StaticObject> staticObjectsFixed = new HashMap<>();
     private HashMap<String, StaticObject> staticObjectsVariable = new HashMap<>();
 
     // timer
@@ -98,6 +98,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         setFocusable(true);
 
         // initialize graphics
+        this.level = 1; // TODO: setlevel() is called after this !!
         gameInit = new GameInit(context, this.level);
 
         loadAssets(context); // to be outdated
@@ -125,16 +126,11 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         goal = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.goal), 6000, gameInit.displayHeight/2);
         dynamicObjects = new ArrayList<>(Arrays.asList(player, enemy, goal));
 
-        // platforms
-        this.level = 2; // TODO: setlevel() is called after this !!
-        Log.d(TAG, "use level: " + level);
-        platformObjects = GameInit.createPlatforms(context, this.gameInit.displayHeight, this.level);
-
         // sprites
         fire = new SpriteObject(BitmapFactory.decodeResource(getResources(), R.drawable.fire), 4, 100, gameInit.displayHeight - 300);
 
         // static objects
-        staticObjectsFixed = GameInit.createStaticObjectsFixed(context, gameInit.displayHeight, gameInit.displayWidth, gameInit.padding);
+        // staticObjectsFixed = GameInit.createStaticObjectsFixed(context, gameInit.displayHeight, gameInit.displayWidth, gameInit.padding);
         staticObjectsVariable = GameInit.createStaticObjectsVariable(context, gameInit.displayHeight, gameInit.displayWidth, gameInit.padding);
         bg1 = new StaticObject(BitmapFactory.decodeResource(getResources(), R.drawable.background), 0, gameInit.displayWidth, 0, gameInit.displayHeight);
         overlay = new StaticObject(BitmapFactory.decodeResource(getResources(), R.drawable.overlay), 0, gameInit.displayWidth, 0, gameInit.displayHeight);
@@ -224,7 +220,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             touchY = (int) e.getY();
 
             // up button
-            if (Objects.requireNonNull(staticObjectsFixed.get("buttonUp")).getRectTarget().contains(touchX, touchY)) {
+            if (Objects.requireNonNull(gameInit.staticObjectsFixed.get("buttonUp")).getRectTarget().contains(touchX, touchY)) {
                 // jump motion is not handled here, but in longTouchEvent() for smoother movement
 
                 playJumpSound();
@@ -308,13 +304,13 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         boolean result = false;
         switch (button) {
             case "right":
-                if (Objects.requireNonNull(staticObjectsFixed.get("buttonRight")).getRectTarget().contains(touchX, touchY)) {
+                if (Objects.requireNonNull(gameInit.staticObjectsFixed.get("buttonRight")).getRectTarget().contains(touchX, touchY)) {
                     isGoingRight = true;
                     result = true;
                 }
                 break;
             case "left":
-                if (Objects.requireNonNull(staticObjectsFixed.get("buttonLeft")).getRectTarget().contains(touchX, touchY)) {
+                if (Objects.requireNonNull(gameInit.staticObjectsFixed.get("buttonLeft")).getRectTarget().contains(touchX, touchY)) {
                     isGoingRight = false;
                     result = true;
                 }
@@ -329,7 +325,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
      */
     public boolean checkCollision() {
         boolean result = false;
-        for (DynamicObject p: platformObjects) {
+        for (DynamicObject p: gameInit.platformObjects) {
             if (Rect.intersects(player.getRectTarget(), p.getRectTarget())) {
                 result = true;
             }
@@ -352,7 +348,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             Log.d(TAG, "update: game lost");
 
             if (player.getNumberOfLives() != 0) {
-                staticObjectsFixed.remove("heart" + player.getNumberOfLives());
+                gameInit.staticObjectsFixed.remove("heart" + player.getNumberOfLives());
                 player.reduceLive();
                 player.setToStart(700, 300);
             } else {
@@ -393,7 +389,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             for (DynamicObject d: dynamicObjects) {
                 d.move(-200 * this.deltaTime, 0);
             }
-            for (DynamicObject p: platformObjects) {
+            for (DynamicObject p: gameInit.platformObjects) {
                 p.move(-200 * this.deltaTime, 0);
             }
             fire.move(-200 * this.deltaTime, 0);
@@ -404,7 +400,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             for (DynamicObject d: dynamicObjects) {
                 d.move(+200 * this.deltaTime, 0);
             }
-            for (DynamicObject p: platformObjects) {
+            for (DynamicObject p: gameInit.platformObjects) {
                 p.move(+200 * this.deltaTime, 0);
             }
             fire.move(+200 * this.deltaTime, 0);
@@ -424,7 +420,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             fire.draw(canvas); // sprite
 
             // draw all platforms first
-            for (DynamicObject p: platformObjects) {
+            for (DynamicObject p: gameInit.platformObjects) {
                 p.draw(canvas);
             }
             // then all other dynamic objects
@@ -432,7 +428,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
                 d.draw(canvas);
             }
             // and static objects (such as buttons) on top
-            for (StaticObject s: staticObjectsFixed.values()) {
+            for (StaticObject s: gameInit.staticObjectsFixed.values()) {
                 s.draw(canvas);
             }
 

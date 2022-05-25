@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import at.ac.tuwien.mmue_ll6.objects.DynamicObject;
+import at.ac.tuwien.mmue_ll6.objects.SpriteObject;
 import at.ac.tuwien.mmue_ll6.objects.StaticObject;
 import at.ac.tuwien.mmue_ll6.persistence.Score;
 import at.ac.tuwien.mmue_ll6.persistence.ScoreRoomDatabase;
@@ -38,14 +39,21 @@ public class GameInit {
     // paint for timer
     protected Paint textPaint = new Paint();
 
-
+    // objects
+    protected ArrayList<DynamicObject> platformObjects = new ArrayList<>();
+    protected HashMap<String, StaticObject> staticObjectsFixed = new HashMap<>();
 
     GameInit(Context context, int level) {
         this.context = context;
         this.level = level;
 
+        // general
         setDisplaySize();
         setTextPaint(); // text for high score
+
+        // objects
+        setPlatforms();
+        setStaticObjectsFixed();
     }
 
     private void setDisplaySize() {
@@ -73,12 +81,11 @@ public class GameInit {
     /**
      * generate platforms based on level
      */
-    public static ArrayList<DynamicObject> createPlatforms(Context context, int displayHeight, int level) {
-        ArrayList<DynamicObject> platformObjects = new ArrayList<>();
+    public void setPlatforms() {
 
         // coordinate system starts from top left! (in landscape mode)
         // but elements are initialized from bottom left
-        if (level == 1) {
+        if (this.level == 1) {
             DynamicObject platform1 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 100, displayHeight - 150);
             DynamicObject platform2 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 1100, displayHeight - 150);
             DynamicObject platform3 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 2000, displayHeight - 300);
@@ -90,7 +97,7 @@ public class GameInit {
             platformObjects = new ArrayList<>(Arrays.asList(platform1, platform2, platform3, platform4, platform5, platform6));
         }
 
-        if (level == 2) {
+        if (this.level == 2) {
             DynamicObject platform1 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 200, displayHeight - 150);
             DynamicObject platform2 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 1100, displayHeight - 100);
             DynamicObject platform3 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 2000, displayHeight - 200);
@@ -102,10 +109,9 @@ public class GameInit {
             // the order of array is the order of draw calls!
             platformObjects = new ArrayList<>(Arrays.asList(platform1, platform2, platform3, platform4, platform5, platform6, platform7));
         }
-        return platformObjects;
     }
 
-    public static HashMap<String, StaticObject> createStaticObjectsFixed(Context context, int displayHeight, int displayWidth, int padding) {
+    public void setStaticObjectsFixed() {
         // coordinate system starts from top left! (in landscape mode)
         // but elements are initialized from bottom left
         StaticObject buttonLeft = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowleft), displayWidth - 600,displayHeight - (int) padding);
@@ -115,15 +121,12 @@ public class GameInit {
         StaticObject heart2 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 300, (int) (padding + BitmapFactory.decodeResource(context.getResources(), R.drawable.heart).getHeight()));
         StaticObject heart3 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 500, (int) (padding + BitmapFactory.decodeResource(context.getResources(), R.drawable.heart).getHeight()));
 
-        HashMap<String, StaticObject> staticObjects = new HashMap<>();
-        staticObjects.put("buttonLeft", buttonLeft);
-        staticObjects.put("buttonRight", buttonRight);
-        staticObjects.put("buttonUp", buttonUp);
-        staticObjects.put("heart1", heart1);
-        staticObjects.put("heart2", heart2);
-        staticObjects.put("heart3", heart3);
-
-        return staticObjects;
+        staticObjectsFixed.put("buttonLeft", buttonLeft);
+        staticObjectsFixed.put("buttonRight", buttonRight);
+        staticObjectsFixed.put("buttonUp", buttonUp);
+        staticObjectsFixed.put("heart1", heart1);
+        staticObjectsFixed.put("heart2", heart2);
+        staticObjectsFixed.put("heart3", heart3);
     }
 
     public static HashMap<String, StaticObject> createStaticObjectsVariable(Context context, int displayHeight, int displayWidth, int padding) {
