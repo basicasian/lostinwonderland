@@ -20,10 +20,10 @@ import at.ac.tuwien.mmue_ll6.persistence.Score;
 import at.ac.tuwien.mmue_ll6.persistence.ScoreRoomDatabase;
 
 /**
- * Help class for GameSurfaceView
+ * Help class for GameSurfaceView to initialize assets
  * @author Michelle Lau
  */
-public class GameHelper {
+public class GameInit {
 
     /**
      * gets the size of the display from the window
@@ -147,11 +147,6 @@ public class GameHelper {
         return textPaint;
     }
 
-    /**
-     * save score to the database
-     */
-    public static void saveScore(Context context, Score score) {
-        ScoreRoomDatabase.getInstance(context).scoreDao().insert(score);
-    }
+
 
 }

@@ -30,7 +30,7 @@
     <string name="after_game_menu">Zum Menü zurückkehren</string>
 
     <!-- select game -->
-    <string name="select_game_title">* Level aussuchen *</string>
+    <string name="select_game_title">* Level wählen *</string>
     <string name="select_game_easy">einfach</string>
     <string name="select_game_hard">schwierig</string>
 

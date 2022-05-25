@@ -5,11 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -17,11 +14,9 @@ import android.media.SoundPool;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.WindowManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -127,12 +122,12 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private void loadAssets(Context context) {
 
         // get the size of the screen
-        this.displayWidth = GameHelper.getDisplayWidth(context, actionBarHeight);
-        this.displayHeight = GameHelper.getDisplayHeight(context);
+        this.displayWidth = GameInit.getDisplayWidth(context, actionBarHeight);
+        this.displayHeight = GameInit.getDisplayHeight(context);
         padding = displayWidth * 0.02f;
 
         // text for high score
-        textPaint = GameHelper.setTextPaint();
+        textPaint = GameInit.setTextPaint();
 
         // Initialize the assets
         // dynamic objects
@@ -144,14 +139,14 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // platforms
         this.level = 2; // TODO: setlevel() is called after this !!
         Log.d(TAG, "use level: " + level);
-        platformObjects = GameHelper.createPlatforms(context, this.displayHeight, this.level);
+        platformObjects = GameInit.createPlatforms(context, this.displayHeight, this.level);
 
         // sprites
         fire = new SpriteObject(BitmapFactory.decodeResource(getResources(), R.drawable.fire), 4, 100, displayHeight - 300);
 
         // static objects
-        staticObjectsFixed = GameHelper.createStaticObjectsFixed(context, displayHeight, displayWidth, (int) padding);
-        staticObjectsVariable = GameHelper.createStaticObjectsVariable(context, displayHeight, displayWidth, (int) padding);
+        staticObjectsFixed = GameInit.createStaticObjectsFixed(context, displayHeight, displayWidth, (int) padding);
+        staticObjectsVariable = GameInit.createStaticObjectsVariable(context, displayHeight, displayWidth, (int) padding);
         bg1 = new StaticObject(BitmapFactory.decodeResource(getResources(), R.drawable.background), 0, displayWidth, 0, displayHeight);
         overlay = new StaticObject(BitmapFactory.decodeResource(getResources(), R.drawable.overlay), 0, displayWidth, 0, displayHeight);
     }
@@ -353,8 +348,6 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         return result;
     }
 
-
-
     /**
      * updates the game logic
      * @param deltaTime the delta time needed for frame independence
@@ -386,7 +379,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             isGameWin = true;
 
             // Save score
-            Concurrency.executeAsync(() -> GameHelper.saveScore(context, new Score(currentTime, level)));
+            Concurrency.executeAsync(() -> saveScore(context, new Score(currentTime, level)));
         }
 
         // if button is pressed, move character
@@ -523,4 +516,12 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         Log.d(TAG, "playJumpSound: jump");
         soundPool.play(jumpSoundID, 0.4f, 0.4f, 1, 0, 1.0f);
     }
+
+    /**
+     * save score to the database
+     */
+    public static void saveScore(Context context, Score score) {
+        ScoreRoomDatabase.getInstance(context).scoreDao().insert(score);
+    }
+
 }
