@@ -8,6 +8,7 @@ import android.view.animation.AnimationUtils;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import at.ac.tuwien.mmue_ll6.GameSurfaceView;
 import at.ac.tuwien.mmue_ll6.R;
 
 /**
@@ -25,8 +26,8 @@ public class AfterGameActivity extends AppCompatActivity {
         findViewById(R.id.afterGameImagePlayer).startAnimation(travel);
     }
 
-    public void restartGameActivity(View v) {
-        startActivity(new Intent(this, GameActivity.class));
+    public void selectGameActivity(View v) {
+        startActivity(new Intent(this, SelectGameActivity.class));
     }
 
     public void showHighScoreActivity(View v) {

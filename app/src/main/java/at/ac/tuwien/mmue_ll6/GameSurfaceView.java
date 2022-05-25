@@ -80,7 +80,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         setFocusable(true);
 
         // initialize graphics
-        this.level = 1; // TODO: setlevel() is called after this !!
+        this.level = 2; // TODO: setlevel() is called after this !!
         gameGraphic = new GameGraphic(context, this.level);
 
         // initialize sounds
@@ -90,6 +90,10 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     public void setLevel(int level) {
         Log.d(TAG, "set level: " + level);
         this.level = level;
+    }
+
+    public int getLevel() {
+        return level;
     }
 
     /**
@@ -236,51 +240,13 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     }
 
     /**
-     * help method to check which button is pressed
-     * @param button the specified direction
-     * @return boolean if input button is pressed
-     */
-    public boolean checkButton(String button) {
-        boolean result = false;
-        switch (button) {
-            case "right":
-                if (Objects.requireNonNull(gameGraphic.staticObjectsFixed.get("buttonRight")).getRectTarget().contains(touchX, touchY)) {
-                    isGoingRight = true;
-                    result = true;
-                }
-                break;
-            case "left":
-                if (Objects.requireNonNull(gameGraphic.staticObjectsFixed.get("buttonLeft")).getRectTarget().contains(touchX, touchY)) {
-                    isGoingRight = false;
-                    result = true;
-                }
-                break;
-        }
-        return result;
-    }
-
-    /**
-     * help method to check if the player is colliding against platforms
-     * @return true if character is colliding against platform
-     */
-    public boolean checkCollision() {
-        boolean result = false;
-        for (DynamicObject p: gameGraphic.platformObjects) {
-            if (Rect.intersects(gameGraphic.player.getRectTarget(), p.getRectTarget())) {
-                result = true;
-            }
-        }
-        return result;
-    }
-
-    /**
      * updates the game logic
      * @param deltaTime the delta time needed for frame independence
      */
     public void update(double deltaTime) {
         this.deltaTime = deltaTime;
         currentTime += deltaTime;
-        currentTime = ((double)((int)(currentTime *100.0))) / 100.0; //only two decimals
+        currentTime = ((double)((int)(currentTime * 100.0))) / 100.0; //only two decimals
 
         // lose condition
         // if the player touches the enemy or player falls from platforms
@@ -288,9 +254,10 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             Log.d(TAG, "update: game lost");
 
             if (gameGraphic.player.getNumberOfLives() != 0) {
+                gameGraphic.player.setToStart(500, 500);
                 gameGraphic.staticObjectsFixed.remove("heart" + gameGraphic.player.getNumberOfLives());
                 gameGraphic.player.reduceLive();
-                gameGraphic.player.setToStart(700, 300);
+
             } else {
                 isGameOver = true;
                 // don't call endGame() here! only if the you go back to the main screen
@@ -380,7 +347,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
                 s.draw(canvas);
             }
 
-            // font
+            // font height
             Paint.FontMetrics fm = gameGraphic.textPaint.getFontMetrics();
             float height = fm.descent - fm.ascent;
 
@@ -417,4 +384,42 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         ScoreRoomDatabase.getInstance(context).scoreDao().insert(score);
     }
 
+
+    /**
+     * help method to check which button is pressed
+     * @param button the specified direction
+     * @return boolean if input button is pressed
+     */
+    public boolean checkButton(String button) {
+        boolean result = false;
+        switch (button) {
+            case "right":
+                if (Objects.requireNonNull(gameGraphic.staticObjectsFixed.get("buttonRight")).getRectTarget().contains(touchX, touchY)) {
+                    isGoingRight = true;
+                    result = true;
+                }
+                break;
+            case "left":
+                if (Objects.requireNonNull(gameGraphic.staticObjectsFixed.get("buttonLeft")).getRectTarget().contains(touchX, touchY)) {
+                    isGoingRight = false;
+                    result = true;
+                }
+                break;
+        }
+        return result;
+    }
+
+    /**
+     * help method to check if the player is colliding against platforms
+     * @return true if character is colliding against platform
+     */
+    public boolean checkCollision() {
+        boolean result = false;
+        for (DynamicObject p: gameGraphic.platformObjects) {
+            if (Rect.intersects(gameGraphic.player.getRectTarget(), p.getRectTarget())) {
+                result = true;
+            }
+        }
+        return result;
+    }
 }

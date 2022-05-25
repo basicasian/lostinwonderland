@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:onClick="restartGameActivity"
+        android:onClick="selectGameActivity"
         android:text="@string/after_game_tryagain"
         app:backgroundTint="@color/pink_500"
         app:layout_constraintBottom_toTopOf="@+id/chooseLevelButton"
