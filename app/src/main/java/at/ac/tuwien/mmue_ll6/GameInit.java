@@ -25,39 +25,46 @@ import at.ac.tuwien.mmue_ll6.persistence.ScoreRoomDatabase;
  */
 public class GameInit {
 
-    /**
-     * gets the size of the display from the window
-     * @param context to get the window
-     * @return size of the display
-     */
-    private static Point getDisplaySize(Context context) {
+    // general
+    private Context context;
+    private int level;
+
+    // information about display
+    private int displayHeight;
+    private int displayWidth;
+    private int padding;
+    private int actionBarHeight = 56;
+
+    GameInit(Context context, int level) {
+        this.context = context;
+        this.level = level;
+
+        setDisplaySize();
+    }
+
+    private void setDisplaySize() {
         // get the size of the screen
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        WindowManager wm = (WindowManager) this.context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
         display.getRealSize(size);
-        return size;
+
+        // set size variables
+        this.displayWidth = (size.x - actionBarHeight);
+        this.displayHeight = size.y;
+        this.padding = (int) (displayWidth * 0.02f);
     }
 
-    /**
-     * gets the display width
-     * @param context to get the window
-     * @param actionBarHeight reduce the display size by the action bar height
-     * @return display width
-     */
-    public static int getDisplayWidth(Context context, int actionBarHeight) {
-        Point size = getDisplaySize(context);
-        return (size.x - actionBarHeight);
+    public int getDisplayWidth() {
+        return this.displayWidth;
     }
 
-    /**
-     * gets the display height
-     * @param context to get the window
-     * @return display height
-     */
-    public static int getDisplayHeight(Context context) {
-        Point size = getDisplaySize(context);
-        return size.y;
+    public int getDisplayHeight() {
+        return this.displayHeight;
+    }
+
+    public int getPadding() {
+        return this.padding;
     }
 
     /**

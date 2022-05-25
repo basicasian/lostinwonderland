@@ -71,13 +71,15 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     // timer
     private Paint textPaint = new Paint();
-    private float padding;
     private double currentTime = 0;
 
     // information about display
+    /*
     int displayHeight;
     int displayWidth;
     int actionBarHeight = 56;
+    private float padding;
+     */
 
     // coordinates of touch
     int touchX;
@@ -87,6 +89,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private MediaPlayer mediaPlayer;
     private SoundPool soundPool;
     private int jumpSoundID;
+
+    private GameInit gameInit;
 
     /**
      * constructor for the class GameSurfaceView
@@ -101,6 +105,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         getHolder().addCallback(this);
         // so events can be handled
         setFocusable(true);
+
+        gameInit = new GameInit(context, this.level);
 
         // initialize graphics
         loadAssets(context);
@@ -121,34 +127,36 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
      */
     private void loadAssets(Context context) {
 
+        /*
         // get the size of the screen
         this.displayWidth = GameInit.getDisplayWidth(context, actionBarHeight);
         this.displayHeight = GameInit.getDisplayHeight(context);
         padding = displayWidth * 0.02f;
+         */
 
         // text for high score
         textPaint = GameInit.setTextPaint();
 
         // Initialize the assets
         // dynamic objects
-        player = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.player), 600, displayHeight - 300);
-        enemy = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy), 300, displayHeight - 300);
-        goal = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.goal), 6000, displayHeight/2);
+        player = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.player), 600, gameInit.getDisplayHeight() - 300);
+        enemy = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy), 300, gameInit.getDisplayHeight() - 300);
+        goal = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.goal), 6000, gameInit.getDisplayHeight()/2);
         dynamicObjects = new ArrayList<>(Arrays.asList(player, enemy, goal));
 
         // platforms
         this.level = 2; // TODO: setlevel() is called after this !!
         Log.d(TAG, "use level: " + level);
-        platformObjects = GameInit.createPlatforms(context, this.displayHeight, this.level);
+        platformObjects = GameInit.createPlatforms(context, this.gameInit.getDisplayHeight(), this.level);
 
         // sprites
-        fire = new SpriteObject(BitmapFactory.decodeResource(getResources(), R.drawable.fire), 4, 100, displayHeight - 300);
+        fire = new SpriteObject(BitmapFactory.decodeResource(getResources(), R.drawable.fire), 4, 100, gameInit.getDisplayHeight() - 300);
 
         // static objects
-        staticObjectsFixed = GameInit.createStaticObjectsFixed(context, displayHeight, displayWidth, (int) padding);
-        staticObjectsVariable = GameInit.createStaticObjectsVariable(context, displayHeight, displayWidth, (int) padding);
-        bg1 = new StaticObject(BitmapFactory.decodeResource(getResources(), R.drawable.background), 0, displayWidth, 0, displayHeight);
-        overlay = new StaticObject(BitmapFactory.decodeResource(getResources(), R.drawable.overlay), 0, displayWidth, 0, displayHeight);
+        staticObjectsFixed = GameInit.createStaticObjectsFixed(context, gameInit.getDisplayHeight(), gameInit.getDisplayWidth(), gameInit.getPadding());
+        staticObjectsVariable = GameInit.createStaticObjectsVariable(context, gameInit.getDisplayHeight(), gameInit.getDisplayWidth(), gameInit.getPadding());
+        bg1 = new StaticObject(BitmapFactory.decodeResource(getResources(), R.drawable.background), 0, gameInit.getDisplayWidth(), 0, gameInit.getDisplayHeight());
+        overlay = new StaticObject(BitmapFactory.decodeResource(getResources(), R.drawable.overlay), 0, gameInit.getDisplayWidth(), 0, gameInit.getDisplayHeight());
     }
 
     /**
@@ -290,12 +298,12 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // check intersection here + gravity
 
         // right button
-        if (checkButton("right") && player.getX() < (displayWidth/2)) {
+        if (checkButton("right") && player.getX() < (gameInit.getDisplayWidth()/2)) {
             player.move(+300 * this.deltaTime, 0); // velocity * dt
         }
 
         // left button
-        if (checkButton("left") && player.getX() > displayWidth * 0.1) {
+        if (checkButton("left") && player.getX() > gameInit.getDisplayWidth() * 0.1) {
             player.move(-300 * this.deltaTime, 0); 
         }
         // up button
@@ -359,7 +367,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         // lose condition
         // if the player touches the enemy or player falls from platforms
-        if ((Rect.intersects(player.getRectTarget(), enemy.getRectTarget())) || (player.getRectTarget().top > displayHeight)) {
+        if ((Rect.intersects(player.getRectTarget(), enemy.getRectTarget())) || (player.getRectTarget().top > gameInit.getDisplayHeight())) {
             Log.d(TAG, "update: game lost");
 
             if (player.getNumberOfLives() != 0) {
@@ -399,7 +407,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
 
         // move scene to the right
-        if (player.getX() >= (displayWidth/2)
+        if (player.getX() >= (gameInit.getDisplayWidth()/2)
                 && !(checkButton("left"))) {
             for (DynamicObject d: dynamicObjects) {
                 d.move(-200 * this.deltaTime, 0);
@@ -451,7 +459,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             Paint.FontMetrics fm = textPaint.getFontMetrics();
             float height = fm.descent - fm.ascent;
 
-            canvas.drawText("Time: " + currentTime, displayWidth * 0.5f, padding + height, textPaint);
+            canvas.drawText("Time: " + currentTime, gameInit.getDisplayWidth() * 0.5f, gameInit.getPadding() + height, textPaint);
 
             // draw pause image when the game is paused
             if (gameLoop.isRunning()){
