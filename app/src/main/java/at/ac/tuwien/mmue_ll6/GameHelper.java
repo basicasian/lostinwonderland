@@ -16,6 +16,8 @@ import java.util.HashMap;
 
 import at.ac.tuwien.mmue_ll6.objects.DynamicObject;
 import at.ac.tuwien.mmue_ll6.objects.StaticObject;
+import at.ac.tuwien.mmue_ll6.persistence.Score;
+import at.ac.tuwien.mmue_ll6.persistence.ScoreRoomDatabase;
 
 /**
  * Help class for GameSurfaceView
@@ -64,6 +66,8 @@ public class GameHelper {
     public static ArrayList<DynamicObject> createPlatforms(Context context, int displayHeight, int level) {
         ArrayList<DynamicObject> platformObjects = new ArrayList<>();
 
+        // coordinate system starts from top left! (in landscape mode)
+        // but elements are initialized from bottom left
         if (level == 1) {
             DynamicObject platform1 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 100, displayHeight - 150);
             DynamicObject platform2 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 1100, displayHeight - 150);
@@ -92,6 +96,8 @@ public class GameHelper {
     }
 
     public static HashMap<String, StaticObject> createStaticObjectsFixed(Context context, int displayHeight, int displayWidth, int padding) {
+        // coordinate system starts from top left! (in landscape mode)
+        // but elements are initialized from bottom left
         StaticObject buttonLeft = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowleft), displayWidth - 600,displayHeight - (int) padding);
         StaticObject buttonRight = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowright), displayWidth - 300,displayHeight - (int) padding);
         StaticObject buttonUp = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowup),  100, displayHeight - (int) padding);
@@ -111,6 +117,8 @@ public class GameHelper {
     }
 
     public static HashMap<String, StaticObject> createStaticObjectsVariable(Context context, int displayHeight, int displayWidth, int padding) {
+        // coordinate system starts from top left! (in landscape mode)
+        // but elements are initialized from bottom left
         StaticObject pauseButton = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.pause), displayWidth - 300, (int) (padding + BitmapFactory.decodeResource(context.getResources(), R.drawable.pause).getHeight()));
         StaticObject playButton = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.play), displayWidth - 300, (int) (padding + BitmapFactory.decodeResource(context.getResources(), R.drawable.play).getHeight()));
         StaticObject gameOverImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.gameover), displayWidth/2 - BitmapFactory.decodeResource(context.getResources(), R.drawable.gameover).getWidth()/2, displayHeight/2 + BitmapFactory.decodeResource(context.getResources(), R.drawable.gameover).getHeight()/2);
@@ -127,7 +135,6 @@ public class GameHelper {
         return staticObjects;
     }
 
-
     /**
      * set text paint
      */
@@ -140,6 +147,11 @@ public class GameHelper {
         return textPaint;
     }
 
-
+    /**
+     * save score to the database
+     */
+    public static void saveScore(Context context, Score score) {
+        ScoreRoomDatabase.getInstance(context).scoreDao().insert(score);
+    }
 
 }

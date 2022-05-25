@@ -22,7 +22,7 @@ public class HighScoreActivity extends AppCompatActivity {
     private TextView highscoreHard;
 
     private interface OnScoreLoadedListener {
-        void onScoresLoaded(List<Score> users);
+        void onScoresLoaded(List<Score> scores, int level);
     }
     private final OnScoreLoadedListener onScoresLoadedListener = this::updateScoresTable;
 
@@ -34,11 +34,15 @@ public class HighScoreActivity extends AppCompatActivity {
         highscoreEasy = findViewById(R.id.highscoreTimesEasy);
         highscoreHard = findViewById(R.id.highscoreTimesHard);
 
-        // TODO: load score also for different level
-        // Load scores
+        // load scores for each level
         Concurrency.executeAsync(() -> {
             List<Score> scores = loadScores(1);
-            runOnUiThread(() -> onScoresLoadedListener.onScoresLoaded(scores));
+            runOnUiThread(() -> onScoresLoadedListener.onScoresLoaded(scores, 1));
+        });
+
+        Concurrency.executeAsync(() -> {
+            List<Score> scores = loadScores(2);
+            runOnUiThread(() -> onScoresLoadedListener.onScoresLoaded(scores, 2));
         });
     }
 
@@ -46,13 +50,18 @@ public class HighScoreActivity extends AppCompatActivity {
         return ScoreRoomDatabase.getInstance(this).scoreDao().selectAllScores(level);
     }
 
-    private void updateScoresTable(List<Score> scores) {
+    private void updateScoresTable(List<Score> scores, int level) {
         StringBuilder text = new StringBuilder();
         int ranking = 1;
         for (Score score : scores) {
             text.append(ranking).append(" : ").append(score.time).append("\n");
             ranking++;
         }
-        highscoreEasy.setText(text.toString());
+        if (level == 1) {
+            highscoreEasy.setText(text.toString());
+        } else if (level == 2) {
+            highscoreHard.setText(text.toString());
+        }
     }
+
 }
