@@ -3,7 +3,6 @@ package at.ac.tuwien.mmue_ll6;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -18,9 +17,6 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Objects;
 
 import at.ac.tuwien.mmue_ll6.activities.AfterGameActivity;
@@ -35,7 +31,7 @@ import at.ac.tuwien.mmue_ll6.util.Concurrency;
  * The game view for loading assets and starting and ending the game
  * @author Renate Zhang
  */
-public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback, SoundPool.OnLoadCompleteListener, MediaPlayer.OnCompletionListener {
+public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback{
 
     private static final String TAG = GameSurfaceView.class.getSimpleName();
 
@@ -62,12 +58,12 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     int touchX;
     int touchY;
 
-    // sound
-    private MediaPlayer mediaPlayer;
-    private SoundPool soundPool;
-    private int jumpSoundID;
+    // graphics
+    private final GameGraphic gameGraphic;
 
-    private final GameInit gameInit;
+    // sound
+    private final GameSound gameSound;
+
 
     /**
      * constructor for the class GameSurfaceView
@@ -85,30 +81,15 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         // initialize graphics
         this.level = 1; // TODO: setlevel() is called after this !!
-        gameInit = new GameInit(context, this.level);
+        gameGraphic = new GameGraphic(context, this.level);
 
         // initialize sounds
-        loadSounds(context);
+        gameSound = new GameSound(context);
     }
 
     public void setLevel(int level) {
         Log.d(TAG, "set level: " + level);
         this.level = level;
-    }
-
-    /**
-     * load the media player and initializing them with sources
-     * @param context to get the sound
-     */
-    private void loadSounds(Context context) {
-        //Init media player with a song. Create audio pool
-        mediaPlayer = MediaPlayer.create(context, R.raw.bgmusic);
-        mediaPlayer.setLooping(true);
-        mediaPlayer.start();
-
-        createSoundPool();
-        // load sound file from resource and returns it as id that can be played by the sound pool
-        jumpSoundID = soundPool.load(context, R.raw.jumpsound, 1);
     }
 
     /**
@@ -134,10 +115,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
         endGame();
-        mediaPlayer.release();
-        soundPool.release();
+        gameSound.mediaPlayer.release();
+        gameSound.soundPool.release();
     }
-
 
     /**
      * create a new game loop and game thread, and starts it
@@ -180,10 +160,10 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             touchY = (int) e.getY();
 
             // up button
-            if (Objects.requireNonNull(gameInit.staticObjectsFixed.get("buttonUp")).getRectTarget().contains(touchX, touchY)) {
+            if (Objects.requireNonNull(gameGraphic.staticObjectsFixed.get("buttonUp")).getRectTarget().contains(touchX, touchY)) {
                 // jump motion is not handled here, but in longTouchEvent() for smoother movement
 
-                playJumpSound();
+                gameSound.playJumpSound();
                 isJumping = true;
                 jumpTimer = 0; // how 'high' the player is jumping
 
@@ -201,13 +181,13 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             }
 
             // pause button
-            if (Objects.requireNonNull(gameInit.staticObjectsVariable.get("pauseButton")).getRectTarget().contains(touchX, touchY)) {
+            if (Objects.requireNonNull(gameGraphic.staticObjectsVariable.get("pauseButton")).getRectTarget().contains(touchX, touchY)) {
                 Log.d(TAG, "onTouchEvent: pause");
                 if (gameLoop.isRunning()) {
-                    mediaPlayer.pause();
+                    gameSound.mediaPlayer.pause();
                     endGame();
                 } else {
-                    mediaPlayer.start();
+                    gameSound.mediaPlayer.start();
                     startGame(this.surfaceHolder);
                 }
             }
@@ -235,22 +215,22 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // check intersection here + gravity
 
         // right button
-        if (checkButton("right") && gameInit.player.getX() < (gameInit.displayWidth / 2)) {
-            gameInit.player.move(+300 * this.deltaTime, 0); // velocity * dt
+        if (checkButton("right") && gameGraphic.player.getX() < (gameGraphic.displayWidth / 2)) {
+            gameGraphic.player.move(+300 * this.deltaTime, 0); // velocity * dt
         }
 
         // left button
-        if (checkButton("left") && gameInit.player.getX() > gameInit.displayWidth * 0.1) {
-            gameInit.player.move(-300 * this.deltaTime, 0);
+        if (checkButton("left") && gameGraphic.player.getX() > gameGraphic.displayWidth * 0.1) {
+            gameGraphic.player.move(-300 * this.deltaTime, 0);
         }
         // up button
         if (isJumping && jumpTimer < 4) {
-            // jumpCounter controls the max time of jumping, so the character cant jump indefinitely
+            // jumpCounter controls the max time of jumping, so the character cant jump indefGraphicely
             jumpTimer++;
             if (isGoingRight) {
-                gameInit.player.move(200 * deltaTime,-2000 * this.deltaTime);
+                gameGraphic.player.move(200 * deltaTime,-2000 * this.deltaTime);
             } else {
-                gameInit.player.move(-200 * deltaTime,-2000 * this.deltaTime);
+                gameGraphic.player.move(-200 * deltaTime,-2000 * this.deltaTime);
             }
         }
     }
@@ -264,13 +244,13 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         boolean result = false;
         switch (button) {
             case "right":
-                if (Objects.requireNonNull(gameInit.staticObjectsFixed.get("buttonRight")).getRectTarget().contains(touchX, touchY)) {
+                if (Objects.requireNonNull(gameGraphic.staticObjectsFixed.get("buttonRight")).getRectTarget().contains(touchX, touchY)) {
                     isGoingRight = true;
                     result = true;
                 }
                 break;
             case "left":
-                if (Objects.requireNonNull(gameInit.staticObjectsFixed.get("buttonLeft")).getRectTarget().contains(touchX, touchY)) {
+                if (Objects.requireNonNull(gameGraphic.staticObjectsFixed.get("buttonLeft")).getRectTarget().contains(touchX, touchY)) {
                     isGoingRight = false;
                     result = true;
                 }
@@ -285,8 +265,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
      */
     public boolean checkCollision() {
         boolean result = false;
-        for (DynamicObject p: gameInit.platformObjects) {
-            if (Rect.intersects(gameInit.player.getRectTarget(), p.getRectTarget())) {
+        for (DynamicObject p: gameGraphic.platformObjects) {
+            if (Rect.intersects(gameGraphic.player.getRectTarget(), p.getRectTarget())) {
                 result = true;
             }
         }
@@ -304,13 +284,13 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         // lose condition
         // if the player touches the enemy or player falls from platforms
-        if ((Rect.intersects(gameInit.player.getRectTarget(), gameInit.enemy.getRectTarget())) || (gameInit.player.getRectTarget().top > gameInit.displayHeight)) {
+        if ((Rect.intersects(gameGraphic.player.getRectTarget(), gameGraphic.enemy.getRectTarget())) || (gameGraphic.player.getRectTarget().top > gameGraphic.displayHeight)) {
             Log.d(TAG, "update: game lost");
 
-            if (gameInit.player.getNumberOfLives() != 0) {
-                gameInit.staticObjectsFixed.remove("heart" + gameInit.player.getNumberOfLives());
-                gameInit.player.reduceLive();
-                gameInit.player.setToStart(700, 300);
+            if (gameGraphic.player.getNumberOfLives() != 0) {
+                gameGraphic.staticObjectsFixed.remove("heart" + gameGraphic.player.getNumberOfLives());
+                gameGraphic.player.reduceLive();
+                gameGraphic.player.setToStart(700, 300);
             } else {
                 isGameOver = true;
                 // don't call endGame() here! only if the you go back to the main screen
@@ -319,7 +299,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         // win condition
         // if player touches the goal
-        if (Rect.intersects(gameInit.player.getRectTarget(), gameInit.goal.getRectTarget())) {
+        if (Rect.intersects(gameGraphic.player.getRectTarget(), gameGraphic.goal.getRectTarget())) {
             Log.d(TAG, "update: game win");
             isGameWin = true;
 
@@ -335,45 +315,45 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // gravity simulation
         if (!isJumping && !checkCollision()) {
             if (isGoingRight) {
-                gameInit.player.move(+ 200 * this.deltaTime,+300 * this.deltaTime);
+                gameGraphic.player.move(+ 200 * this.deltaTime,+300 * this.deltaTime);
             } else {
-                gameInit.player.move(- 200 * this.deltaTime,+300 * this.deltaTime);
+                gameGraphic.player.move(- 200 * this.deltaTime,+300 * this.deltaTime);
             }
         }
-        for (SpriteObject s: gameInit.spritesObjects) {
+        for (SpriteObject s: gameGraphic.spritesObjects) {
             s.update(System.currentTimeMillis());
         }
 
         // move scene to the right
-        if (gameInit.player.getX() >= (gameInit.displayWidth / 2)
+        if (gameGraphic.player.getX() >= (gameGraphic.displayWidth / 2)
                 && !(checkButton("left"))) {
-            for (DynamicObject d: gameInit.dynamicObjects.values()) {
+            for (DynamicObject d: gameGraphic.dynamicObjects.values()) {
                 d.move(-200 * this.deltaTime, 0);
             }
-            for (DynamicObject p: gameInit.platformObjects) {
+            for (DynamicObject p: gameGraphic.platformObjects) {
                 p.move(-200 * this.deltaTime, 0);
             }
-            for (SpriteObject s: gameInit.spritesObjects) {
+            for (SpriteObject s: gameGraphic.spritesObjects) {
                 s.move(-200 * this.deltaTime, 0);
             }
         }
 
         // move scene to the left
-        if (gameInit.player.getX() <= 250) {
-            for (DynamicObject d: gameInit.dynamicObjects.values()) {
+        if (gameGraphic.player.getX() <= 250) {
+            for (DynamicObject d: gameGraphic.dynamicObjects.values()) {
                 d.move(+200 * this.deltaTime, 0);
             }
-            for (DynamicObject p: gameInit.platformObjects) {
+            for (DynamicObject p: gameGraphic.platformObjects) {
                 p.move(+200 * this.deltaTime, 0);
             }
-            for (SpriteObject s: gameInit.spritesObjects) {
+            for (SpriteObject s: gameGraphic.spritesObjects) {
                 s.move(+200 * this.deltaTime, 0);
             }
         }
     }
 
     /**
-     * draw the objects created in loadAssets() on the canvas
+     * draw the objects created in GameGraphic class on the canvas
      * @param canvas which is drawn on
      */
     @Override
@@ -381,93 +361,53 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         super.draw(canvas);
 
         if (canvas != null) {
-            gameInit.bg.draw(canvas); // has to drawn first, because it's in the back
+            gameGraphic.bg.draw(canvas); // has to drawn first, because it's in the back
 
             // draw all platforms first
-            for (DynamicObject p: gameInit.platformObjects) {
+            for (DynamicObject p: gameGraphic.platformObjects) {
                 p.draw(canvas);
             }
             // then all other dynamic objects
-            for (DynamicObject d: gameInit.dynamicObjects.values()) {
+            for (DynamicObject d: gameGraphic.dynamicObjects.values()) {
                 d.draw(canvas);
             }
             // then all sprites
-            for (SpriteObject s: gameInit.spritesObjects) {
+            for (SpriteObject s: gameGraphic.spritesObjects) {
                 s.draw(canvas);
             }
             // and static objects (such as buttons) on top
-            for (StaticObject s: gameInit.staticObjectsFixed.values()) {
+            for (StaticObject s: gameGraphic.staticObjectsFixed.values()) {
                 s.draw(canvas);
             }
 
             // font
-            Paint.FontMetrics fm = gameInit.textPaint.getFontMetrics();
+            Paint.FontMetrics fm = gameGraphic.textPaint.getFontMetrics();
             float height = fm.descent - fm.ascent;
 
-            canvas.drawText("Time: " + currentTime, gameInit.displayWidth* 0.5f, gameInit.padding + height, gameInit.textPaint);
+            canvas.drawText("Time: " + currentTime, gameGraphic.displayWidth* 0.5f, gameGraphic.padding + height, gameGraphic.textPaint);
 
             // draw pause image when the game is paused
             if (gameLoop.isRunning()){
-                Objects.requireNonNull(gameInit.staticObjectsVariable.get("pauseButton")).draw(canvas);
+                Objects.requireNonNull(gameGraphic.staticObjectsVariable.get("pauseButton")).draw(canvas);
             } else {
-                gameInit.overlay.draw(canvas);
-                Objects.requireNonNull(gameInit.staticObjectsVariable.get("playButton")).draw(canvas);
-                Objects.requireNonNull(gameInit.staticObjectsVariable.get("gamePauseImage")).draw(canvas);
+                gameGraphic.overlay.draw(canvas);
+                Objects.requireNonNull(gameGraphic.staticObjectsVariable.get("playButton")).draw(canvas);
+                Objects.requireNonNull(gameGraphic.staticObjectsVariable.get("gamePauseImage")).draw(canvas);
             }
 
             // draw game win image when the game is won
             if (isGameWin){
-                gameInit.overlay.draw(canvas);
-                Objects.requireNonNull(gameInit.staticObjectsVariable.get("gameWinImage")).draw(canvas);
+                gameGraphic.overlay.draw(canvas);
+                Objects.requireNonNull(gameGraphic.staticObjectsVariable.get("gameWinImage")).draw(canvas);
                 gameLoop.setRunning(false);
             }
             // draw game over image when the game is over
             if (isGameOver){
-                gameInit.overlay.draw(canvas);
-                Objects.requireNonNull(gameInit.staticObjectsVariable.get("gameOverImage")).draw(canvas);
+                gameGraphic.overlay.draw(canvas);
+                Objects.requireNonNull(gameGraphic.staticObjectsVariable.get("gameOverImage")).draw(canvas);
                 gameLoop.setRunning(false);
             }
         }
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private SoundPool createNewSoundPool() {
-        AudioAttributes attributes = new AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_GAME)
-                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                .build();
-
-        return new SoundPool.Builder()
-                .setAudioAttributes(attributes)
-                .setMaxStreams(5)
-                .build();
-    }
-
-    private void createSoundPool() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            soundPool = createNewSoundPool();
-        } else {
-            soundPool = createLegacySoundPool();
-        }
-    }
-
-    private SoundPool createLegacySoundPool() {
-        return new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
-    }
-
-    @Override
-    public void onCompletion(MediaPlayer mp) {
-        //callback when media player has finished playing
-    }
-
-    @Override
-    public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
-        //callback when sound pool has finished loading
-    }
-
-    public void playJumpSound() {
-        Log.d(TAG, "playJumpSound: jump");
-        soundPool.play(jumpSoundID, 0.4f, 0.4f, 1, 0, 1.0f);
     }
 
     /**

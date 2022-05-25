@@ -21,10 +21,10 @@ import at.ac.tuwien.mmue_ll6.persistence.Score;
 import at.ac.tuwien.mmue_ll6.persistence.ScoreRoomDatabase;
 
 /**
- * Help class for GameSurfaceView to initialize assets
+ * Help class for GameSurfaceView to initialize graphic assets
  * @author Michelle Lau
  */
-public class GameInit {
+public class GameGraphic {
 
     // general
     private Context context;
@@ -57,7 +57,7 @@ public class GameInit {
      * load the assets (character, background, etc) and initializing them with x and y coordinates
      * also getting the display sizes for the background
      */
-    GameInit(Context context, int level) {
+    GameGraphic(Context context, int level) {
         this.context = context;
         this.level = level;
 
