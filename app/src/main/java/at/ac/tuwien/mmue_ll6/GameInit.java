@@ -39,10 +39,24 @@ public class GameInit {
     // paint for timer
     protected Paint textPaint = new Paint();
 
+    // assets
+    protected StaticObject bg;
+    protected StaticObject overlay;
+
     // objects
     protected ArrayList<DynamicObject> platformObjects = new ArrayList<>();
+    protected ArrayList<SpriteObject> spritesObjects = new ArrayList<>();
     protected HashMap<String, StaticObject> staticObjectsFixed = new HashMap<>();
+    protected HashMap<String, StaticObject> staticObjectsVariable = new HashMap<>();
+    protected HashMap<String, DynamicObject> dynamicObjects = new HashMap<>();
+    protected DynamicObject player;
+    protected DynamicObject enemy;
+    protected DynamicObject goal;
 
+    /**
+     * load the assets (character, background, etc) and initializing them with x and y coordinates
+     * also getting the display sizes for the background
+     */
     GameInit(Context context, int level) {
         this.context = context;
         this.level = level;
@@ -54,6 +68,9 @@ public class GameInit {
         // objects
         setPlatforms();
         setStaticObjectsFixed();
+        setStaticObjectsVariable();
+        setSpriteObjects();
+        setDynamicObjects();
     }
 
     private void setDisplaySize() {
@@ -64,6 +81,8 @@ public class GameInit {
         display.getRealSize(size);
 
         // set size variables
+        // coordinate system starts from top left! (in landscape mode)
+        // but elements are initialized from bottom left
         this.displayWidth = (size.x - actionBarHeight);
         this.displayHeight = size.y;
         this.padding = (int) (displayWidth * 0.02f);
@@ -83,8 +102,6 @@ public class GameInit {
      */
     public void setPlatforms() {
 
-        // coordinate system starts from top left! (in landscape mode)
-        // but elements are initialized from bottom left
         if (this.level == 1) {
             DynamicObject platform1 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 100, displayHeight - 150);
             DynamicObject platform2 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 1100, displayHeight - 150);
@@ -112,14 +129,17 @@ public class GameInit {
     }
 
     public void setStaticObjectsFixed() {
-        // coordinate system starts from top left! (in landscape mode)
-        // but elements are initialized from bottom left
-        StaticObject buttonLeft = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowleft), displayWidth - 600,displayHeight - (int) padding);
-        StaticObject buttonRight = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowright), displayWidth - 300,displayHeight - (int) padding);
+        // buttons and hearts
+        StaticObject buttonLeft = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowleft), displayWidth - 600,displayHeight - padding);
+        StaticObject buttonRight = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowright), displayWidth - 300,displayHeight - padding);
         StaticObject buttonUp = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowup),  100, displayHeight - (int) padding);
-        StaticObject heart1 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 100, (int) (padding + BitmapFactory.decodeResource(context.getResources(), R.drawable.heart).getHeight()));
-        StaticObject heart2 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 300, (int) (padding + BitmapFactory.decodeResource(context.getResources(), R.drawable.heart).getHeight()));
-        StaticObject heart3 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 500, (int) (padding + BitmapFactory.decodeResource(context.getResources(), R.drawable.heart).getHeight()));
+        StaticObject heart1 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 100, padding + BitmapFactory.decodeResource(context.getResources(), R.drawable.heart).getHeight());
+        StaticObject heart2 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 300, padding + BitmapFactory.decodeResource(context.getResources(), R.drawable.heart).getHeight());
+        StaticObject heart3 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 500, padding + BitmapFactory.decodeResource(context.getResources(), R.drawable.heart).getHeight());
+
+        // background
+        bg = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.background), 0, displayWidth, 0, displayHeight);
+        overlay = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.overlay), 0, displayWidth, 0, displayHeight);
 
         staticObjectsFixed.put("buttonLeft", buttonLeft);
         staticObjectsFixed.put("buttonRight", buttonRight);
@@ -129,23 +149,43 @@ public class GameInit {
         staticObjectsFixed.put("heart3", heart3);
     }
 
-    public static HashMap<String, StaticObject> createStaticObjectsVariable(Context context, int displayHeight, int displayWidth, int padding) {
-        // coordinate system starts from top left! (in landscape mode)
-        // but elements are initialized from bottom left
+    public void setStaticObjectsVariable() {
         StaticObject pauseButton = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.pause), displayWidth - 300, (int) (padding + BitmapFactory.decodeResource(context.getResources(), R.drawable.pause).getHeight()));
         StaticObject playButton = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.play), displayWidth - 300, (int) (padding + BitmapFactory.decodeResource(context.getResources(), R.drawable.play).getHeight()));
         StaticObject gameOverImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.gameover), displayWidth/2 - BitmapFactory.decodeResource(context.getResources(), R.drawable.gameover).getWidth()/2, displayHeight/2 + BitmapFactory.decodeResource(context.getResources(), R.drawable.gameover).getHeight()/2);
         StaticObject gameWinImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.youwin), displayWidth/2 - BitmapFactory.decodeResource(context.getResources(), R.drawable.youwin).getWidth()/2, displayHeight/2 + BitmapFactory.decodeResource(context.getResources(), R.drawable.youwin).getHeight()/2);
         StaticObject gamePauseImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.paused), displayWidth/2 - BitmapFactory.decodeResource(context.getResources(), R.drawable.paused).getWidth()/2, displayHeight/2 + BitmapFactory.decodeResource(context.getResources(), R.drawable.paused).getHeight()/2);
 
-        HashMap<String, StaticObject> staticObjects = new HashMap<>();
-        staticObjects.put("pauseButton", pauseButton);
-        staticObjects.put("playButton", playButton);
-        staticObjects.put("gameOverImage", gameOverImage);
-        staticObjects.put("gameWinImage", gameWinImage);
-        staticObjects.put("gamePauseImage", gamePauseImage);
+        staticObjectsVariable.put("pauseButton", pauseButton);
+        staticObjectsVariable.put("playButton", playButton);
+        staticObjectsVariable.put("gameOverImage", gameOverImage);
+        staticObjectsVariable.put("gameWinImage", gameWinImage);
+        staticObjectsVariable.put("gamePauseImage", gamePauseImage);
+    }
 
-        return staticObjects;
+    public void setDynamicObjects() {
+        // player, enemy, goal is set in extra variable because its used frequently
+        if (this.level == 1) {
+            player = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.player), 600, displayHeight - 300);
+            enemy = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy), 300, displayHeight - 300);
+            goal = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.goal), 6000, displayHeight/2);
+        }
+        if (this.level == 2) {
+            player = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.player), 600, displayHeight - 300);
+            enemy = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy), 300, displayHeight - 300);
+            goal = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.goal), 6000, displayHeight/2);
+        }
+
+        // put in hashmap for easier iteration
+        dynamicObjects.put("player", player);
+        dynamicObjects.put("enemy", enemy);
+        dynamicObjects.put("goal", goal);
+    }
+
+    public void setSpriteObjects() {
+        SpriteObject fire = new SpriteObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.fire), 4, 100, displayHeight - 300);
+
+        spritesObjects.add(fire);
     }
 
 
