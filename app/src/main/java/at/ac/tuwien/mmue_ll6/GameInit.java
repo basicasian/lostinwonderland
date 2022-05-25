@@ -30,16 +30,22 @@ public class GameInit {
     private int level;
 
     // information about display
-    private int displayHeight;
-    private int displayWidth;
-    private int padding;
-    private int actionBarHeight = 56;
+    protected int displayHeight;
+    protected int displayWidth;
+    protected int padding;
+    protected int actionBarHeight = 56;
+
+    // paint for timer
+    protected Paint textPaint = new Paint();
+
+
 
     GameInit(Context context, int level) {
         this.context = context;
         this.level = level;
 
         setDisplaySize();
+        setTextPaint(); // text for high score
     }
 
     private void setDisplaySize() {
@@ -55,16 +61,13 @@ public class GameInit {
         this.padding = (int) (displayWidth * 0.02f);
     }
 
-    public int getDisplayWidth() {
-        return this.displayWidth;
-    }
-
-    public int getDisplayHeight() {
-        return this.displayHeight;
-    }
-
-    public int getPadding() {
-        return this.padding;
+    /**
+     * set text paint
+     */
+    public void setTextPaint() {
+        textPaint.setColor(Color.WHITE);
+        textPaint.setTextSize(60);
+        textPaint.setTypeface(Typeface.create("Monospace",Typeface.NORMAL));
     }
 
     /**
@@ -142,17 +145,7 @@ public class GameInit {
         return staticObjects;
     }
 
-    /**
-     * set text paint
-     */
-    public static Paint setTextPaint() {
-        Paint textPaint = new Paint();
-        textPaint.setColor(Color.WHITE);
-        textPaint.setTextSize(60);
-        textPaint.setTypeface(Typeface.create("Monospace",Typeface.NORMAL));
 
-        return textPaint;
-    }
 
 
 
