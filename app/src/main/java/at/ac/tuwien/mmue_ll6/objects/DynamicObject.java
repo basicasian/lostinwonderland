@@ -44,6 +44,7 @@ public class DynamicObject{
     public Rect getRectTarget() { return rectTarget;}
 
     public int getX() { return x;}
+    public int getY() { return y;}
 
     /**
      * method to update x and y coordinate of character

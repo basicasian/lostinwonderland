@@ -3,6 +3,7 @@ package at.ac.tuwien.mmue_ll6;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -49,7 +50,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private boolean isGameWin = false;
     private boolean isGoingRight = true;
     private int jumpTimer;
-    private int jumpCounter = 0;
+    private boolean canJump = true;
 
     // timer
     private double currentTime = 0;
@@ -76,7 +77,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // so events can be handled
         setFocusable(true);
 
-        // do not initialize game here! setLevel is not called here
+        // do not initialize game here! setLevel is not called yet
     }
 
     public void initializeGame() {
@@ -165,24 +166,12 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             touchY = (int) e.getY();
 
             // up button
-            if (Objects.requireNonNull(gameGraphic.staticObjectsFixed.get("buttonUp")).getRectTarget().contains(touchX, touchY)) {
+            if (Objects.requireNonNull(gameGraphic.staticObjectsFixed.get("buttonUp")).getRectTarget().contains(touchX, touchY) && canJump) {
                 // jump motion is not handled here, but in longTouchEvent() for smoother movement
 
                 gameSound.playJumpSound();
                 isJumping = true;
-                jumpTimer = 0; // how 'high' the player is jumping
-
-                // improved jump mechanics but not quite smooth
-                /*
-                if (jumpCounter <= 3) {
-                    playJumpSound();
-                    isJumping = true;
-                    jumpTimer = 0; // how 'high' the player is jumping
-                    jumpCounter++; // how often he can jump in a sequence
-                } else if (checkCollision()) {
-                   jumpCounter = 0;
-                   isJumping = false;
-                }*/
+                jumpTimer = 0;
             }
 
             // pause button
@@ -229,9 +218,10 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             gameGraphic.player.move(-300 * this.deltaTime, 0);
         }
         // up button
-        if (isJumping && jumpTimer < 4) {
-            // jumpCounter controls the max time of jumping, so the character cant jump indefGraphicely
+        if (isJumping && jumpTimer < 4 && canJump) {
+            // jumpCounter controls the max time of jumping, so the character cant jump indefinitely
             jumpTimer++;
+
             if (isGoingRight) {
                 gameGraphic.player.move(200 * deltaTime,-2000 * this.deltaTime);
             } else {
@@ -275,11 +265,6 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             Concurrency.executeAsync(() -> saveScore(context, new Score(currentTime, level)));
         }
 
-        // if button is pressed, move character
-        if (isPressed()) {
-            longTouchEvent();
-        }
-
         // gravity simulation
         if (!isJumping && !checkCollision()) {
             if (isGoingRight) {
@@ -288,8 +273,14 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
                 gameGraphic.player.move(- 200 * this.deltaTime,+300 * this.deltaTime);
             }
         }
+
         for (SpriteObject s: gameGraphic.spritesObjects) {
             s.update(System.currentTimeMillis());
+        }
+
+        // if button is pressed, move character
+        if (isPressed()) {
+            longTouchEvent();
         }
 
         // move scene to the right
@@ -415,12 +406,19 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
      * @return true if character is colliding against platform
      */
     public boolean checkCollision() {
-        boolean result = false;
         for (DynamicObject p: gameGraphic.platformObjects) {
+
             if (Rect.intersects(gameGraphic.player.getRectTarget(), p.getRectTarget())) {
-                result = true;
+                canJump = true;
+                return true;
+                /*
+                if (p.getRectTarget().top > gameGraphic.player.getRectTarget().bottom * 1.01 || p.getRectTarget().top < gameGraphic.player.getRectTarget().bottom * 0.99) {
+                    return true;
+                }*/
             }
         }
-        return result;
+        canJump = false;
+        return false;
     }
+
 }
