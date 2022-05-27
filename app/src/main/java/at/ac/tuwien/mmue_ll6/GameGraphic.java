@@ -111,8 +111,8 @@ public class GameGraphic {
             DynamicObject platform1 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 100, displayHeight - 150);
             DynamicObject platform2 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 1100, displayHeight - 150);
             DynamicObject platform3 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 2000, displayHeight - 300);
-            DynamicObject platform4 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 3200, displayHeight - 150);
-            DynamicObject platform5 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 3900, displayHeight - 400);
+            DynamicObject platform4 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 3000, displayHeight - 150);
+            DynamicObject platform5 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 3900, displayHeight - 300);
             DynamicObject platform6 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 5000, displayHeight - 300);
 
             // the order of array is the order of draw calls!
@@ -173,11 +173,11 @@ public class GameGraphic {
         player = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.player), 600, displayHeight - 300);
 
         if (this.level == 1) {
-            enemy = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy), 300, displayHeight - 300);
-            goal = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.goal), 6000, displayHeight/2);
+            enemy = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy), 900, displayHeight - 200);
+            goal = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.goal), 5500, displayHeight - 700);
         }
         if (this.level == 2) {
-            enemy = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy), 900, displayHeight - 300);
+            enemy = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy), 1000, displayHeight - 300);
             goal = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.goal), 6020, displayHeight - 100);
         }
 
@@ -190,8 +190,8 @@ public class GameGraphic {
     public void setSpriteObjects() {
 
         if (this.level == 1) {
-            SpriteObject fire = new SpriteObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.fire), 4, 100, displayHeight - 300);
-            spritesObjects.add(fire);
+            SpriteObject fire1 = new SpriteObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.fire), 4, 100, displayHeight - 300);
+            spritesObjects = new ArrayList<>(Arrays.asList(fire1));
         }
 
         if (this.level == 2) {

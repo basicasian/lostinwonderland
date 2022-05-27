@@ -223,9 +223,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             jumpTimer++;
 
             if (isGoingRight) {
-                gameGraphic.player.move(200 * deltaTime,-2000 * this.deltaTime);
+                gameGraphic.player.move(300 * deltaTime,-2500 * this.deltaTime);
             } else {
-                gameGraphic.player.move(-200 * deltaTime,-2000 * this.deltaTime);
+                gameGraphic.player.move(-300 * deltaTime,-2500 * this.deltaTime);
             }
         }
     }
@@ -268,9 +268,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // gravity simulation
         if (!isJumping && !checkCollision()) {
             if (isGoingRight) {
-                gameGraphic.player.move(+ 200 * this.deltaTime,+300 * this.deltaTime);
+                gameGraphic.player.move(+ 300 * this.deltaTime,+300 * this.deltaTime);
             } else {
-                gameGraphic.player.move(- 200 * this.deltaTime,+300 * this.deltaTime);
+                gameGraphic.player.move(- 300 * this.deltaTime,+300 * this.deltaTime);
             }
         }
 
@@ -287,26 +287,26 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         if (gameGraphic.player.getX() >= (gameGraphic.displayWidth / 2)
                 && !(checkButton("left"))) {
             for (DynamicObject d: gameGraphic.dynamicObjects.values()) {
-                d.move(-200 * this.deltaTime, 0);
+                d.move(-300 * this.deltaTime, 0);
             }
             for (DynamicObject p: gameGraphic.platformObjects) {
-                p.move(-200 * this.deltaTime, 0);
+                p.move(-300 * this.deltaTime, 0);
             }
             for (SpriteObject s: gameGraphic.spritesObjects) {
-                s.move(-200 * this.deltaTime, 0);
+                s.move(-300 * this.deltaTime, 0);
             }
         }
 
         // move scene to the left
         if (gameGraphic.player.getX() <= 250) {
             for (DynamicObject d: gameGraphic.dynamicObjects.values()) {
-                d.move(+200 * this.deltaTime, 0);
+                d.move(+300 * this.deltaTime, 0);
             }
             for (DynamicObject p: gameGraphic.platformObjects) {
-                p.move(+200 * this.deltaTime, 0);
+                p.move(+300 * this.deltaTime, 0);
             }
             for (SpriteObject s: gameGraphic.spritesObjects) {
-                s.move(+200 * this.deltaTime, 0);
+                s.move(+300 * this.deltaTime, 0);
             }
         }
     }
