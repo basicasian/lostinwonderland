@@ -12,7 +12,8 @@
     <string name="help_title">* How to play *</string>
     <string name="help_chara">This is your character, \n help it find the way out of this wicked wonderland!</string>
     <string name="help_buttons">Pressing the buttons will move your character to the left or right, but will also make you jump.</string>
-    <string name="help_enemy">Be careful not to touch the monsters! And don\'t fall from the platforms!</string>
+    <string name="help_sticky">Because you are so sickly sweet, you can get stuck easily. \n Use this for your advantage!</string>
+    <string name="help_enemy">But still, be careful not to touch the monsters! And don\'t fall from the platforms!</string>
     <string name="help_heart">You have three lives, \n if you lose them all it\'s game over.</string>
     <string name="help_pause">Clicking on the pause button, \n will pause button and also stop the music.</string>
 

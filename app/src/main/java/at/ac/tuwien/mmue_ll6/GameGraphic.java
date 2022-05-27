@@ -49,11 +49,10 @@ public class GameGraphic {
     // objects
     protected ArrayList<DynamicObject> platformObjects = new ArrayList<>();
     protected ArrayList<SpriteObject> spritesObjects = new ArrayList<>();
+    protected ArrayList<DynamicObject> enemyObjects = new ArrayList<>();
     protected HashMap<String, StaticObject> staticObjectsFixed = new HashMap<>();
     protected HashMap<String, StaticObject> staticObjectsVariable = new HashMap<>();
-    protected HashMap<String, DynamicObject> dynamicObjects = new HashMap<>();
     protected DynamicObject player;
-    protected DynamicObject enemy;
     protected DynamicObject goal;
 
     /**
@@ -111,8 +110,8 @@ public class GameGraphic {
             DynamicObject platform1 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 100, displayHeight - 150);
             DynamicObject platform2 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 1100, displayHeight - 150);
             DynamicObject platform3 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 2000, displayHeight - 300);
-            DynamicObject platform4 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 3200, displayHeight - 150);
-            DynamicObject platform5 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 3900, displayHeight - 400);
+            DynamicObject platform4 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 3000, displayHeight - 150);
+            DynamicObject platform5 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 3900, displayHeight - 300);
             DynamicObject platform6 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 5000, displayHeight - 300);
 
             // the order of array is the order of draw calls!
@@ -121,15 +120,17 @@ public class GameGraphic {
 
         if (this.level == 2) {
             DynamicObject platform1 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 200, displayHeight - 200);
-            DynamicObject platform2 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 1100, displayHeight - 100);
-            DynamicObject platform3 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 2000, displayHeight - 300);
-            DynamicObject platform4 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 3000, displayHeight - 400);
-            DynamicObject platform5 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 3800, displayHeight - 100);
-            DynamicObject platform6 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 5000, displayHeight - 250);
-            DynamicObject platform7 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 5900, displayHeight - 300);
+            DynamicObject platform2 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 1250, displayHeight - 500);
+            DynamicObject platform3 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 2300, displayHeight - 100);
+            DynamicObject platform4 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 2500, displayHeight - 750);
+            DynamicObject platform5 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 3600, displayHeight - 500);
+            DynamicObject platform6 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 3900, displayHeight - 100);
+            DynamicObject platform7 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 5000, displayHeight - 300);
+            DynamicObject platform8 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 6000, displayHeight - 600);
+            DynamicObject platform9 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.platform2), 7000, displayHeight - 400);
 
             // the order of array is the order of draw calls!
-            platformObjects = new ArrayList<>(Arrays.asList(platform1, platform2, platform3, platform4, platform5, platform6, platform7));
+            platformObjects = new ArrayList<>(Arrays.asList(platform1, platform2, platform3, platform5, platform6, platform7, platform8, platform9));
         }
     }
 
@@ -169,33 +170,37 @@ public class GameGraphic {
     }
 
     public void setDynamicObjects() {
-        // player, enemy, goal is set in extra variable because its used frequently
-        player = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.player), 600, displayHeight - 300);
 
         if (this.level == 1) {
-            enemy = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy), 300, displayHeight - 300);
-            goal = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.goal), 6000, displayHeight/2);
+            player = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.player), 600, displayHeight - 300);
+            goal = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.goal), 5500, displayHeight - 700);
+
+            DynamicObject enemy = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy), 900, displayHeight - 200);
+            enemyObjects.add(enemy);
         }
         if (this.level == 2) {
-            enemy = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy), 900, displayHeight - 300);
-            goal = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.goal), 6020, displayHeight - 100);
-        }
+            player = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.player), 600, displayHeight - 350);
+            goal = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.goal), 7000, displayHeight - 150);
 
-        // put in hashmap for easier iteration
-        dynamicObjects.put("player", player);
-        dynamicObjects.put("enemy", enemy);
-        dynamicObjects.put("goal", goal);
+            DynamicObject enemy1 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy), 1050, displayHeight - 300);
+            DynamicObject enemy2 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy), 2700, displayHeight - 300);
+            DynamicObject enemy3 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy), 5250, displayHeight - 450);
+            DynamicObject enemy4 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy), 5500, displayHeight - 450);
+            DynamicObject enemy5 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy), 6700, displayHeight - 250);
+            DynamicObject enemy6 = new DynamicObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy), 8100, displayHeight - 400);
+            enemyObjects = new ArrayList<>(Arrays.asList(enemy1, enemy2, enemy3, enemy4, enemy5, enemy6));
+        }
     }
 
     public void setSpriteObjects() {
 
         if (this.level == 1) {
-            SpriteObject fire = new SpriteObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.fire), 4, 100, displayHeight - 300);
-            spritesObjects.add(fire);
+            SpriteObject fire1 = new SpriteObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.fire), 4, 100, displayHeight - 300);
+            spritesObjects.add(fire1);
         }
 
         if (this.level == 2) {
-            SpriteObject fire = new SpriteObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.fire), 4, 200, displayHeight - 300);
+            SpriteObject fire = new SpriteObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.fire), 4, 200, displayHeight - 350);
             spritesObjects.add(fire);
         }
     }

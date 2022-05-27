@@ -3,6 +3,7 @@ package at.ac.tuwien.mmue_ll6;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -17,6 +18,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import at.ac.tuwien.mmue_ll6.activities.AfterGameActivity;
@@ -49,7 +51,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private boolean isGameWin = false;
     private boolean isGoingRight = true;
     private int jumpTimer;
-    private int jumpCounter = 0;
+    private boolean canJump = true;
 
     // timer
     private double currentTime = 0;
@@ -76,7 +78,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // so events can be handled
         setFocusable(true);
 
-        // do not initialize game here! setLevel is not called here
+        // do not initialize game here! setLevel is not called yet
     }
 
     public void initializeGame() {
@@ -165,24 +167,12 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             touchY = (int) e.getY();
 
             // up button
-            if (Objects.requireNonNull(gameGraphic.staticObjectsFixed.get("buttonUp")).getRectTarget().contains(touchX, touchY)) {
+            if (Objects.requireNonNull(gameGraphic.staticObjectsFixed.get("buttonUp")).getRectTarget().contains(touchX, touchY) && canJump) {
                 // jump motion is not handled here, but in longTouchEvent() for smoother movement
 
                 gameSound.playJumpSound();
                 isJumping = true;
-                jumpTimer = 0; // how 'high' the player is jumping
-
-                // improved jump mechanics but not quite smooth
-                /*
-                if (jumpCounter <= 3) {
-                    playJumpSound();
-                    isJumping = true;
-                    jumpTimer = 0; // how 'high' the player is jumping
-                    jumpCounter++; // how often he can jump in a sequence
-                } else if (checkCollision()) {
-                   jumpCounter = 0;
-                   isJumping = false;
-                }*/
+                jumpTimer = 0;
             }
 
             // pause button
@@ -229,13 +219,14 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             gameGraphic.player.move(-300 * this.deltaTime, 0);
         }
         // up button
-        if (isJumping && jumpTimer < 4) {
-            // jumpCounter controls the max time of jumping, so the character cant jump indefGraphicely
+        if (isJumping && jumpTimer < 4 && canJump) {
+            // jumpCounter controls the max time of jumping, so the character cant jump indefinitely
             jumpTimer++;
+
             if (isGoingRight) {
-                gameGraphic.player.move(200 * deltaTime,-2000 * this.deltaTime);
+                gameGraphic.player.move(300 * deltaTime,-2500 * this.deltaTime);
             } else {
-                gameGraphic.player.move(-200 * deltaTime,-2000 * this.deltaTime);
+                gameGraphic.player.move(-300 * deltaTime,-2500 * this.deltaTime);
             }
         }
     }
@@ -251,7 +242,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         // lose condition
         // if the player touches the enemy or player falls from platforms
-        if ((Rect.intersects(gameGraphic.player.getRectTarget(), gameGraphic.enemy.getRectTarget())) || (gameGraphic.player.getRectTarget().top > gameGraphic.displayHeight)) {
+        if (checkCollision(gameGraphic.enemyObjects, false) || (gameGraphic.player.getRectTarget().top > gameGraphic.displayHeight)) {
             Log.d(TAG, "update: game lost");
 
             if (gameGraphic.player.getNumberOfLives() != 0) {
@@ -275,47 +266,52 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             Concurrency.executeAsync(() -> saveScore(context, new Score(currentTime, level)));
         }
 
+        // gravity simulation
+        if (!isJumping && !checkCollision(gameGraphic.platformObjects, true)) {
+            if (isGoingRight) {
+                gameGraphic.player.move(+ 300 * this.deltaTime,+300 * this.deltaTime);
+            } else {
+                gameGraphic.player.move(- 300 * this.deltaTime,+300 * this.deltaTime);
+            }
+        }
+
+        for (SpriteObject s: gameGraphic.spritesObjects) {
+            s.update(System.currentTimeMillis());
+        }
+
         // if button is pressed, move character
         if (isPressed()) {
             longTouchEvent();
         }
 
-        // gravity simulation
-        if (!isJumping && !checkCollision()) {
-            if (isGoingRight) {
-                gameGraphic.player.move(+ 200 * this.deltaTime,+300 * this.deltaTime);
-            } else {
-                gameGraphic.player.move(- 200 * this.deltaTime,+300 * this.deltaTime);
-            }
-        }
-        for (SpriteObject s: gameGraphic.spritesObjects) {
-            s.update(System.currentTimeMillis());
-        }
-
         // move scene to the right
         if (gameGraphic.player.getX() >= (gameGraphic.displayWidth / 2)
                 && !(checkButton("left"))) {
-            for (DynamicObject d: gameGraphic.dynamicObjects.values()) {
-                d.move(-200 * this.deltaTime, 0);
-            }
+            gameGraphic.goal.move(-300 * this.deltaTime, 0);
+            gameGraphic.player.move(-300 * this.deltaTime, 0);
             for (DynamicObject p: gameGraphic.platformObjects) {
-                p.move(-200 * this.deltaTime, 0);
+                p.move(-300 * this.deltaTime, 0);
             }
             for (SpriteObject s: gameGraphic.spritesObjects) {
-                s.move(-200 * this.deltaTime, 0);
+                s.move(-300 * this.deltaTime, 0);
+            }
+            for (DynamicObject e: gameGraphic.enemyObjects) {
+                e.move(-300 * this.deltaTime, 0);
             }
         }
 
         // move scene to the left
         if (gameGraphic.player.getX() <= 250) {
-            for (DynamicObject d: gameGraphic.dynamicObjects.values()) {
-                d.move(+200 * this.deltaTime, 0);
-            }
+            gameGraphic.goal.move(+300 * this.deltaTime, 0);
+            gameGraphic.player.move(+300 * this.deltaTime, 0);
             for (DynamicObject p: gameGraphic.platformObjects) {
-                p.move(+200 * this.deltaTime, 0);
+                p.move(+300 * this.deltaTime, 0);
+            }
+            for (DynamicObject e: gameGraphic.enemyObjects) {
+                e.move(+300 * this.deltaTime, 0);
             }
             for (SpriteObject s: gameGraphic.spritesObjects) {
-                s.move(+200 * this.deltaTime, 0);
+                s.move(+300 * this.deltaTime, 0);
             }
         }
     }
@@ -335,14 +331,17 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             for (DynamicObject p: gameGraphic.platformObjects) {
                 p.draw(canvas);
             }
-            // then all other dynamic objects
-            for (DynamicObject d: gameGraphic.dynamicObjects.values()) {
-                d.draw(canvas);
-            }
             // then all sprites
             for (SpriteObject s: gameGraphic.spritesObjects) {
                 s.draw(canvas);
             }
+            // the other dynamic objects
+            for (DynamicObject d: gameGraphic.enemyObjects) {
+                d.draw(canvas);
+            }
+            gameGraphic.goal.draw(canvas);
+            gameGraphic.player.draw(canvas);
+
             // and static objects (such as buttons) on top
             for (StaticObject s: gameGraphic.staticObjectsFixed.values()) {
                 s.draw(canvas);
@@ -411,16 +410,24 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     }
 
     /**
-     * help method to check if the player is colliding against platforms
-     * @return true if character is colliding against platform
+     * help method to check if the player is colliding against list of objects
+     * @return true if character is colliding
      */
-    public boolean checkCollision() {
-        boolean result = false;
-        for (DynamicObject p: gameGraphic.platformObjects) {
-            if (Rect.intersects(gameGraphic.player.getRectTarget(), p.getRectTarget())) {
-                result = true;
+    public boolean checkCollision(ArrayList<DynamicObject> objectsList, boolean isPlatform) {
+
+        for (DynamicObject o: objectsList) {
+
+            if (Rect.intersects(gameGraphic.player.getRectTarget(), o.getRectTarget())) {
+                if (isPlatform) {
+                    canJump = true;
+                }
+                return true;
             }
         }
-        return result;
+        if (isPlatform) {
+            canJump = false;
+        }
+        return false;
     }
+
 }
