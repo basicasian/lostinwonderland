@@ -18,6 +18,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import at.ac.tuwien.mmue_ll6.activities.AfterGameActivity;
@@ -241,7 +242,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         // lose condition
         // if the player touches the enemy or player falls from platforms
-        if ((Rect.intersects(gameGraphic.player.getRectTarget(), gameGraphic.enemy.getRectTarget())) || (gameGraphic.player.getRectTarget().top > gameGraphic.displayHeight)) {
+        if (checkCollision(gameGraphic.enemyObjects, false) || (gameGraphic.player.getRectTarget().top > gameGraphic.displayHeight)) {
             Log.d(TAG, "update: game lost");
 
             if (gameGraphic.player.getNumberOfLives() != 0) {
@@ -266,7 +267,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         }
 
         // gravity simulation
-        if (!isJumping && !checkCollision()) {
+        if (!isJumping && !checkCollision(gameGraphic.platformObjects, true)) {
             if (isGoingRight) {
                 gameGraphic.player.move(+ 300 * this.deltaTime,+300 * this.deltaTime);
             } else {
@@ -286,24 +287,28 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // move scene to the right
         if (gameGraphic.player.getX() >= (gameGraphic.displayWidth / 2)
                 && !(checkButton("left"))) {
-            for (DynamicObject d: gameGraphic.dynamicObjects.values()) {
-                d.move(-300 * this.deltaTime, 0);
-            }
+            gameGraphic.goal.move(-300 * this.deltaTime, 0);
+            gameGraphic.player.move(-300 * this.deltaTime, 0);
             for (DynamicObject p: gameGraphic.platformObjects) {
                 p.move(-300 * this.deltaTime, 0);
             }
             for (SpriteObject s: gameGraphic.spritesObjects) {
                 s.move(-300 * this.deltaTime, 0);
             }
+            for (DynamicObject e: gameGraphic.enemyObjects) {
+                e.move(-300 * this.deltaTime, 0);
+            }
         }
 
         // move scene to the left
         if (gameGraphic.player.getX() <= 250) {
-            for (DynamicObject d: gameGraphic.dynamicObjects.values()) {
-                d.move(+300 * this.deltaTime, 0);
-            }
+            gameGraphic.goal.move(+300 * this.deltaTime, 0);
+            gameGraphic.player.move(+300 * this.deltaTime, 0);
             for (DynamicObject p: gameGraphic.platformObjects) {
                 p.move(+300 * this.deltaTime, 0);
+            }
+            for (DynamicObject e: gameGraphic.enemyObjects) {
+                e.move(+300 * this.deltaTime, 0);
             }
             for (SpriteObject s: gameGraphic.spritesObjects) {
                 s.move(+300 * this.deltaTime, 0);
@@ -326,14 +331,17 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             for (DynamicObject p: gameGraphic.platformObjects) {
                 p.draw(canvas);
             }
-            // then all other dynamic objects
-            for (DynamicObject d: gameGraphic.dynamicObjects.values()) {
-                d.draw(canvas);
-            }
             // then all sprites
             for (SpriteObject s: gameGraphic.spritesObjects) {
                 s.draw(canvas);
             }
+            // the other dynamic objects
+            for (DynamicObject d: gameGraphic.enemyObjects) {
+                d.draw(canvas);
+            }
+            gameGraphic.goal.draw(canvas);
+            gameGraphic.player.draw(canvas);
+
             // and static objects (such as buttons) on top
             for (StaticObject s: gameGraphic.staticObjectsFixed.values()) {
                 s.draw(canvas);
@@ -402,22 +410,23 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     }
 
     /**
-     * help method to check if the player is colliding against platforms
-     * @return true if character is colliding against platform
+     * help method to check if the player is colliding against list of objects
+     * @return true if character is colliding
      */
-    public boolean checkCollision() {
-        for (DynamicObject p: gameGraphic.platformObjects) {
+    public boolean checkCollision(ArrayList<DynamicObject> objectsList, boolean isPlatform) {
 
-            if (Rect.intersects(gameGraphic.player.getRectTarget(), p.getRectTarget())) {
-                canJump = true;
+        for (DynamicObject o: objectsList) {
+
+            if (Rect.intersects(gameGraphic.player.getRectTarget(), o.getRectTarget())) {
+                if (isPlatform) {
+                    canJump = true;
+                }
                 return true;
-                /*
-                if (p.getRectTarget().top > gameGraphic.player.getRectTarget().bottom * 1.01 || p.getRectTarget().top < gameGraphic.player.getRectTarget().bottom * 0.99) {
-                    return true;
-                }*/
             }
         }
-        canJump = false;
+        if (isPlatform) {
+            canJump = false;
+        }
         return false;
     }
 
