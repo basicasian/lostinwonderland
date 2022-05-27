@@ -196,7 +196,7 @@ public class GameGraphic {
 
         if (this.level == 1) {
             SpriteObject fire1 = new SpriteObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.fire), 4, 100, displayHeight - 300);
-            spritesObjects.add(fire1);
+            spritesObjects = new ArrayList<>(Arrays.asList(fire1));
         }
 
         if (this.level == 2) {
