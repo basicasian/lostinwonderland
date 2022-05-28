@@ -204,9 +204,4 @@ public class GameGraphic {
             spritesObjects.add(fire);
         }
     }
-
-
-
-
-
 }
