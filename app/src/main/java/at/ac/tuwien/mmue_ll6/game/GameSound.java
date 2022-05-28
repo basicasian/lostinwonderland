@@ -27,7 +27,7 @@ public class GameSound implements SoundPool.OnLoadCompleteListener, MediaPlayer.
     GameSound(Context context) {
         //Init media player with a song. Create audio pool
         mediaPlayer = MediaPlayer.create(context, R.raw.bgmusic);
-        mediaPlayer.setLooping(true);
+        mediaPlayer.setLooping(true); // loops when music is played through
         mediaPlayer.start();
 
         createSoundPool();
@@ -35,6 +35,9 @@ public class GameSound implements SoundPool.OnLoadCompleteListener, MediaPlayer.
         jumpSoundID = soundPool.load(context, R.raw.jumpsound, 1);
     }
 
+    /**
+     * creates a sound pool based on android version
+     */
     private void createSoundPool() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             soundPool = createNewSoundPool();
@@ -43,10 +46,16 @@ public class GameSound implements SoundPool.OnLoadCompleteListener, MediaPlayer.
         }
     }
 
+    /**
+     * sound pool for android version before lollipop
+     */
     private SoundPool createLegacySoundPool() {
         return new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
     }
 
+    /**
+     * sound pool for android version after lollipop
+     */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private SoundPool createNewSoundPool() {
         AudioAttributes attributes = new AudioAttributes.Builder()
@@ -60,6 +69,9 @@ public class GameSound implements SoundPool.OnLoadCompleteListener, MediaPlayer.
                 .build();
     }
 
+    /**
+     * play the jump sound
+     */
     public void playJumpSound() {
         soundPool.play(jumpSoundID, 0.4f, 0.4f, 1, 0, 1.0f);
     }

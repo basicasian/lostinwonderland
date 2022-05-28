@@ -74,6 +74,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // do not initialize game here! setLevel is not called yet
     }
 
+    /**
+     * initialize game assets, such as sound and graphics
+     */
     public void initializeGame() {
         // initialize sounds
         gameSound = new GameSound(context);
@@ -372,6 +375,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     /**
      * save score to the database
+     * @param context to find database
+     * @param score the saved score
      */
     public static void saveScore(Context context, Score score) {
         ScoreRoomDatabase.getInstance(context).scoreDao().insert(score);
@@ -381,7 +386,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     /**
      * help method to check which button is pressed
      * @param button the specified direction
-     * @return boolean if input button is pressed
+     * @return if input button is pressed
      */
     public boolean checkButton(String button) {
         boolean result = false;
@@ -404,6 +409,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     /**
      * help method to check if the player is colliding against list of objects
+     * @param objectsList the list which is checked
+     * @param isPlatform if platforms are checked
      * @return true if character is colliding
      */
     public boolean checkCollision(ArrayList<DynamicObject> objectsList, boolean isPlatform) {

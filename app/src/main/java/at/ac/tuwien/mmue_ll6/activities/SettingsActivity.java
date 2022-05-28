@@ -19,7 +19,7 @@ import android.widget.TextView;
 import at.ac.tuwien.mmue_ll6.R;
 
 /**
- * Activity for settings (language settings, etc.)
+ * Activity for settings (language settings)
  * @author Renate Zhang
  */
 public class SettingsActivity extends AppCompatActivity {

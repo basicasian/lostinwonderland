@@ -9,7 +9,7 @@ import at.ac.tuwien.mmue_ll6.game.GameSurfaceView;
 import at.ac.tuwien.mmue_ll6.R;
 
 /**
- * Activity for playing the the game
+ * Activity for playing the game
  * @author Renate Zhang
  */
 public class GameActivity extends AppCompatActivity {
@@ -28,6 +28,4 @@ public class GameActivity extends AppCompatActivity {
         // Remove notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
-
-
 }
