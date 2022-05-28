@@ -2,20 +2,10 @@ package at.ac.tuwien.mmue_ll6.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.TargetApi;
-import android.media.AudioAttributes;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.SoundPool;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
-import android.view.View;
 import android.view.WindowManager;
 
-import at.ac.tuwien.mmue_ll6.GameSurfaceView;
+import at.ac.tuwien.mmue_ll6.game.GameSurfaceView;
 import at.ac.tuwien.mmue_ll6.R;
 
 /**

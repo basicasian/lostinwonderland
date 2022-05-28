@@ -1,4 +1,4 @@
-package at.ac.tuwien.mmue_ll6;
+package at.ac.tuwien.mmue_ll6.game;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
@@ -10,16 +10,14 @@ import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import at.ac.tuwien.mmue_ll6.R;
 import at.ac.tuwien.mmue_ll6.objects.DynamicObject;
 import at.ac.tuwien.mmue_ll6.objects.SpriteObject;
 import at.ac.tuwien.mmue_ll6.objects.StaticObject;
-import at.ac.tuwien.mmue_ll6.persistence.Score;
-import at.ac.tuwien.mmue_ll6.persistence.ScoreRoomDatabase;
 
 /**
  * Help class for GameSurfaceView to initialize graphic assets
