@@ -215,7 +215,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             gameGraphic.player.move(-300 * this.deltaTime, 0);
         }
         // up button
-        if (isJumping && jumpTimer < 4 && canJump) {
+        if (isJumping && jumpTimer < 8 && canJump) {
             // jumpCounter controls the max time of jumping, so the character cant jump indefinitely
             jumpTimer++;
 
