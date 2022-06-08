@@ -1,4 +1,4 @@
-package at.ac.tuwien.mmue_ll6;
+package at.ac.tuwien.mmue_ll6.game;
 
 import android.graphics.Canvas;
 import android.util.Log;

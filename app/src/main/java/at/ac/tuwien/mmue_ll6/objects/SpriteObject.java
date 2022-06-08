@@ -22,6 +22,7 @@ public class SpriteObject {
     private final int frameWidth;
     private final int frameHeight;
     private int currentFrame;
+    private int totalFrames;
 
     private long pastTime = 0;
     private final int frameTime;
@@ -36,6 +37,7 @@ public class SpriteObject {
     public SpriteObject(Bitmap bitmap, int totalFrames, int x, int y) {
         this.bitmap = bitmap;
         this.currentFrame = 0;
+        this.totalFrames = totalFrames;
 
         this.frameWidth = bitmap.getWidth() / totalFrames;
         this.frameHeight = bitmap.getHeight();
@@ -53,7 +55,7 @@ public class SpriteObject {
         if (currentTime > pastTime + frameTime) {
             pastTime = currentTime;
             currentFrame++;
-            currentFrame %= 4;
+            currentFrame %= this.totalFrames;
         }
     }
 

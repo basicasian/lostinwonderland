@@ -8,7 +8,6 @@ import android.view.animation.AnimationUtils;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import at.ac.tuwien.mmue_ll6.GameSurfaceView;
 import at.ac.tuwien.mmue_ll6.R;
 
 /**

@@ -1,4 +1,4 @@
-package at.ac.tuwien.mmue_ll6;
+package at.ac.tuwien.mmue_ll6.game;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
@@ -10,16 +10,14 @@ import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import at.ac.tuwien.mmue_ll6.R;
 import at.ac.tuwien.mmue_ll6.objects.DynamicObject;
 import at.ac.tuwien.mmue_ll6.objects.SpriteObject;
 import at.ac.tuwien.mmue_ll6.objects.StaticObject;
-import at.ac.tuwien.mmue_ll6.persistence.Score;
-import at.ac.tuwien.mmue_ll6.persistence.ScoreRoomDatabase;
 
 /**
  * Help class for GameSurfaceView to initialize graphic assets
@@ -58,6 +56,8 @@ public class GameGraphic {
     /**
      * load the assets (character, background, etc) and initializing them with x and y coordinates
      * also getting the display sizes for the background
+     * @param context to get the windows size and load assets
+     * @param level to align right layout for assets
      */
     GameGraphic(Context context, int level) {
         Log.d(TAG, "use level: " + level);
@@ -77,6 +77,9 @@ public class GameGraphic {
         setPlatforms();
     }
 
+    /**
+     * set the display size parameters (display height, display width)
+     */
     private void setDisplaySize() {
         // get the size of the screen
         WindowManager wm = (WindowManager) this.context.getSystemService(Context.WINDOW_SERVICE);
@@ -93,7 +96,7 @@ public class GameGraphic {
     }
 
     /**
-     * set text paint
+     * set text paint (color, size, type)
      */
     public void setTextPaint() {
         textPaint.setColor(Color.WHITE);
@@ -134,6 +137,9 @@ public class GameGraphic {
         }
     }
 
+    /**
+     * generate static objects based on level, objects that appear all the time (buttons, heart, background)
+     */
     public void setStaticObjectsFixed() {
         // buttons and hearts
         StaticObject buttonLeft = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowleft), displayWidth - 600,displayHeight - padding);
@@ -155,6 +161,9 @@ public class GameGraphic {
         staticObjectsFixed.put("heart3", heart3);
     }
 
+    /**
+     * generate static objects based on level, objects that appear only on action (pause/play, gameover/win/pause image)
+     */
     public void setStaticObjectsVariable() {
         StaticObject pauseButton = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.pause), displayWidth - 300, (int) (padding + BitmapFactory.decodeResource(context.getResources(), R.drawable.pause).getHeight()));
         StaticObject playButton = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.play), displayWidth - 300, (int) (padding + BitmapFactory.decodeResource(context.getResources(), R.drawable.play).getHeight()));
@@ -169,6 +178,9 @@ public class GameGraphic {
         staticObjectsVariable.put("gamePauseImage", gamePauseImage);
     }
 
+    /**
+     * generate dynamic objects based on level (player, goal, enemies)
+     */
     public void setDynamicObjects() {
 
         if (this.level == 1) {
@@ -192,11 +204,14 @@ public class GameGraphic {
         }
     }
 
+    /**
+     * generate sprites objects based on level (fire sprite)
+     */
     public void setSpriteObjects() {
 
         if (this.level == 1) {
             SpriteObject fire1 = new SpriteObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.fire), 4, 100, displayHeight - 300);
-            spritesObjects.add(fire1);
+            spritesObjects = new ArrayList<>(Arrays.asList(fire1));
         }
 
         if (this.level == 2) {
@@ -204,9 +219,4 @@ public class GameGraphic {
             spritesObjects.add(fire);
         }
     }
-
-
-
-
-
 }

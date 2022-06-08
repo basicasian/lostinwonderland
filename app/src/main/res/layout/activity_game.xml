@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".activities.GameActivity">
 
-    <at.ac.tuwien.mmue_ll6.GameSurfaceView
+    <at.ac.tuwien.mmue_ll6.game.GameSurfaceView
         android:id="@+id/gameSurfaceView"
         android:layout_width="733dp"
         android:layout_height="721dp"
