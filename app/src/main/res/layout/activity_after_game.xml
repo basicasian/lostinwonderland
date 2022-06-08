@@ -4,31 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AfterGameActivity">
-
-    <TextView
-        android:id="@+id/loseText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/after_game_text"
-        android:textColor="@color/pink_700"
-        android:textSize="50sp"
-        app:layout_constraintBottom_toTopOf="@+id/tryAgainButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.689" />
+    tools:context=".activities.AfterGameActivity">
 
     <Button
         android:id="@+id/tryAgainButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="28dp"
+        android:layout_marginBottom="16dp"
+        android:onClick="selectGameActivity"
         android:text="@string/after_game_tryagain"
-        android:onClick="restartGameActivity"
-        app:backgroundTint="@color/pink_500"
+        app:backgroundTint="@color/blue_100"
+        app:layout_constraintBottom_toTopOf="@+id/chooseLevelButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.485"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="UsingOnClickInXml" />
+
+    <Button
+        android:id="@+id/chooseLevelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:onClick="showHighScoreActivity"
+        android:text="@string/after_game_highscore"
+        app:backgroundTint="@color/blue_100"
         app:layout_constraintBottom_toTopOf="@+id/returnToMenuButton"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="UsingOnClickInXml" />
 
@@ -36,13 +38,38 @@
         android:id="@+id/returnToMenuButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="244dp"
-        android:text="@string/after_game_menu"
+        android:layout_marginBottom="156dp"
         android:onClick="returnMenuActivity"
-        app:backgroundTint="@color/pink_100"
+        android:text="@string/after_game_menu"
+        app:backgroundTint="@color/blue_100"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="UsingOnClickInXml" />
+
+    <ImageView
+        android:id="@+id/afterGameImageTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/tryAgainButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.869"
+        app:srcCompat="@drawable/title" />
+
+    <ImageView
+        android:id="@+id/afterGameImagePlayer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="36dp"
+        app:layout_constraintBottom_toTopOf="@+id/afterGameImageTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/player" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

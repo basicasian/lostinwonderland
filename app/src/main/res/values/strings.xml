@@ -9,18 +9,38 @@
     <string name="menu_title_settings">settings</string>
 
     <!-- tutorial / help -->
-    <string name="help_title">How to play</string>
+    <string name="help_title">* How to play *</string>
+    <string name="help_chara">This is your character, \n help it find the way out of this dark wonderland!</string>
+    <string name="help_buttons">Pressing the buttons will move your character to the left or right, but will also make you jump.</string>
+    <string name="help_sticky">The platforms here seem to be special... \n Use this for your advantage!</string>
+    <string name="help_enemy">But still, be careful not to touch the monsters! And don\'t fall from the platforms!</string>
+    <string name="help_heart">You have three lives, \n if you lose them all it\'s game over.</string>
+    <string name="help_pause">Clicking on the pause button, \n will pause button and also stop the music.</string>
+
+    <!-- high score -->
+    <string name="highscore_title">* High Score *</string>
+    <string name="highscore_easy">easy level</string>
+    <string name="highscore_hard">hard level</string>
 
     <!-- skip video -->
     <string name="video_skip">skip</string>
 
-    <!-- game -->
-    <string name="game_left">left</string>
-    <string name="game_right">right</string>
+    <!-- select game -->
+    <string name="select_game_title">* Choose level *</string>
+    <string name="select_game_easy">easy</string>
+    <string name="select_game_hard">hard</string>
 
     <!-- after game -->
-    <string name="after_game_text">GAME ENDED</string>
-    <string name="after_game_tryagain">another game?</string>
+    <string name="after_game_tryagain">play again?</string>
+    <string name="after_game_highscore">show highscore</string>
     <string name="after_game_menu">return to menu</string>
+
+    <!-- settings -->
+    <string name="settings_title">* Settings *</string>
+    <string name="settings_language">Choose language</string>
+    <string name="settings_english">English</string>
+    <string name="settings_german">German</string>
+    <string name="settings_save">Save</string>
+
 
 </resources>
