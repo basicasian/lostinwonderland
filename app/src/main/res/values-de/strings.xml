@@ -41,4 +41,7 @@
     <string name="settings_english">Englisch</string>
     <string name="settings_german">Deutsch</string>
     <string name="settings_save">Speichern</string>
+    <string name="settings_sound">Musik aktiviert im Spiel</string>
+    <string name="settings_soundyes">Ja</string>
+    <string name="settings_soundno">Nein</string>
 </resources>

@@ -37,6 +37,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private SurfaceHolder surfaceHolder;
     private double deltaTime;
     private int level;
+    private boolean sound;
 
     // check variables
     private boolean isJumping = false;
@@ -79,7 +80,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
      */
     public void initializeGame() {
         // initialize sounds
-        gameSound = new GameSound(context);
+        gameSound = new GameSound(context, sound);
 
         // initialize graphics
         gameGraphic = new GameGraphic(context, this.level);
@@ -90,8 +91,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         this.level = level;
     }
 
-    public int getLevel() {
-        return level;
+    public void setSound(boolean sound) {
+        Log.d(TAG, "set level: " + sound);
+        this.sound = sound;
     }
 
     /**
@@ -162,25 +164,35 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             touchX = (int) e.getX();
             touchY = (int) e.getY();
 
-            // up button
-            if (Objects.requireNonNull(gameGraphic.staticObjectsFixed.get("buttonUp")).getRectTarget().contains(touchX, touchY) && canJump) {
-                // jump motion is not handled here, but in longTouchEvent() for smoother movement
-
-                gameSound.playJumpSound();
-                isJumping = true;
-                jumpTimer = 0;
-            }
-
             // pause button
             if (Objects.requireNonNull(gameGraphic.staticObjectsVariable.get("pauseButton")).getRectTarget().contains(touchX, touchY)) {
                 Log.d(TAG, "onTouchEvent: pause");
                 if (gameLoop.isRunning()) {
-                    gameSound.mediaPlayer.pause();
                     endGame();
                 } else {
-                    gameSound.mediaPlayer.start();
                     startGame(this.surfaceHolder);
                 }
+            }
+
+            // sound button
+            if (Objects.requireNonNull(gameGraphic.staticObjectsVariable.get("soundButton")).getRectTarget().contains(touchX, touchY) && gameLoop.isRunning()) {
+                Log.d(TAG, "onTouchEvent: sound");
+                sound = !sound;
+                if (sound) {
+                    gameSound.mediaPlayer.start();
+                } else {
+                    gameSound.mediaPlayer.pause();
+                }
+            }
+
+            // up button
+            if (Objects.requireNonNull(gameGraphic.staticObjectsFixed.get("buttonUp")).getRectTarget().contains(touchX, touchY) && gameLoop.isRunning()) {
+                // jump motion is not handled here, but in longTouchEvent() for smoother movement
+                if (sound) {
+                    gameSound.playJumpSound();
+                }
+                isJumping = true;
+                jumpTimer = 0;
             }
         }
 
@@ -347,7 +359,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             Paint.FontMetrics fm = gameGraphic.textPaint.getFontMetrics();
             float height = fm.descent - fm.ascent;
 
-            canvas.drawText("Time: " + currentTime, gameGraphic.displayWidth* 0.5f, gameGraphic.padding + height, gameGraphic.textPaint);
+            canvas.drawText("Time: " + currentTime, gameGraphic.displayWidth* 0.4f, gameGraphic.padding + height, gameGraphic.textPaint);
 
             // draw pause image when the game is paused
             if (gameLoop.isRunning()){
@@ -356,6 +368,13 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
                 gameGraphic.overlay.draw(canvas);
                 Objects.requireNonNull(gameGraphic.staticObjectsVariable.get("playButton")).draw(canvas);
                 Objects.requireNonNull(gameGraphic.staticObjectsVariable.get("gamePauseImage")).draw(canvas);
+            }
+
+            // draw sound icon depending if its activated or not
+            if (sound) {
+                Objects.requireNonNull(gameGraphic.staticObjectsVariable.get("soundButton")).draw(canvas);
+            } else {
+                Objects.requireNonNull(gameGraphic.staticObjectsVariable.get("muteButton")).draw(canvas);
             }
 
             // draw game win image when the game is won

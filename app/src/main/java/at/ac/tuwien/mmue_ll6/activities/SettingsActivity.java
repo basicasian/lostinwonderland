@@ -27,6 +27,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     TextView messageView;
     RadioButton englishButton, germanButton;
+    RadioButton soundButtonYes, soundButtonNo;
     Button saveButton;
 
     @Override
@@ -34,37 +35,69 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        // to set sound settings in game
+        // create object of SharedPreferences.
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPref.edit();
+
         // referencing the text and button views
         messageView = findViewById(R.id.textView);
         saveButton = findViewById(R.id.saveButton);
         englishButton = findViewById(R.id.englishButton);
         germanButton = findViewById(R.id.germanButton);
+        soundButtonYes = findViewById(R.id.soundButtonYes);
+        soundButtonNo = findViewById(R.id.soundButtonNo);
 
         // setting up on click listener event over the button
-        // in order to change the language with the help of the save button
+        // in order to change the language and sound with the help of the save button
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // language
                 if (englishButton.isChecked()) {
                     setLocale(SettingsActivity.this, "en");
                 }
                 if (germanButton.isChecked()) {
                     setLocale(SettingsActivity.this, "de");
                 }
+
+                // music
+                if (soundButtonYes.isChecked()) {
+                    editor.putBoolean("sound", true);
+                }
+                if (soundButtonNo.isChecked()) {
+                    editor.putBoolean("sound", false);
+                }
+                // commits your edits
+                editor.apply();
             }
         });
 
+        // language
         englishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 germanButton.setChecked(false);
             }
         });
-
         germanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 englishButton.setChecked(false);
+            }
+        });
+
+        // music
+        soundButtonYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                soundButtonNo.setChecked(false);
+            }
+        });
+        soundButtonNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                soundButtonYes.setChecked(false);
             }
         });
     }

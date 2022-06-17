@@ -41,6 +41,9 @@
     <string name="settings_english">English</string>
     <string name="settings_german">German</string>
     <string name="settings_save">Save</string>
+    <string name="settings_sound">Music activated in Game</string>
+    <string name="settings_soundyes">Yes</string>
+    <string name="settings_soundno">No</string>
 
 
 </resources>
