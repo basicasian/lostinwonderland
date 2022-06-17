@@ -24,11 +24,13 @@ public class GameSound implements SoundPool.OnLoadCompleteListener, MediaPlayer.
      * load the media player and initializing them with sources
      * @param context to get the sound
      */
-    GameSound(Context context) {
+    GameSound(Context context, boolean sound) {
         //Init media player with a song. Create audio pool
         mediaPlayer = MediaPlayer.create(context, R.raw.bgmusic);
         mediaPlayer.setLooping(true); // loops when music is played through
-        mediaPlayer.start();
+        if (sound) {
+            mediaPlayer.start();
+        }
 
         createSoundPool();
         // load sound file from resource and returns it as id that can be played by the sound pool
