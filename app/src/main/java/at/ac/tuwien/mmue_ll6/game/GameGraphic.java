@@ -146,8 +146,8 @@ public class GameGraphic {
         StaticObject buttonRight = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowright), displayWidth - 300,displayHeight - padding);
         StaticObject buttonUp = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowup),  100, displayHeight - (int) padding);
         StaticObject heart1 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 100, padding + BitmapFactory.decodeResource(context.getResources(), R.drawable.heart).getHeight());
-        StaticObject heart2 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 300, padding + BitmapFactory.decodeResource(context.getResources(), R.drawable.heart).getHeight());
-        StaticObject heart3 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 500, padding + BitmapFactory.decodeResource(context.getResources(), R.drawable.heart).getHeight());
+        StaticObject heart2 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 250, padding + BitmapFactory.decodeResource(context.getResources(), R.drawable.heart).getHeight());
+        StaticObject heart3 = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.heart), 400, padding + BitmapFactory.decodeResource(context.getResources(), R.drawable.heart).getHeight());
 
         // background
         bg = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.background), 0, displayWidth, 0, displayHeight);
@@ -162,17 +162,21 @@ public class GameGraphic {
     }
 
     /**
-     * generate static objects based on level, objects that appear only on action (pause/play, gameover/win/pause image)
+     * generate static objects based on level, objects that appear only on action (pause/play, sound/mute, gameover/win/pause image)
      */
     public void setStaticObjectsVariable() {
         StaticObject pauseButton = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.pause), displayWidth - 300, (int) (padding + BitmapFactory.decodeResource(context.getResources(), R.drawable.pause).getHeight()));
         StaticObject playButton = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.play), displayWidth - 300, (int) (padding + BitmapFactory.decodeResource(context.getResources(), R.drawable.play).getHeight()));
+        StaticObject soundButton = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.sound), displayWidth - 500, (int) (padding + BitmapFactory.decodeResource(context.getResources(), R.drawable.sound).getHeight()));
+        StaticObject muteButton = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.mute), displayWidth - 500, (int) (padding + BitmapFactory.decodeResource(context.getResources(), R.drawable.mute).getHeight()));
         StaticObject gameOverImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.gameover), displayWidth/2 - BitmapFactory.decodeResource(context.getResources(), R.drawable.gameover).getWidth()/2, displayHeight/2 + BitmapFactory.decodeResource(context.getResources(), R.drawable.gameover).getHeight()/2);
         StaticObject gameWinImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.youwin), displayWidth/2 - BitmapFactory.decodeResource(context.getResources(), R.drawable.youwin).getWidth()/2, displayHeight/2 + BitmapFactory.decodeResource(context.getResources(), R.drawable.youwin).getHeight()/2);
         StaticObject gamePauseImage = new StaticObject(BitmapFactory.decodeResource(context.getResources(), R.drawable.paused), displayWidth/2 - BitmapFactory.decodeResource(context.getResources(), R.drawable.paused).getWidth()/2, displayHeight/2 + BitmapFactory.decodeResource(context.getResources(), R.drawable.paused).getHeight()/2);
 
         staticObjectsVariable.put("pauseButton", pauseButton);
         staticObjectsVariable.put("playButton", playButton);
+        staticObjectsVariable.put("soundButton", soundButton);
+        staticObjectsVariable.put("muteButton", muteButton);
         staticObjectsVariable.put("gameOverImage", gameOverImage);
         staticObjectsVariable.put("gameWinImage", gameWinImage);
         staticObjectsVariable.put("gamePauseImage", gamePauseImage);
