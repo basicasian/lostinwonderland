@@ -361,6 +361,13 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
             canvas.drawText("Time: " + currentTime, gameGraphic.displayWidth* 0.4f, gameGraphic.padding + height, gameGraphic.textPaint);
 
+            // draw sound icon depending if its activated or not
+            if (sound) {
+                Objects.requireNonNull(gameGraphic.staticObjectsVariable.get("soundButton")).draw(canvas);
+            } else {
+                Objects.requireNonNull(gameGraphic.staticObjectsVariable.get("muteButton")).draw(canvas);
+            }
+
             // draw pause image when the game is paused
             if (gameLoop.isRunning()){
                 Objects.requireNonNull(gameGraphic.staticObjectsVariable.get("pauseButton")).draw(canvas);
@@ -368,13 +375,6 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
                 gameGraphic.overlay.draw(canvas);
                 Objects.requireNonNull(gameGraphic.staticObjectsVariable.get("playButton")).draw(canvas);
                 Objects.requireNonNull(gameGraphic.staticObjectsVariable.get("gamePauseImage")).draw(canvas);
-            }
-
-            // draw sound icon depending if its activated or not
-            if (sound) {
-                Objects.requireNonNull(gameGraphic.staticObjectsVariable.get("soundButton")).draw(canvas);
-            } else {
-                Objects.requireNonNull(gameGraphic.staticObjectsVariable.get("muteButton")).draw(canvas);
             }
 
             // draw game win image when the game is won
