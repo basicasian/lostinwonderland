@@ -1,5 +1,7 @@
 # Lost in Wonderland
 
+**Creators:** Michelle Lau, Renate Zhang  
+
 ## Game Description
 
 *Lost in Wonderland* is an adventurous jump-and-run game created as part of the 2022 Multimedia Exercise class. The game follows a young boy who dreams of being an adventurer. After accidentally falling into an underground cave, he must find his way back to his family by navigating through a dangerous Wonderland filled with enemies and obstacles. The game includes two levels with different difficulties, providing players with a challenging yet engaging experience. Through virtual touchscreen buttons, players can control the character’s movements and help him reach the goal, avoiding dangers along the way. 
