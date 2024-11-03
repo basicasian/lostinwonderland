@@ -2,8 +2,17 @@
 
 ## Game Description
 
+*Lost in Wonderland* is an adventurous jump-and-run game created as part of the 2022 Multimedia Exercise class. The game follows a young boy who dreams of being an adventurer. After accidentally falling into an underground cave, he must find his way back to his family by navigating through a dangerous Wonderland filled with enemies and obstacles. The game includes two levels with different difficulties, providing players with a challenging yet engaging experience. Through virtual touchscreen buttons, players can control the character’s movements and help him reach the goal, avoiding dangers along the way. 
+
+This project was developed using the **Android SDK** and adheres to the requirements outlined in the course, such as implementing a 2D arcade-style gameplay with persistent high scores, an intuitive GUI, and multi-language support. The game leverages the **Android Studio IDE** and runs on an **Android Virtual Device (AVD)**, specifically optimized for Nexus 5X settings.
+
+**Story**  
 Once upon a time, there was a boy whose dream was to be an adventurer. One day, he fell into an underground cave but managed to survive. To return to his family, he must find the exit, but dangers lurk in this treacherous Wonderland.
+
+**Gameplay**  
 Lost in Wonderland is a jump-and-run game where the player’s objective is to escape from the game environment. There are two levels with varying difficulty. The player has three lives, which are lost by falling off platforms or touching monsters.
+
+**Controls**  
 The game is controlled through virtual buttons on the touchscreen, allowing the character to move forward, backward, and jump.
 
 ## How to Play
@@ -39,7 +48,7 @@ To play this game, use the virtual buttons on the screen:
 
 ## Technical Implementation
 
-The game is developed using Android Studio and utilizes Activities, which are triggered by various Intents and lifecycle management. An Android Virtual Device Emulator (Nexus 5) is used for testing and debugging.
+The game is developed using **Android Studio** with the **Android SDK**. It follows the course requirements, including using the **Room Persistence Library** for high scores, **multi-threading** for the game loop, and persistent storage for game data. The game leverages activities and intents for navigation, while animations and sprites are implemented to create an engaging visual experience.
 
 ### Game Flow:
 1. Splash Screen
