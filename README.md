@@ -6,15 +6,6 @@
 
 This project was developed using the **Android SDK** and adheres to the requirements outlined in the course, such as implementing a 2D arcade-style gameplay with persistent high scores, an intuitive GUI, and multi-language support. The game leverages the **Android Studio IDE** and runs on an **Android Virtual Device (AVD)**, specifically optimized for Nexus 5X settings.
 
-**Story**  
-Once upon a time, there was a boy whose dream was to be an adventurer. One day, he fell into an underground cave but managed to survive. To return to his family, he must find the exit, but dangers lurk in this treacherous Wonderland.
-
-**Gameplay**  
-Lost in Wonderland is a jump-and-run game where the player’s objective is to escape from the game environment. There are two levels with varying difficulty. The player has three lives, which are lost by falling off platforms or touching monsters.
-
-**Controls**  
-The game is controlled through virtual buttons on the touchscreen, allowing the character to move forward, backward, and jump.
-
 ## How to Play
 
 To play this game, use the virtual buttons on the screen:
