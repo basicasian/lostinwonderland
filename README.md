@@ -37,8 +37,6 @@ To play this game, use the virtual buttons on the screen:
 - **Help Dialog**: Tutorial viewable in the main menu.
 - **Language Selection**: Switch between English and German in settings.
 
----
-
 ## Technical Implementation
 
 The game is developed using Android Studio and utilizes Activities, which are triggered by various Intents and lifecycle management. An Android Virtual Device Emulator (Nexus 5) is used for testing and debugging.
@@ -50,8 +48,6 @@ The game is developed using Android Studio and utilizes Activities, which are tr
 4. Select Level (easy or hard mode)
 5. Game Play
 6. After Game (replay, check high scores, or return to main menu)
-
----
 
 ## Code Architecture
 
