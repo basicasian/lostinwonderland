@@ -1,5 +1,12 @@
 # Lost in Wonderland
 
+<p align="middle">
+  <img src="noncode/screenshots/LostInWonderland_Start.png" alt="Set Up" width="20%"/> 
+  <img src="noncode/screenshots/LostInWonderland_InGame.png" alt="In Game" width="49%"/>
+  <img src="noncode/screenshots/LostInWonderland_Paused.png" alt="End" width="17%"/> 
+</p>
+
+
 **Creators:** Michelle Lau, Renate Zhang  
 
 ## Game Description
