@@ -1,9 +1,9 @@
 # Lost in Wonderland
 
 <p align="middle">
-  <img src="noncode/screenshots/LostInWonderland_Menu.png" alt="Start Menu" width="15%" />
-  <img src="noncode/screenshots/LostInWonderland_InGame.png" alt="In Game" width="35%"/>
-  <img src="noncode/screenshots/LostInWonderland_Paused.png" alt="Paused" width="35%"/> 
+  <img src="noncode/screenshots/LostInWonderland_Menu.png" alt="Start Menu" width="15%" style="vertical-align: middle; margin-right: 3\%;"/>
+  <img src="noncode/screenshots/LostInWonderland_InGame.png" alt="In Game" width="35%" style="vertical-align: middle; margin-right: 3\%;"/>
+  <img src="noncode/screenshots/LostInWonderland_Paused.png" alt="Paused" width="35%" style="vertical-align: middle; margin-right: 3\%;"/> 
 </p>
 
 
