@@ -9,6 +9,8 @@
 
 **Creators:** Michelle Lau, Renate Zhang  
 
+<img align="left" src="noncode/screenshots/LostInWonderland_Tutorial.jpeg" alt="Tutorial" width="30%" />
+
 ## Game Description
 
 *Lost in Wonderland* is an adventurous jump-and-run game created as part of the 2022SS Multimedia Exercise class of TU Vienna. The game follows a young boy who dreams of being an adventurer. After accidentally falling into an underground cave, he must find his way back to his family by navigating through a dangerous Wonderland filled with enemies and obstacles. The game includes two levels with different difficulties, providing players with a challenging yet engaging experience. Through virtual touchscreen buttons, players can control the character’s movements and help him reach the goal, avoiding dangers along the way. 
@@ -16,9 +18,6 @@
 This project was developed using the **Android SDK** and adheres to the requirements outlined in the course, such as implementing a 2D arcade-style gameplay with persistent high scores, an intuitive GUI, and multi-language support. The game leverages the **Android Studio IDE** and runs on an **Android Virtual Device (AVD)**, specifically optimized for Nexus 5X settings.
 
 ## How to Play
-
-<img align="left" src="noncode/screenshots/LostInWonderland_Tutorial.jpeg" alt="Tutorial" width="30%" />
-
 
 To play this game, use the virtual buttons on the screen:
 
