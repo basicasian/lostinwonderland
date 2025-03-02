@@ -29,7 +29,7 @@ To play this game, use the virtual buttons on the screen:
 - Complete the game by reaching and touching the **goal**.
 
 <p align="middle">
-  <img src="noncode/screenshots/LostInWonderland_Tutorial.jpeg" alt="Tutorial" width="50%" />
+  <img src="noncode/screenshots/LostInWonderland_Tutorial.jpeg" alt="Tutorial" width="30%" />
 </p>
 
 ---
