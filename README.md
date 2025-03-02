@@ -29,7 +29,6 @@ To play this game, use the virtual buttons on the screen:
 
 - You have **three lives**. A life is lost each time you fall off a platform or collide with an enemy.
 - Complete the game by reaching and touching the **goal**.
-- 
 ---
 
 ## Features
