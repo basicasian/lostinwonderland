@@ -15,7 +15,7 @@
 
 This project was developed using the **Android SDK** and adheres to the requirements outlined in the course, such as implementing a 2D arcade-style gameplay with persistent high scores, an intuitive GUI, and multi-language support. The game leverages the **Android Studio IDE** and runs on an **Android Virtual Device (AVD)**, specifically optimized for Nexus 5X settings.
 
-<img align="left" src="noncode/screenshots/LostInWonderland_Tutorial.jpeg" alt="Tutorial" width="30%" />
+<img align="left" style="margin-right=3px" src="noncode/screenshots/LostInWonderland_Tutorial.jpeg" alt="Tutorial" width="30%" />
 
 ## How to Play
 
